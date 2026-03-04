@@ -235,7 +235,7 @@ class StorePackagerApp(tk.Tk):
         self.appcert_path = tk.StringVar()
         self.pfx_path = tk.StringVar()
         self.pfx_password = tk.StringVar()
-        self.timestamp_url = tk.StringVar(value="http://timestamp.digicert.com")
+        self.timestamp_url = tk.StringVar(value="http://timestamp.digicert.com")  # Note: signtool requires http://, not https://
         self.msix_name = tk.StringVar()
         
         # External Python (Recursion Fix)
@@ -970,17 +970,21 @@ def patch_widgets(translator):
                     startupinfo = subprocess.STARTUPINFO()
                     startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-                subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=startupinfo)
+                build_env = os.environ.copy()
+                build_env["PYTHONIOENCODING"] = "utf-8"
+                subprocess.check_call(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=startupinfo, env=build_env)
                 
                 progress.update_status("Aufräumen...")
+                # Cleanup relativ zum Output-Verzeichnis (nicht cwd!)
+                cleanup_base = os.path.dirname(staged_script) if staged_script else os.getcwd()
                 for pattern in ["build", "*.spec"]:
-                    for item in glob.glob(pattern):
+                    for item in glob.glob(os.path.join(cleanup_base, pattern)):
                         try:
                             if os.path.isdir(item):
                                 shutil.rmtree(item)
                             else:
                                 os.remove(item)
-                        except:
+                        except OSError:
                             pass
                 
                 final = os.path.join(outdir, exe_name)
@@ -1004,7 +1008,7 @@ def patch_widgets(translator):
                 
             except subprocess.CalledProcessError as e:
                 progress.close()
-                err_out = e.stderr.decode('cp1252', errors='ignore') if e.stderr else "Unbekannter Fehler"
+                err_out = e.stderr.decode('utf-8', errors='replace') if e.stderr else "Unbekannter Fehler"
                 self.after(0, lambda: messagebox.showerror("PyInstaller Fehler", f"{err_out}"))
             except Exception as e:
                 progress.close()
@@ -1164,7 +1168,9 @@ def patch_widgets(translator):
                     
             except subprocess.CalledProcessError as e:
                 progress.close()
-                error_msg = f"Befehl fehlgeschlagen:\n{e.cmd}\n\nAusgabe:\n{e.stderr if e.stderr else e.stdout}"
+                # Passwort aus Fehlermeldung entfernen
+                safe_cmd = [x if x != pfx_pw else "***" for x in (e.cmd or [])]
+                error_msg = f"Befehl fehlgeschlagen:\n{safe_cmd}\n\nAusgabe:\n{e.stderr if e.stderr else e.stdout}"
                 self.after(0, lambda: messagebox.showerror("Fehler", error_msg))
             except Exception as e:
                 progress.close()
@@ -1196,10 +1202,11 @@ def patch_widgets(translator):
         
         caps = ""
         if self.capabilities.get().strip():
+            from xml.sax.saxutils import escape
             for c in self.capabilities.get().split(","):
                 c = c.strip()
                 if c:
-                    caps += f'    <Capability Name="{c}"/>\n'
+                    caps += f'    <Capability Name="{escape(c)}"/>\n'
         manifest = manifest.replace("{{CAPABILITIES}}", caps)
         
         with open(os.path.join(outdir, "AppxManifest.xml"), "w", encoding="utf-8") as f:
@@ -1253,8 +1260,9 @@ def patch_widgets(translator):
             proc.terminate()
             try:
                 proc.wait(timeout=5)
-            except:
+            except subprocess.TimeoutExpired:
                 proc.kill()
+                proc.wait(timeout=3)
                 
             messagebox.showinfo("Screenshots", 
                 f"Screenshots in Store-Formaten gespeichert:\n{shots_dir}\n\n" +
