@@ -8,7 +8,7 @@
 
 <h1 align="center">WinStorePackager</h1>
 
-<h4 align="center">GUI tool for preparing Python apps for the Microsoft Store — manifest, icons, and MSIX package at the click of a button</h4>
+<h4 align="center">GUI tool for preparing Python apps for the Microsoft Store — Manifest, Icons, and MSIX package at the click of a button</h4>
 
 ---
 
@@ -16,15 +16,15 @@
 
 | Feature | Description |
 |---------|-------------|
-| **Manifest Generator** | Automatically creates `AppxManifest.xml` from form input |
+| **Manifest Generator** | Automatically creates `AppxManifest.xml` from form inputs |
 | **Icon Generator** | All required Store sizes: 44×44, 50×50, 150×150, 310×310, 310×150 (Wide) |
 | **Keyring Integration** | Secure storage of certificate passwords (no plaintext) |
 | **Screenshot Assistant** | Captures app screenshots directly via `pygetwindow` |
 | **11 Store Categories** | Predefined (Games, Productivity, Developer Tools, ...) |
 | **Age Ratings** | 3+ to 18+ ratings |
-| **MSIX Build** | Calls `makeappx.exe` and `signtool.exe` from the Windows SDK |
+| **MSIX Build** | Invokes `makeappx.exe` and `signtool.exe` from the Windows SDK |
 | **Settings Persistence** | Configuration is saved in JSON and loaded on next launch |
-| **Auto-Install** | Missing dependencies are installed automatically |
+| **Auto-Install** | Missing dependencies are automatically installed |
 
 ---
 
@@ -57,11 +57,11 @@ Or on Windows, double-click `START.bat`.
 ## Getting Started
 
 1. **Launch the tool** — `python WindowsStorePublisher_3.py` or `START.bat`
-2. **Enter app details** — Name, Publisher ID, version, path to `.py` file
+2. **Enter app data** — Name, Publisher ID, version, path to `.py` file
 3. **Select icon** — the tool automatically generates all Store sizes
 4. **Generate manifest** — `AppxManifest.xml` is created
-5. **Build MSIX** — the tool calls `makeappx.exe` and creates the package
-6. **Sign** — select certificate, securely enter password via Keyring
+5. **Build MSIX** — Tool invokes `makeappx.exe` and creates the package
+6. **Sign** — Select certificate, enter password securely via Keyring
 
 ---
 
@@ -90,7 +90,7 @@ You can find your Publisher ID in the [Microsoft Partner Center](https://partner
 |---------|:---:|:---:|:---:|:---:|
 | GUI | ✅ | ⚠️ | ✅ | ✅ |
 | Python Focus | ✅ | ❌ | ❌ | ❌ |
-| Auto Icons | ✅ | ❌ | ⚠️ | ✅ |
+| Auto-Icons | ✅ | ❌ | ⚠️ | ✅ |
 | Manifest Template | ✅ | ❌ | ✅ | ✅ |
 | Free | ✅ | ✅ | ⚠️ | ❌ |
 | Screenshot Assistant | ✅ | ❌ | ❌ | ❌ |
@@ -104,4 +104,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Deutsche Version: [README.de.md](README.de.md)
+🇩🇪 [Deutsche Version](README.de.md)
