@@ -1,0 +1,14 @@
+{
+  "app_name": "WinStorePackager",
+  "publisher": "CN=LukasGeiger",
+  "publisher_display": "Lukas Geiger",
+  "identity_name": "LukasGeiger.WinStorePackager",
+  "version": "2.3.0.0",
+  "description": "Python-Apps fuer den Microsoft Store packen (MSIX). Manifest-Generierung, Icon-Builder, PyInstaller-Integration, Code-Signing, WACK-Tests.",
+  "executable": "WinStorePackager.exe",
+  "capabilities": "internetClient",
+  "category": "Developer Tools",
+  "age_rating": "3+",
+  "privacy_url": "https://github.com/lukisch/WinStorePackager",
+  "support_url": "https://github.com/lukisch/WinStorePackager/issues"
+}

@@ -1,0 +1,11 @@
+Pillow
+License: MIT-CMU (Historical Permission Notice and Disclaimer)
+URL: https://pypi.org/project/Pillow/
+
+pygetwindow
+License: BSD-3-Clause
+URL: https://pypi.org/project/PyGetWindow/
+
+keyring
+License: MIT
+URL: https://pypi.org/project/keyring/
