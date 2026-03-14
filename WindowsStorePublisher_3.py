@@ -46,19 +46,28 @@ def install_and_import(package_name, import_name=None):
             print(f"❌ Import von '{import_name}' nach Installation immer noch nicht möglich.")
             sys.exit(1)
 
-# --- Abhängigkeiten prüfen & installieren ---
-print("--- Prüfe Abhängigkeiten ---")
-install_and_import("Pillow", "PIL")        # Für Icon-Resizing
-install_and_import("pygetwindow")          # Für Screenshots
-install_and_import("keyring")              # Für sichere Passwort-Speicherung
-print("--- Abhängigkeiten OK ---")
+# ------------------------------------------------------------
+# 0b. Abhängigkeiten sicherstellen (nur wenn direkt ausgeführt)
+# ------------------------------------------------------------
+def ensure_dependencies():
+    """Prüft und installiert fehlende Abhängigkeiten (nur beim Start als Hauptskript)."""
+    print("--- Prüfe Abhängigkeiten ---")
+    install_and_import("Pillow", "PIL")        # Für Icon-Resizing
+    install_and_import("pygetwindow")          # Für Screenshots
+    install_and_import("keyring")              # Für sichere Passwort-Speicherung
+    print("--- Abhängigkeiten OK ---")
 
 # ------------------------------------------------------------
 # 1. Imports der nachgeladenen Module & Standard-Libs
 # ------------------------------------------------------------
-from PIL import Image, ImageGrab
-import pygetwindow as gw
-import keyring
+try:
+    from PIL import Image, ImageGrab
+    import pygetwindow as gw
+    import keyring
+except ImportError:
+    Image = ImageGrab = None
+    gw = None
+    keyring = None
 
 # Standard Libs
 import json
@@ -68,6 +77,7 @@ import re
 import time
 import threading
 import html
+import hashlib
 from pathlib import Path
 
 # ------------------------------------------------------------
@@ -876,22 +886,51 @@ def patch_widgets(translator):
             return False, str(e)
 
     # ---------- License collection ----------
+    def _get_requirements_hash(self) -> str:
+        """Berechnet MD5-Hash der requirements.txt fuer Cache-Invalidierung."""
+        req_file = os.path.join(os.path.dirname(self.script_path.get() or __file__), "requirements.txt")
+        if not os.path.exists(req_file):
+            return ""
+        try:
+            with open(req_file, "rb") as f:
+                return hashlib.md5(f.read()).hexdigest()
+        except OSError:
+            return ""
+
     def collect_python_licenses(self, outdir):
         target = os.path.join(outdir, "THIRD_PARTY_LICENSES.txt")
+        cache_file = os.path.join(outdir, ".licenses_cache.json")
+
+        # Cache pruefen: nur neu sammeln wenn requirements.txt sich geaendert hat
+        req_hash = self._get_requirements_hash()
+        if os.path.exists(cache_file) and os.path.exists(target):
+            try:
+                with open(cache_file, "r", encoding="utf-8") as f:
+                    cache_meta = json.load(f)
+                if cache_meta.get("req_hash") == req_hash and req_hash != "":
+                    return True, target  # Cache gueltig
+            except (OSError, json.JSONDecodeError, KeyError):
+                pass  # Cache defekt -> neu sammeln
+
         try:
             python_exe = self.get_build_interpreter() or sys.executable
-            subprocess.run([python_exe, "-m", "pip", "install", "pip-licenses"], 
+            subprocess.run([python_exe, "-m", "pip", "install", "pip-licenses"],
                           check=True, capture_output=True, timeout=60)
-            
+
             with open(target, "w", encoding="utf-8") as f:
                 subprocess.run(
-                    [python_exe, "-m", "pip_licenses", 
+                    [python_exe, "-m", "pip_licenses",
                      "--with-license-file", "--format=plain"],
                     stdout=f,
                     stderr=subprocess.PIPE,
                     check=True,
                     timeout=120
                 )
+
+            # Cache-Metadaten speichern
+            with open(cache_file, "w", encoding="utf-8") as f:
+                json.dump({"req_hash": req_hash}, f)
+
             return True, target
         except subprocess.TimeoutExpired:
             return False, "Timeout beim Sammeln der Lizenzen"
@@ -1216,66 +1255,71 @@ def patch_widgets(translator):
     # ---------- Screenshots ----------
     def run_screenshots(self):
         if not gw:
-            messagebox.showerror("Fehler", 
+            messagebox.showerror("Fehler",
                 "pygetwindow nicht verfügbar. Installieren Sie: pip install pygetwindow")
             return
-            
+
         exe_name = self.exe_name.get() or f"{self.app_name.get()}.exe"
         exe_path = os.path.join(self.package_dir(), exe_name)
-        
+
         if not os.path.exists(exe_path):
             messagebox.showerror("Fehler", f"EXE nicht gefunden:\n{exe_path}\n\nBitte zuerst EXE bauen.")
             return
-            
+
         outdir = self.package_dir()
-        proc = None
-        try:
-            proc = subprocess.Popen([exe_path])
-            time.sleep(5)
-            
-            app_name = self.app_name.get()
-            windows = gw.getWindowsWithTitle(app_name)
-            if windows:
-                try:
-                    windows[0].activate()
-                except:
-                    pass
-                time.sleep(1)
-            
-            img = ImageGrab.grab()
-            shots_dir = os.path.join(outdir, "screenshots")
-            os.makedirs(shots_dir, exist_ok=True)
-            
-            formats = [
-                (1240, 600, "Desktop 16:9"),
-                (2480, 1200, "Desktop 16:9 @2x"),
-                (1080, 1920, "Mobile Portrait"),
-                (1920, 1080, "Desktop Landscape")
-            ]
-            
-            for width, height, desc in formats:
-                resized = img.resize((width, height), Image.LANCZOS)
-                filename = f"screenshot_{width}x{height}.png"
-                resized.save(os.path.join(shots_dir, filename))
-            
-            proc.terminate()
+        app_name = self.app_name.get()
+
+        def _do_screenshots():
+            proc = None
             try:
-                proc.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                proc.kill()
-                proc.wait(timeout=3)
-                
-            messagebox.showinfo("Screenshots", 
-                f"Screenshots in Store-Formaten gespeichert:\n{shots_dir}\n\n" +
-                "\n".join([f"• {w}x{h} ({d})" for w, h, d in formats]))
-                
-        except Exception as e:
-            messagebox.showerror("Fehler", f"Screenshots fehlgeschlagen:\n{e}")
-            if proc is not None:
+                proc = subprocess.Popen([exe_path])
+                time.sleep(5)
+
+                windows = gw.getWindowsWithTitle(app_name)
+                if windows:
+                    try:
+                        windows[0].activate()
+                    except Exception:
+                        pass
+                    time.sleep(1)
+
+                img = ImageGrab.grab()
+                shots_dir = os.path.join(outdir, "screenshots")
+                os.makedirs(shots_dir, exist_ok=True)
+
+                formats = [
+                    (1240, 600, "Desktop 16:9"),
+                    (2480, 1200, "Desktop 16:9 @2x"),
+                    (1080, 1920, "Mobile Portrait"),
+                    (1920, 1080, "Desktop Landscape")
+                ]
+
+                for width, height, desc in formats:
+                    resized = img.resize((width, height), Image.LANCZOS)
+                    filename = f"screenshot_{width}x{height}.png"
+                    resized.save(os.path.join(shots_dir, filename))
+
+                proc.terminate()
                 try:
-                    proc.terminate()
-                except Exception:
-                    pass
+                    proc.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+                    proc.wait(timeout=3)
+
+                messagebox.showinfo("Screenshots",
+                    f"Screenshots in Store-Formaten gespeichert:\n{shots_dir}\n\n" +
+                    "\n".join([f"• {w}x{h} ({d})" for w, h, d in formats]))
+
+            except Exception as e:
+                messagebox.showerror("Fehler", f"Screenshots fehlgeschlagen:\n{e}")
+                if proc is not None:
+                    try:
+                        proc.terminate()
+                    except Exception:
+                        pass
+
+        t = threading.Thread(target=_do_screenshots, daemon=True)
+        t.start()
 
     # ---------- WACK ----------
     def run_wack_test(self):
@@ -1441,5 +1485,6 @@ def patch_widgets(translator):
 
 # ---------- main ----------
 if __name__ == "__main__":
+    ensure_dependencies()
     app = StorePackagerApp()
     app.mainloop()
