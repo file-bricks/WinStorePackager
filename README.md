@@ -28,6 +28,14 @@
 
 ---
 
+## Screenshot
+
+![WinStorePackager main window](README/screenshots/main.png)
+
+The current UI combines manifest fields, icon generation, screenshot capture, and MSIX build preparation in one desktop workflow.
+
+---
+
 ## Prerequisites
 
 - Python 3.10+
@@ -44,7 +52,7 @@ pip install -r requirements.txt
 ## Installation
 
 ```bash
-git clone https://github.com/lukisch/WinStorePackager.git
+git clone https://github.com/file-bricks/WinStorePackager.git
 cd WinStorePackager
 pip install -r requirements.txt
 python WindowsStorePublisher_3.py
@@ -67,7 +75,7 @@ Or on Windows, double-click `START.bat`.
 
 ## Configuration
 
-On first launch, `settings_store_packager.json` is created (in `.gitignore` — contains personal data). Template:
+On first launch, `settings_store_packager.json` is created locally and ignored by Git. It may contain local Publisher IDs, certificate paths, Windows SDK paths, and other machine-specific settings. Template:
 
 ```json
 {
@@ -81,6 +89,14 @@ On first launch, `settings_store_packager.json` is created (in `.gitignore` — 
 ```
 
 You can find your Publisher ID in the [Microsoft Partner Center](https://partner.microsoft.com/dashboard).
+
+---
+
+## Local Data and Build Artifacts
+
+WinStorePackager works on local project files only. Generated MSIX packages, EXE builds, temporary staging folders, local settings, certificates, and release bundles are intentionally ignored by Git and should be distributed through GitHub Releases, Microsoft Store submissions, or another release channel instead of source commits.
+
+If dependencies are missing, the launcher can install Python packages from PyPI via `pip`. After dependencies are installed, the packaging workflow itself runs locally and uses the Windows SDK tools configured on your machine.
 
 ---
 
@@ -118,8 +134,8 @@ A GUI tool for preparing Python applications for the Microsoft Store (MSIX packa
 ### Installation
 
 ```bash
-git clone https://github.com/lukisch/REL-PUB_WinStorePackager.git
-cd REL-PUB_WinStorePackager
+git clone https://github.com/file-bricks/WinStorePackager.git
+cd WinStorePackager
 pip install -r requirements.txt
 python "WindowsStorePublisher_3.py"
 ```
@@ -132,7 +148,7 @@ See [LICENSE](LICENSE) for details.
 
 ## Haftung / Liability
 
-Dieses Projekt ist eine **unentgeltliche Open-Source-Schenkung** im Sinne der §§ 516 ff. BGB. Die Haftung des Urhebers ist gemäß **§ 521 BGB** auf **Vorsatz und grobe Fahrlässigkeit** beschränkt. Ergänzend gelten die Haftungsausschlüsse aus GPL-3.0 / MIT / Apache-2.0 §§ 15–16 (je nach gewählter Lizenz).
+Dieses Projekt ist eine **unentgeltliche Open-Source-Schenkung** im Sinne der §§ 516 ff. BGB. Die Haftung des Urhebers ist gemäß **§ 521 BGB** auf **Vorsatz und grobe Fahrlässigkeit** beschränkt. Ergänzend gilt der Haftungsausschluss der MIT License.
 
 Nutzung auf eigenes Risiko. Keine Wartungszusage, keine Verfügbarkeitsgarantie, keine Gewähr für Fehlerfreiheit oder Eignung für einen bestimmten Zweck.
 

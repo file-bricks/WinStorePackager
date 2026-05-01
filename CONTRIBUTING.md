@@ -28,10 +28,10 @@ Vielen Dank fuer Ihr Interesse, zu diesem Projekt beizutragen!
 ### Erste Schritte
 
 ```bash
-git clone https://github.com/lukisch/WinStorePackager.git
+git clone https://github.com/file-bricks/WinStorePackager.git
 cd WinStorePackager
 pip install -r requirements.txt
-python main.py
+python WindowsStorePublisher_3.py
 ```
 
 ---
@@ -64,8 +64,8 @@ Thank you for your interest in contributing to this project!
 ### Getting Started
 
 ```bash
-git clone https://github.com/lukisch/WinStorePackager.git
+git clone https://github.com/file-bricks/WinStorePackager.git
 cd WinStorePackager
 pip install -r requirements.txt
-python main.py
+python WindowsStorePublisher_3.py
 ```

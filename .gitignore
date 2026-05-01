@@ -20,13 +20,14 @@ venv/
 env/
 .env/
 
-# ---- BACH Interne Steuerungsdateien (NIEMALS in Git!) ----
+# ---- Interne Steuerungsdateien (NIEMALS in Git!) ----
 AUFGABEN.txt
 TEST.txt
 TESTS.txt
 TESTERGEBNISSE.txt
 BUGREPORT.md
 DIAGNOSE_REPORT.md
+tmpclaude-*
 
 # ---- Persoenliche / Sensible Daten ----
 _USER/
@@ -35,17 +36,22 @@ _USER/
 credentials.json
 client_secret*.json
 token.json
+secrets.*
 *.pem
 *.key
 keyring/
 
 # ---- Build-Artefakte & Releases ----
 releases/
+_WARTUNG/
 *.exe
 *.msi
 *.msix
 *.appx
 *.spec
+*.tmp
+*.zip
+.licenses_cache.json
 
 # ---- IDE & Editoren ----
 .claude/
@@ -66,6 +72,9 @@ PLAN.txt
 _archive/
 _private/
 *.log
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # ---- Projektspezifisch ----
 settings_store_packager.json

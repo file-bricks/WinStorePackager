@@ -1,6 +1,6 @@
 # Privacy Policy — WinStorePackager
 
-**Last updated:** March 13, 2026
+**Last updated:** May 1, 2026
 **Publisher:** Geiger
 
 ## Overview
@@ -19,7 +19,7 @@ The application reads project files, icons, and configuration files that you cho
 
 ## External Services
 
-WinStorePackager does not connect to any external services or the internet during its core operation. It is designed as a fully offline tool. External tools (e.g., Windows SDK utilities for code signing and WACK tests) are invoked locally on your machine according to your configuration.
+WinStorePackager does not send project files, icons, manifests, certificates, or settings to the developer or third parties during packaging. If required Python packages are missing, the application can invoke `pip` to install them from PyPI. External tools (e.g., Windows SDK utilities for code signing and WACK tests) are invoked locally on your machine according to your configuration.
 
 ## Local Storage
 
@@ -43,7 +43,7 @@ For questions about this privacy policy:
 
 # Datenschutzrichtlinie — WinStorePackager
 
-**Zuletzt aktualisiert:** 13. März 2026
+**Zuletzt aktualisiert:** 1. Mai 2026
 **Herausgeber:** Geiger
 
 ## Überblick
@@ -62,7 +62,7 @@ Die Anwendung liest Projektdateien, Icons und Konfigurationsdateien, die Sie ver
 
 ## Externe Dienste
 
-WinStorePackager stellt während des normalen Betriebs keine Verbindung zu externen Diensten oder dem Internet her. Externe Tools (z. B. Windows SDK-Hilfsprogramme für Code-Signierung und WACK-Tests) werden lokal auf Ihrem Rechner gemäß Ihrer Konfiguration aufgerufen.
+WinStorePackager überträgt beim Packaging keine Projektdateien, Icons, Manifeste, Zertifikate oder Einstellungen an den Entwickler oder Dritte. Wenn erforderliche Python-Pakete fehlen, kann die Anwendung `pip` aufrufen, um diese von PyPI zu installieren. Externe Tools (z. B. Windows SDK-Hilfsprogramme für Code-Signierung und WACK-Tests) werden lokal auf Ihrem Rechner gemäß Ihrer Konfiguration aufgerufen.
 
 ## Lokale Speicherung
 

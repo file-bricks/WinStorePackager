@@ -5,12 +5,12 @@
 If you find a security vulnerability, please report it responsibly:
 
 1. **Do NOT open a public issue**
-2. **Use GitHub's [private vulnerability reporting](https://github.com/lukisch/WinStorePackager/security/advisories/new)**
+2. **Use GitHub's [private vulnerability reporting](https://github.com/file-bricks/WinStorePackager/security/advisories/new)**
 3. Include: description, steps to reproduce, potential impact
 
 ### How to Report
 
-1. Go to: https://github.com/lukisch/WinStorePackager/security/advisories/new
+1. Go to: https://github.com/file-bricks/WinStorePackager/security/advisories/new
 2. Fill out the form (title, description, severity, affected versions)
 3. Submit privately (not visible to public until disclosed)
 

@@ -225,6 +225,12 @@ class ProgressDialog(tk.Toplevel):
 class StorePackagerApp(tk.Tk):
     def __init__(self):
         super().__init__()
+        app_icon_path = str(Path(__file__).parent / "WinStorePackager.ico")
+        if os.path.exists(app_icon_path):
+            try:
+                self.iconbitmap(default=app_icon_path)
+            except tk.TclError:
+                pass
         self.title("Windows Store Packager v2.3 (Auto-Setup)")
         self.geometry("1200x1000")
 
