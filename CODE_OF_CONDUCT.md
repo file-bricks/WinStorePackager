@@ -5,30 +5,30 @@
 ### Unser Versprechen
 
 Wir als Mitglieder, Beitragende und Leitende verpflichten uns, die Teilnahme an unserer
-Community zu einer belaetigungsfreien Erfahrung fuer alle zu machen, unabhaengig von
-Alter, Koerpergroesse, sichtbarer oder unsichtbarer Behinderung, ethnischer Zugehoerigkeit,
-Geschlechtsmerkmalen, Geschlechtsidentitaet und -ausdruck, Erfahrungsgrad, Bildung,
-sozio-oekonomischem Status, Nationalitaet, persoenlichem Aussehen, Herkunft, Religion
-oder sexueller Identitaet und Orientierung.
+Community zu einer belästigungsfreien Erfahrung für alle zu machen, unabhängig von
+Alter, Körpergröße, sichtbarer oder unsichtbarer Behinderung, ethnischer Zugehörigkeit,
+Geschlechtsmerkmalen, Geschlechtsidentität und -ausdruck, Erfahrungsgrad, Bildung,
+sozio-ökonomischem Status, Nationalität, persönlichem Aussehen, Herkunft, Religion
+oder sexueller Identität und Orientierung.
 
 ### Unsere Standards
 
-Beispiele fuer Verhalten, das zu einem positiven Umfeld beitraegt:
+Beispiele für Verhalten, das zu einem positiven Umfeld beiträgt:
 - Verwendung einladender und inklusiver Sprache
 - Respektvoller Umgang mit unterschiedlichen Standpunkten und Erfahrungen
-- Konstruktive Kritik hoeflich annehmen
-- Fokus auf das Beste fuer die Community
+- Konstruktive Kritik höflich annehmen
+- Fokus auf das Beste für die Community
 
 Inakzeptables Verhalten umfasst:
-- Trolling, beleidigende Kommentare und persoenliche oder politische Angriffe
-- Oeffentliche oder private Belaestigung
-- Veroeffentlichung privater Informationen anderer ohne ausdrueckliche Erlaubnis
+- Trolling, beleidigende Kommentare und persönliche oder politische Angriffe
+- Öffentliche oder private Belästigung
+- Veröffentlichung privater Informationen anderer ohne ausdrückliche Erlaubnis
 
 ### Durchsetzung
 
-Faelle von missbräuchlichem Verhalten koennen ueber die GitHub-Kontaktwege des
+Fälle von missbräuchlichem Verhalten können über die GitHub-Kontaktwege des
 Repositories gemeldet werden. Bitte keine privaten oder sensiblen Daten in
-oeffentliche Issues schreiben. Alle Beschwerden werden geprueft und untersucht.
+öffentliche Issues schreiben. Alle Beschwerden werden geprüft und untersucht.
 
 ---
 

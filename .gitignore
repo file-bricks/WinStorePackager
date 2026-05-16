@@ -1,7 +1,7 @@
 # =============================================================================
-# .gitignore Template fuer Software Entwicklung Projekte
+# .gitignore Template für Software-Entwicklungsprojekte
 # Kopieren und als .gitignore im Projektroot ablegen
-# Projektspezifische Eintraege am Ende anfuegen
+# Projektspezifische Einträge am Ende anfügen
 # =============================================================================
 
 # ---- Python ----
@@ -80,3 +80,13 @@ _private/
 settings_store_packager.json
 store_package/
 *.pfx
+*.cer
+*.crt
+*.msixupload
+*.appxsym
+AppxManifest.xml
+Package.appxmanifest
+/screenshots/
+wack-results/
+TestResults/
+*.appcertlog

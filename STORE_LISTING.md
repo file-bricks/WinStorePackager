@@ -3,34 +3,34 @@
 ## Deutsch
 
 ### Kurzbeschreibung (max 100 Zeichen)
-MSIX-Packaging-Tool fuer Python-Apps — Manifest, Icons und Store-Paket per Klick erstellen.
+MSIX-Packaging-Tool für Python-Apps — Manifest, Icons und Store-Paket per Klick erstellen.
 
 ### Beschreibung (max 10.000 Zeichen)
-WinStorePackager ist ein GUI-Tool, das Python-Entwicklern den gesamten Prozess der Microsoft Store-Veroeffentlichung abnimmt. Statt sich manuell mit AppxManifest.xml, Icon-Groessen und MSIX-Build-Befehlen herumzuschlagen, erledigt WinStorePackager alles in einer uebersichtlichen Oberflaeche.
+WinStorePackager ist ein GUI-Tool, das Python-Entwicklern den gesamten Prozess der Microsoft Store-Veröffentlichung abnimmt. Statt sich manuell mit AppxManifest.xml, Icon-Größen und MSIX-Build-Befehlen herumzuschlagen, erledigt WinStorePackager alles in einer übersichtlichen Oberfläche.
 
 **Was WinStorePackager kann:**
 
-- Manifest-Generator: Erstellt automatisch eine vollstaendige AppxManifest.xml aus Formular-Eingaben
-- Icon-Generator: Erzeugt alle vom Store geforderten Groessen (44x44, 50x50, 150x150, 310x310, 310x150 Wide) aus einem einzigen Quellbild
+- Manifest-Generator: Erstellt automatisch eine vollständige AppxManifest.xml aus Formular-Eingaben
+- Icon-Generator: Erzeugt alle vom Store geforderten Größen (44x44, 50x50, 150x150, 310x310, 310x150 Wide) aus einem einzigen Quellbild
 - MSIX-Build: Ruft makeappx.exe und signtool.exe aus dem Windows SDK auf und erstellt das fertige Paket
-- Keyring-Integration: Zertifikats-Passwoerter werden sicher im Windows Credential Store gespeichert — kein Klartext
-- Screenshot-Assistent: Erfasst App-Screenshots direkt ueber pygetwindow fuer die Store-Einreichung
+- Keyring-Integration: Zertifikats-Passwörter werden sicher im Windows Credential Store gespeichert — kein Klartext
+- Screenshot-Assistent: Erfasst App-Screenshots direkt über pygetwindow für die Store-Einreichung
 - 11 Store-Kategorien und Altersfreigaben (3+ bis 18+) vorkonfiguriert
-- Einstellungen werden als JSON gespeichert und beim naechsten Start automatisch geladen
+- Einstellungen werden als JSON gespeichert und beim nächsten Start automatisch geladen
 
-**Fuer wen ist WinStorePackager?**
+**Für wen ist WinStorePackager?**
 
-Python-Entwickler, die ihre Desktop-Anwendungen im Microsoft Store veroeffentlichen moechten, ohne sich in die Komplexitaet von MSIX-Packaging einzuarbeiten. Ideal fuer Einzelentwickler und kleine Teams.
+Python-Entwickler, die ihre Desktop-Anwendungen im Microsoft Store veröffentlichen möchten, ohne sich in die Komplexität von MSIX-Packaging einzuarbeiten. Ideal für Einzelentwickler und kleine Teams.
 
 **Voraussetzungen:**
 
 - Python 3.10+
 - Windows 10/11
-- Windows SDK (fuer makeappx.exe und signtool.exe)
-- Microsoft Store Entwicklerkonto (fuer die Einreichung)
+- Windows SDK (für makeappx.exe und signtool.exe)
+- Microsoft Store Entwicklerkonto (für die Einreichung)
 
-### Schluesselwoerter
-MSIX, Python, Packaging, Microsoft Store, App-Veroeffentlichung, Manifest, Icon-Generator, Entwickler-Tool, Windows SDK, Store-Einreichung
+### Schlüsselwörter
+MSIX, Python, Packaging, Microsoft Store, App-Veröffentlichung, Manifest, Icon-Generator, Entwickler-Tool, Windows SDK, Store-Einreichung
 
 ### Kategorie
 Developer Tools

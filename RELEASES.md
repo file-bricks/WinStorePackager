@@ -1,6 +1,6 @@
 # RELEASES - WinStorePackager
 
-Stand: 2026-05-01
+Stand: 2026-05-17
 Aktuelles lokales EXE-Bundle: `v2.3.0`
 
 ## Struktur
@@ -19,11 +19,12 @@ releases/
 ## Aktueller Stand
 
 - `dist/WinStorePackager.exe` ist der frische lokale Build aus dem aktuellen Quellstand.
-- `releases/v2.3.0/` enthaelt die versionierten GitHub-/Direktdownload-Artefakte.
-- `releases/windowsstore/` bleibt getrennt fuer den MSIX-/Store-Workflow.
+- `releases/v2.3.0/` enthält die versionierten GitHub-/Direktdownload-Artefakte.
+- `releases/windowsstore/` bleibt getrennt für den MSIX-/Store-Workflow.
 - Release-Artefakte bleiben lokal ignoriert und werden nicht direkt in Git versioniert.
 
 ## Letzte Pflege
 
-- 2026-05-01: README, Privacy-Hinweise und Git-Ignore-Regeln fuer lokale Release-/Staging-Artefakte aktualisiert.
+- 2026-05-17: Repo-Hygiene geprüft; `.gitattributes` ergänzt und Ignore-Regeln für Store-/Signierartefakte erweitert.
+- 2026-05-01: README, Privacy-Hinweise und Git-Ignore-Regeln für lokale Release-/Staging-Artefakte aktualisiert.
 - 2026-04-29: Lokales EXE-Bundle, Source-ZIP und Checksummen aus dem aktuellen Arbeitsstand aktualisiert.

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.3-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.3.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.10+-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge" alt="Windows">
@@ -97,6 +97,12 @@ You can find your Publisher ID in the [Microsoft Partner Center](https://partner
 WinStorePackager works on local project files only. Generated MSIX packages, EXE builds, temporary staging folders, local settings, certificates, and release bundles are intentionally ignored by Git and should be distributed through GitHub Releases, Microsoft Store submissions, or another release channel instead of source commits.
 
 If dependencies are missing, the launcher can install Python packages from PyPI via `pip`. After dependencies are installed, the packaging workflow itself runs locally and uses the Windows SDK tools configured on your machine.
+
+## Repository Hygiene
+
+The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. Local Partner Center data, Publisher IDs in `settings_store_packager.json`, certificates, generated manifests, MSIX/AppX packages, WACK logs, screenshots, and release bundles stay outside Git via `.gitignore`.
+
+Last hygiene check: 2026-05-17. The check found no tracked secrets, no tracked ignored files, and no pending local commits before this documentation refresh.
 
 ---
 
