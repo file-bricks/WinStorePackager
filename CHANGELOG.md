@@ -6,6 +6,8 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Hinzugefügt / Added
+- `PORTIERUNGSPLAN.md` ergänzt: Windows Store bleibt Hauptkanal, Web/PWA wird Companion-Linie, Android/iOS nur PWA-Testziel, macOS/Linux nur SDK-freier Preflight.
+- Projektaufgaben um P0-P3-Portierungsschritte für Dogfooding, Austauschformat `winstorepackager-project-v1.json`, Web/PWA und Preflight ergänzt.
 - Repo-Hygiene-Check vom 2026-05-17 in README und Projektlog dokumentiert.
 - `.gitattributes` ergänzt, damit Text- und Binärdateien konsistent behandelt werden.
 - README bindet jetzt den vorhandenen GUI-Screenshot aus `README/screenshots/main.png` direkt ein.
