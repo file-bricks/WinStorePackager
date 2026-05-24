@@ -11,6 +11,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - `PROJECT_PROFILE_FORMAT.md` dokumentiert jetzt das gemeinsame Austauschformat `winstorepackager-project-v1.json`.
 - Desktop-App kann Projektprofile jetzt sicher importieren und exportieren, ohne Publisher-ID, SDK-Pfade oder Zertifikatsdaten mitzuschreiben.
 - `web_companion/` als lokaler Browser-Companion für Manifest-Vorschau, Icon-Check und JSON-Import/Export ergänzt.
+- `web_companion/` ist jetzt als installierbare PWA nutzbar: `service-worker.js`, `offline.html`, `icon.svg` und `serve_companion.py` ergänzen Offline-Shell, Install-Flow und localhost-Start.
 - `tests/test_project_profile.py` deckt Profil-Serialisierung und Pfadauflösung ab.
 - Repo-Hygiene-Check vom 2026-05-17 in README und Projektlog dokumentiert.
 - `.gitattributes` ergänzt, damit Text- und Binärdateien konsistent behandelt werden.

@@ -34,6 +34,16 @@ textarea {
   font: inherit;
 }
 
+button[hidden] {
+  display: none;
+}
+
+code {
+  background: rgba(11, 106, 116, 0.08);
+  border-radius: 8px;
+  padding: 2px 6px;
+}
+
 .page-shell {
   width: min(1400px, calc(100vw - 32px));
   margin: 24px auto 40px;
@@ -83,12 +93,17 @@ h1 {
   margin: 12px 0 0;
 }
 
+.hero-status,
 .hero-actions,
 .inline-actions {
   display: flex;
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.hero-status {
+  margin-top: 16px;
 }
 
 button {
@@ -206,6 +221,11 @@ pre {
   padding: 18px;
 }
 
+.hint-card p {
+  margin-bottom: 0;
+  line-height: 1.55;
+}
+
 .preview-card {
   margin-top: 14px;
 }
@@ -238,6 +258,24 @@ pre {
 .status-chip.warning {
   color: var(--warning);
   background: rgba(164, 78, 18, 0.12);
+}
+
+.status-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+  color: var(--muted);
+}
+
+.status-row strong {
+  color: var(--ink);
 }
 
 #iconPreview {
@@ -277,5 +315,30 @@ pre {
 
   .hero {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 620px) {
+  .page-shell {
+    width: min(100vw - 20px, 1400px);
+    margin: 10px auto 28px;
+  }
+
+  .hero,
+  .panel {
+    padding: 18px;
+  }
+
+  .panel-header,
+  .preview-header,
+  .status-row {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  button,
+  .hero-actions button {
+    width: 100%;
+    justify-content: center;
   }
 }

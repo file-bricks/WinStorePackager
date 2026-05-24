@@ -40,14 +40,14 @@ Der Desktop kann `winstorepackager-project-v1.json` exportieren und importieren.
 
 - Bestehende Planung vor diesem Check: keine eigene `PORTIERUNGSPLAN.md` gefunden.
 - Windows-Desktop-App: vorhanden, Store-Pipeline-Eintrag aktiv.
-- Web/PWA: erster statischer Companion unter `web_companion/` angelegt. Er bearbeitet lokale Projektprofile, zeigt Manifest-Vorschau, prüft Icon-Größe und exportiert/importiert `winstorepackager-project-v1.json`.
+- Web/PWA: Companion unter `web_companion/` ist jetzt als installierbare lokale PWA ausgebaut. Er bearbeitet lokale Projektprofile, zeigt Manifest-Vorschau, prüft Icon-Größe, exportiert/importiert `winstorepackager-project-v1.json` und bringt Service Worker, Offline-Seite, Install-Status sowie `serve_companion.py` für `localhost` mit.
 - Android/iOS: keine native Planung, PWA-Testziel offen.
 - macOS/Linux: nur Fehlermeldungs-/Preflight-Spuren im Code, keine belastbare Produktlinie.
 - Austauschformat: als `winstorepackager-project-v1.json` dokumentiert und in Desktop-App + Web-Companion verdrahtet.
 
 ## Nächste Schritte
 
-1. Web-Companion auf mobilen Browsern als PWA-Testziel prüfen.
+1. Web-Companion auf Android Chrome und iOS Safari als PWA-Testziel prüfen.
 2. Optionalen Listing-Builder für DE/EN-Texte im Companion vertiefen.
 3. macOS-/Linux-Preflight bewusst auf SDK-freie Checks begrenzen.
 4. Store-Dogfooding abschließen: WinStorePackager mit WinStorePackager paketieren, Screenshots und Store-Listing finalisieren.

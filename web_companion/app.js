@@ -5,6 +5,7 @@ const PROFILE_VERSION = 1;
 const form = document.getElementById("profileForm");
 const importProfileButton = document.getElementById("importProfileButton");
 const exportProfileButton = document.getElementById("exportProfileButton");
+const installAppButton = document.getElementById("installAppButton");
 const profileFileInput = document.getElementById("profileFileInput");
 const resetButton = document.getElementById("resetButton");
 const copyManifestButton = document.getElementById("copyManifestButton");
@@ -14,47 +15,47 @@ const summaryList = document.getElementById("summaryList");
 const iconUpload = document.getElementById("iconUpload");
 const iconPreview = document.getElementById("iconPreview");
 const iconStatus = document.getElementById("iconStatus");
+const protocolStatus = document.getElementById("protocolStatus");
+const installState = document.getElementById("installState");
+const connectivityState = document.getElementById("connectivityState");
+const swState = document.getElementById("swState");
+const runtimeMode = document.getElementById("runtimeMode");
+const cacheState = document.getElementById("cacheState");
+const installHint = document.getElementById("installHint");
 
-const fieldIds = [
-  "projectRoot",
-  "appName",
-  "publisherDisplay",
-  "identityName",
-  "version",
-  "category",
-  "ageRating",
-  "capabilities",
-  "privacyUrl",
-  "supportUrl",
-  "scriptPath",
-  "iconPath",
-  "sourcePath",
-  "installerPath",
-  "outputDir",
-  "exeName",
-  "description",
-  "readme",
-  "changelog",
-  "licenseFiles",
-  "licenseTexts",
-  "enableI18n",
-];
+let deferredInstallPrompt = null;
 
 init();
 
 function init() {
   hydrateFromStorage();
   refreshViews();
+  refreshEnvironment();
 
   form.addEventListener("input", onFormChanged);
   form.addEventListener("change", onFormChanged);
 
   importProfileButton.addEventListener("click", () => profileFileInput.click());
   exportProfileButton.addEventListener("click", exportProfile);
+  installAppButton.addEventListener("click", installApp);
   profileFileInput.addEventListener("change", importProfile);
   resetButton.addEventListener("click", resetProfile);
   copyManifestButton.addEventListener("click", copyManifest);
   iconUpload.addEventListener("change", handleIconUpload);
+
+  window.addEventListener("online", refreshEnvironment);
+  window.addEventListener("offline", refreshEnvironment);
+  window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+  window.addEventListener("appinstalled", handleAppInstalled);
+
+  const displayModeQuery = window.matchMedia("(display-mode: standalone)");
+  if (typeof displayModeQuery.addEventListener === "function") {
+    displayModeQuery.addEventListener("change", refreshEnvironment);
+  } else if (typeof displayModeQuery.addListener === "function") {
+    displayModeQuery.addListener(refreshEnvironment);
+  }
+
+  registerServiceWorker();
 }
 
 function onFormChanged() {
@@ -241,7 +242,7 @@ function resetProfile() {
   document.getElementById("enableI18n").checked = true;
   iconPreview.hidden = true;
   iconPreview.removeAttribute("src");
-  setIconStatus("Noch kein Icon geladen", "neutral");
+  setChip(iconStatus, "Noch kein Icon geladen", "neutral");
   refreshViews();
 }
 
@@ -280,25 +281,132 @@ function handleIconUpload(event) {
     return;
   }
 
+  const imageUrl = URL.createObjectURL(file);
   const image = new Image();
   image.onload = () => {
-    iconPreview.src = image.src;
+    iconPreview.src = imageUrl;
     iconPreview.hidden = false;
     if (image.width >= 310 && image.height >= 310) {
-      setIconStatus(`Icon ok: ${image.width}×${image.height}px`, "success");
+      setChip(iconStatus, `Icon ok: ${image.width}×${image.height}px`, "success");
     } else {
-      setIconStatus(`Zu klein: ${image.width}×${image.height}px`, "warning");
+      setChip(iconStatus, `Zu klein: ${image.width}×${image.height}px`, "warning");
     }
   };
   image.onerror = () => {
-    setIconStatus("Icon konnte nicht gelesen werden", "warning");
+    URL.revokeObjectURL(imageUrl);
+    setChip(iconStatus, "Icon konnte nicht gelesen werden", "warning");
   };
-  image.src = URL.createObjectURL(file);
+  image.src = imageUrl;
 }
 
-function setIconStatus(text, kind) {
-  iconStatus.textContent = text;
-  iconStatus.className = `status-chip ${kind}`;
+async function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) {
+    setChip(swState, "Service Worker fehlt", "warning");
+    cacheState.textContent = "Browser ohne Service-Worker-Support.";
+    installHint.textContent = "Installieren nur in modernen Browsern möglich.";
+    return;
+  }
+
+  if (window.location.protocol === "file:") {
+    setChip(swState, "Service Worker blockiert", "warning");
+    cacheState.textContent = "Dateimodus erlaubt kein Caching.";
+    installHint.textContent = "Für PWA-Funktionen localhost oder https nutzen.";
+    return;
+  }
+
+  try {
+    const registration = await navigator.serviceWorker.register("./service-worker.js");
+    if (registration.installing) {
+      setChip(swState, "Service Worker installiert", "accent");
+    } else {
+      setChip(swState, "Service Worker aktiv", "success");
+    }
+    cacheState.textContent = "App-Shell wird lokal zwischengespeichert.";
+    await navigator.serviceWorker.ready;
+    setChip(swState, "Service Worker bereit", "success");
+  } catch (error) {
+    setChip(swState, "Service Worker fehlgeschlagen", "warning");
+    cacheState.textContent = `Registrierung fehlgeschlagen: ${error.message}`;
+  } finally {
+    refreshEnvironment();
+  }
+}
+
+function handleBeforeInstallPrompt(event) {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  installAppButton.hidden = false;
+  installAppButton.disabled = false;
+  setChip(installState, "Installierbar", "accent");
+  installHint.textContent = "Install-Dialog ist bereit.";
+}
+
+async function installApp() {
+  if (!deferredInstallPrompt) {
+    installHint.textContent = "Kein Install-Dialog verfügbar. Nutze localhost oder den Browser-Menüpunkt.";
+    return;
+  }
+
+  deferredInstallPrompt.prompt();
+  const choice = await deferredInstallPrompt.userChoice;
+  if (choice.outcome === "accepted") {
+    setChip(installState, "Installation bestätigt", "success");
+    installHint.textContent = "Der Browser installiert jetzt den Companion.";
+  } else {
+    setChip(installState, "Installation abgebrochen", "warning");
+    installHint.textContent = "Der Dialog wurde geschlossen. Er kann später erneut erscheinen.";
+  }
+  deferredInstallPrompt = null;
+  installAppButton.hidden = true;
+}
+
+function handleAppInstalled() {
+  deferredInstallPrompt = null;
+  installAppButton.hidden = true;
+  setChip(installState, "Installiert", "success");
+  installHint.textContent = "Companion läuft jetzt auch als installierte App.";
+  refreshEnvironment();
+}
+
+function refreshEnvironment() {
+  const fileMode = window.location.protocol === "file:";
+  const standalone = isStandaloneMode();
+  const online = navigator.onLine;
+
+  if (fileMode) {
+    setChip(protocolStatus, "Dateimodus", "warning");
+  } else {
+    setChip(protocolStatus, "Lokalserver", "success");
+  }
+
+  if (standalone) {
+    runtimeMode.textContent = "Installierte App";
+  } else if (fileMode) {
+    runtimeMode.textContent = "Lokale Datei";
+  } else {
+    runtimeMode.textContent = "Browser-Tab";
+  }
+
+  if (standalone) {
+    setChip(installState, "Installiert", "success");
+  } else if (deferredInstallPrompt) {
+    setChip(installState, "Installierbar", "accent");
+  } else if (fileMode) {
+    setChip(installState, "Nicht installierbar", "warning");
+  } else {
+    setChip(installState, "Nicht installiert", "neutral");
+  }
+
+  setChip(connectivityState, online ? "Online" : "Offline", online ? "success" : "warning");
+}
+
+function isStandaloneMode() {
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
+function setChip(element, text, kind) {
+  element.textContent = text;
+  element.className = `status-chip ${kind}`;
 }
 
 function valueOf(id) {

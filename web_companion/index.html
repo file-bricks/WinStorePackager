@@ -3,11 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b6a74" />
     <meta
       name="description"
       content="Lokaler Web-Companion für WinStorePackager: Projektprofil bearbeiten, Manifest vorschauen, Icon prüfen und JSON exportieren."
     />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="WSP Companion" />
     <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <title>WinStorePackager Companion</title>
   </head>
@@ -21,10 +25,16 @@
             Lokale Vorarbeit für Store-Projekte: Metadaten, Listing-Texte,
             Manifest-Entwurf und Icon-Check ohne Publisher-ID oder Zertifikat.
           </p>
+          <div class="hero-status" id="heroStatus">
+            <span id="protocolStatus" class="status-chip neutral">Dateimodus</span>
+            <span id="installState" class="status-chip neutral">Nicht installiert</span>
+            <span id="connectivityState" class="status-chip neutral">Online</span>
+          </div>
         </div>
         <div class="hero-actions">
           <button id="importProfileButton" class="secondary">JSON laden</button>
           <button id="exportProfileButton">JSON exportieren</button>
+          <button id="installAppButton" class="ghost" hidden>App installieren</button>
           <input id="profileFileInput" type="file" accept=".json,application/json" hidden />
         </div>
       </header>
@@ -148,7 +158,12 @@
               </label>
               <label>
                 <span>Lizenzdateien (eine pro Zeile)</span>
-                <textarea id="licenseFiles" name="licenseFiles" rows="3" placeholder="LICENSE.txt"></textarea>
+                <textarea
+                  id="licenseFiles"
+                  name="licenseFiles"
+                  rows="3"
+                  placeholder="LICENSE.txt"
+                ></textarea>
               </label>
               <label>
                 <span>Zusätzliche Lizenztexte</span>
@@ -177,8 +192,37 @@
               <img id="iconPreview" alt="Icon-Vorschau" hidden />
             </article>
             <article class="info-card">
+              <div class="preview-header">
+                <h3>PWA-Status</h3>
+                <span id="swState" class="status-chip neutral">Service Worker aus</span>
+              </div>
+              <div class="status-list">
+                <div class="status-row">
+                  <strong>Laufmodus</strong>
+                  <span id="runtimeMode">Browser-Tab</span>
+                </div>
+                <div class="status-row">
+                  <strong>Cache</strong>
+                  <span id="cacheState">Nicht bereit</span>
+                </div>
+                <div class="status-row">
+                  <strong>Installation</strong>
+                  <span id="installHint">Install-Dialog nur auf localhost/https.</span>
+                </div>
+              </div>
+            </article>
+            <article class="info-card">
               <h3>Store-Zusammenfassung</h3>
               <dl id="summaryList" class="summary-list"></dl>
+            </article>
+            <article class="info-card hint-card">
+              <h3>Start für echte PWA-Funktionen</h3>
+              <p>
+                Für Offline-Cache und Install-Dialog den Companion über
+                <code>python web_companion/serve_companion.py</code> starten.
+                Im Dateimodus bleiben Bearbeitung und Export nutzbar, aber ohne
+                Service Worker.
+              </p>
             </article>
           </div>
 

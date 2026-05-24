@@ -1,16 +1,22 @@
 {
+  "id": "./index.html",
   "name": "WinStorePackager Companion",
   "short_name": "WSP Companion",
   "description": "Lokaler Web-Companion für Store-Metadaten, Manifest-Vorschau und JSON-Profilbearbeitung.",
+  "lang": "de",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "window-controls-overlay", "browser"],
   "background_color": "#f3efe5",
   "theme_color": "#0b6a74",
+  "categories": ["productivity", "developer tools"],
   "icons": [
     {
-      "src": "../store_assets/Square150x150Logo.png",
-      "sizes": "150x150",
-      "type": "image/png"
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }

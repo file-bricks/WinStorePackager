@@ -38,11 +38,13 @@ The current UI combines manifest fields, icon generation, screenshot capture, an
 
 WinStorePackager now ships with a shared project profile format: [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md). The desktop app can import and export `winstorepackager-project-v1.json` so that Store metadata can be prepared outside Windows without exposing local Publisher IDs, SDK paths, certificate paths, or passwords.
 
-The first browser-based companion lives in [`web_companion/index.html`](web_companion/index.html). It runs locally, offers a project questionnaire, manifest preview, icon-size check, and JSON import/export in the same format as the desktop app.
+The browser-based companion lives in [`web_companion/index.html`](web_companion/index.html). It offers the same project questionnaire, manifest preview, icon-size check, and JSON import/export as before, but now also supports a local app shell with service worker, offline fallback, install prompt, and a small cross-platform localhost starter.
 
 ```bash
-start web_companion\index.html
+python web_companion/serve_companion.py
 ```
+
+Open `http://127.0.0.1:8765/index.html` if the browser does not launch automatically. Directly opening `web_companion/index.html` still works for local editing and JSON export, but install and offline features only work via `localhost` or `https`.
 
 ---
 
@@ -147,7 +149,7 @@ A GUI tool for preparing Python applications for the Microsoft Store (MSIX packa
 - Icon and asset management
 - Store submission preparation
 - Shared project profile exchange via `winstorepackager-project-v1.json`
-- Local browser companion for manifest preview and icon checks
+- Installable local browser companion with offline shell, manifest preview, and icon checks
 
 ### Installation
 
