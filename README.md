@@ -34,6 +34,16 @@
 
 The current UI combines manifest fields, icon generation, screenshot capture, and MSIX build preparation in one desktop workflow.
 
+## Project Profile Exchange and Web Companion
+
+WinStorePackager now ships with a shared project profile format: [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md). The desktop app can import and export `winstorepackager-project-v1.json` so that Store metadata can be prepared outside Windows without exposing local Publisher IDs, SDK paths, certificate paths, or passwords.
+
+The first browser-based companion lives in [`web_companion/index.html`](web_companion/index.html). It runs locally, offers a project questionnaire, manifest preview, icon-size check, and JSON import/export in the same format as the desktop app.
+
+```bash
+start web_companion\index.html
+```
+
 ---
 
 ## Prerequisites
@@ -136,6 +146,8 @@ A GUI tool for preparing Python applications for the Microsoft Store (MSIX packa
 - App manifest generation
 - Icon and asset management
 - Store submission preparation
+- Shared project profile exchange via `winstorepackager-project-v1.json`
+- Local browser companion for manifest preview and icon checks
 
 ### Installation
 

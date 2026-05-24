@@ -8,6 +8,10 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ### Hinzugefügt / Added
 - `PORTIERUNGSPLAN.md` ergänzt: Windows Store bleibt Hauptkanal, Web/PWA wird Companion-Linie, Android/iOS nur PWA-Testziel, macOS/Linux nur SDK-freier Preflight.
 - Projektaufgaben um P0-P3-Portierungsschritte für Dogfooding, Austauschformat `winstorepackager-project-v1.json`, Web/PWA und Preflight ergänzt.
+- `PROJECT_PROFILE_FORMAT.md` dokumentiert jetzt das gemeinsame Austauschformat `winstorepackager-project-v1.json`.
+- Desktop-App kann Projektprofile jetzt sicher importieren und exportieren, ohne Publisher-ID, SDK-Pfade oder Zertifikatsdaten mitzuschreiben.
+- `web_companion/` als lokaler Browser-Companion für Manifest-Vorschau, Icon-Check und JSON-Import/Export ergänzt.
+- `tests/test_project_profile.py` deckt Profil-Serialisierung und Pfadauflösung ab.
 - Repo-Hygiene-Check vom 2026-05-17 in README und Projektlog dokumentiert.
 - `.gitattributes` ergänzt, damit Text- und Binärdateien konsistent behandelt werden.
 - README bindet jetzt den vorhandenen GUI-Screenshot aus `README/screenshots/main.png` direkt ein.

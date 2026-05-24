@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Lokaler Web-Companion für WinStorePackager: Projektprofil bearbeiten, Manifest vorschauen, Icon prüfen und JSON exportieren."
+    />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>WinStorePackager Companion</title>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Web-Companion</p>
+          <h1>WinStorePackager Companion</h1>
+          <p class="hero-copy">
+            Lokale Vorarbeit für Store-Projekte: Metadaten, Listing-Texte,
+            Manifest-Entwurf und Icon-Check ohne Publisher-ID oder Zertifikat.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button id="importProfileButton" class="secondary">JSON laden</button>
+          <button id="exportProfileButton">JSON exportieren</button>
+          <input id="profileFileInput" type="file" accept=".json,application/json" hidden />
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel form-panel">
+          <div class="panel-header">
+            <h2>Projektprofil</h2>
+            <div class="inline-actions">
+              <button id="resetButton" class="ghost">Zurücksetzen</button>
+              <label class="toggle">
+                <input id="enableI18n" type="checkbox" checked />
+                <span>i18n aktiv</span>
+              </label>
+            </div>
+          </div>
+
+          <form id="profileForm">
+            <div class="grid">
+              <label>
+                <span>Projektwurzel</span>
+                <input id="projectRoot" name="projectRoot" value="." />
+              </label>
+              <label>
+                <span>App-Name</span>
+                <input id="appName" name="appName" placeholder="MeineApp" />
+              </label>
+              <label>
+                <span>Publisher Display Name</span>
+                <input id="publisherDisplay" name="publisherDisplay" placeholder="Mein Studio" />
+              </label>
+              <label>
+                <span>Identity Name</span>
+                <input id="identityName" name="identityName" placeholder="MeineApp.Desktop" />
+              </label>
+              <label>
+                <span>Version</span>
+                <input id="version" name="version" value="1.0.0.0" />
+              </label>
+              <label>
+                <span>Kategorie</span>
+                <select id="category" name="category">
+                  <option>Productivity</option>
+                  <option>Education</option>
+                  <option>Entertainment</option>
+                  <option>Games</option>
+                  <option>Photo &amp; Video</option>
+                  <option>Music</option>
+                  <option>Business</option>
+                  <option selected>Developer Tools</option>
+                  <option>Utilities</option>
+                  <option>Social</option>
+                  <option>Health &amp; Fitness</option>
+                </select>
+              </label>
+              <label>
+                <span>Altersfreigabe</span>
+                <select id="ageRating" name="ageRating">
+                  <option selected>3+</option>
+                  <option>7+</option>
+                  <option>12+</option>
+                  <option>16+</option>
+                  <option>18+</option>
+                </select>
+              </label>
+              <label>
+                <span>Capabilities</span>
+                <input
+                  id="capabilities"
+                  name="capabilities"
+                  placeholder="internetClient, webcam"
+                />
+              </label>
+              <label>
+                <span>Privacy Policy URL</span>
+                <input id="privacyUrl" name="privacyUrl" type="url" placeholder="https://…" />
+              </label>
+              <label>
+                <span>Support URL</span>
+                <input id="supportUrl" name="supportUrl" type="url" placeholder="https://…" />
+              </label>
+              <label>
+                <span>Skriptpfad</span>
+                <input id="scriptPath" name="scriptPath" placeholder="src/main.py" />
+              </label>
+              <label>
+                <span>Icon-Pfad</span>
+                <input id="iconPath" name="iconPath" placeholder="assets/icon.png" />
+              </label>
+              <label>
+                <span>Source-Pfad</span>
+                <input id="sourcePath" name="sourcePath" placeholder="dist/source.zip" />
+              </label>
+              <label>
+                <span>Installer-Pfad</span>
+                <input id="installerPath" name="installerPath" placeholder="dist/App.exe" />
+              </label>
+              <label>
+                <span>Ausgabeordner</span>
+                <input id="outputDir" name="outputDir" placeholder="releases/store" />
+              </label>
+              <label>
+                <span>EXE-Name</span>
+                <input id="exeName" name="exeName" placeholder="MeineApp.exe" />
+              </label>
+            </div>
+
+            <div class="stack">
+              <label>
+                <span>Beschreibung</span>
+                <textarea id="description" name="description" rows="4"></textarea>
+              </label>
+              <label>
+                <span>README</span>
+                <textarea id="readme" name="readme" rows="5"></textarea>
+              </label>
+              <label>
+                <span>Changelog</span>
+                <textarea id="changelog" name="changelog" rows="4">Version 1.0.0.0
+- </textarea>
+              </label>
+              <label>
+                <span>Lizenzdateien (eine pro Zeile)</span>
+                <textarea id="licenseFiles" name="licenseFiles" rows="3" placeholder="LICENSE.txt"></textarea>
+              </label>
+              <label>
+                <span>Zusätzliche Lizenztexte</span>
+                <textarea
+                  id="licenseTexts"
+                  name="licenseTexts"
+                  rows="4"
+                  placeholder="Mehrere Blöcke mit --- trennen"
+                ></textarea>
+              </label>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel side-panel">
+          <div class="panel-header">
+            <h2>Prüfen &amp; Vorschau</h2>
+            <button id="copyManifestButton" class="secondary">Manifest kopieren</button>
+          </div>
+
+          <div class="info-grid">
+            <article class="info-card">
+              <h3>Icon-Check</h3>
+              <input id="iconUpload" type="file" accept="image/png,image/*" />
+              <div id="iconStatus" class="status-chip neutral">Noch kein Icon geladen</div>
+              <img id="iconPreview" alt="Icon-Vorschau" hidden />
+            </article>
+            <article class="info-card">
+              <h3>Store-Zusammenfassung</h3>
+              <dl id="summaryList" class="summary-list"></dl>
+            </article>
+          </div>
+
+          <article class="info-card preview-card">
+            <div class="preview-header">
+              <h3>Manifest-Entwurf</h3>
+              <span class="status-chip accent">lokal generiert</span>
+            </div>
+            <pre id="manifestPreview"></pre>
+          </article>
+
+          <article class="info-card preview-card">
+            <div class="preview-header">
+              <h3>JSON-Vorschau</h3>
+              <span class="status-chip neutral">ohne Geheimnisse</span>
+            </div>
+            <pre id="jsonPreview"></pre>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

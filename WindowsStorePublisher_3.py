@@ -80,6 +80,8 @@ import html
 import hashlib
 from pathlib import Path
 
+from project_profile import read_project_profile, write_project_profile
+
 # ------------------------------------------------------------
 # 2. Tkinter Sicherheits-Import
 # ------------------------------------------------------------
@@ -370,6 +372,118 @@ class StorePackagerApp(tk.Tk):
         except Exception as e:
             messagebox.showerror("Fehler", f"Einstellungen konnten nicht gespeichert werden:\n{e}")
 
+    def _get_text_widget_value(self, widget):
+        if widget is None:
+            return ""
+        return widget.get("1.0", tk.END).strip()
+
+    def _set_text_widget_value(self, widget, value):
+        if widget is None:
+            return
+        widget.delete("1.0", tk.END)
+        if value:
+            widget.insert(tk.END, value)
+
+    def collect_project_profile_state(self):
+        return {
+            "app_name": self.app_name.get(),
+            "publisher_display": self.publisher_display.get(),
+            "identity_name": self.identity_name.get(),
+            "version": self.version.get(),
+            "script_path": self.script_path.get(),
+            "icon_path": self.icon_path.get(),
+            "source_path": self.source_path.get(),
+            "installer_path": self.installer_path.get(),
+            "output_dir": self.output_dir.get(),
+            "exe_name": self.exe_name.get(),
+            "privacy_url": self.privacy_url.get(),
+            "support_url": self.support_url.get(),
+            "capabilities": self.capabilities.get(),
+            "category": self.category.get(),
+            "age_rating": self.age_rating.get(),
+            "description": self._get_text_widget_value(self.desc_box),
+            "changelog": self._get_text_widget_value(self.changelog_box),
+            "readme": self._get_text_widget_value(self.readme_box),
+            "license_files": list(self.license_files),
+            "license_text_entries": list(self.license_text_entries),
+            "enable_i18n": self.enable_i18n.get(),
+        }
+
+    def apply_project_profile_state(self, data):
+        self.app_name.set(data.get("app_name", ""))
+        self.publisher_display.set(data.get("publisher_display", ""))
+        self.identity_name.set(data.get("identity_name", ""))
+        self.version.set(data.get("version", DEFAULT_VERSION))
+        self.script_path.set(data.get("script_path", ""))
+        self.icon_path.set(data.get("icon_path", ""))
+        self.source_path.set(data.get("source_path", ""))
+        self.installer_path.set(data.get("installer_path", ""))
+        self.output_dir.set(data.get("output_dir", OUTPUT_ROOT))
+        self.exe_name.set(data.get("exe_name", ""))
+        self.privacy_url.set(data.get("privacy_url", ""))
+        self.support_url.set(data.get("support_url", ""))
+        self.capabilities.set(data.get("capabilities", ""))
+        self.category.set(data.get("category", "Productivity"))
+        self.age_rating.set(data.get("age_rating", "3+"))
+        self.enable_i18n.set(data.get("enable_i18n", True))
+
+        self.license_files = list(data.get("license_files", []))
+        self.license_text_entries = list(data.get("license_text_entries", []))
+
+        self._set_text_widget_value(self.readme_box, data.get("readme", ""))
+        self._set_text_widget_value(self.desc_box, data.get("description", ""))
+
+        changelog = data.get("changelog", "").strip()
+        if not changelog:
+            changelog = f"Version {self.version.get()}\n- \n- \n- "
+        self._set_text_widget_value(self.changelog_box, changelog)
+
+        license_preview_parts = []
+        if self.license_files:
+            license_preview_parts.append("Lizenzdateien:\n" + "\n".join(self.license_files))
+        if self.license_text_entries:
+            license_preview_parts.append("\n\n".join(self.license_text_entries))
+        self._set_text_widget_value(self.license_box, "\n\n".join(license_preview_parts))
+
+    def export_project_profile(self):
+        path = filedialog.asksaveasfilename(
+            title="Projektprofil exportieren",
+            defaultextension=".json",
+            initialfile="winstorepackager-project-v1.json",
+            filetypes=[("JSON", "*.json"), ("Alle Dateien", "*.*")],
+        )
+        if not path:
+            return
+
+        try:
+            write_project_profile(path, self.collect_project_profile_state())
+            messagebox.showinfo(
+                "Projektprofil exportiert",
+                "Projektprofil wurde exportiert.\n\n"
+                "Nicht enthalten sind Publisher-ID, SDK-Pfade, Zertifikatspfade und Passwörter.",
+            )
+        except Exception as e:
+            messagebox.showerror("Fehler", f"Projektprofil konnte nicht exportiert werden:\n{e}")
+
+    def import_project_profile(self):
+        path = filedialog.askopenfilename(
+            title="Projektprofil importieren",
+            filetypes=[("JSON", "*.json"), ("Alle Dateien", "*.*")],
+        )
+        if not path:
+            return
+
+        try:
+            profile_state = read_project_profile(path)
+            self.apply_project_profile_state(profile_state)
+            messagebox.showinfo(
+                "Projektprofil importiert",
+                "Projektprofil wurde geladen.\n\n"
+                "Bitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen.",
+            )
+        except Exception as e:
+            messagebox.showerror("Fehler", f"Projektprofil konnte nicht importiert werden:\n{e}")
+
     # ---------- GUI ----------
     def build_gui(self):
         notebook = ttk.Notebook(self)
@@ -609,6 +723,14 @@ class StorePackagerApp(tk.Tk):
         ttk.Button(extras_frame, text="Ausgabeordner öffnen", command=self.open_output_folder, width=25)\
             .grid(row=2, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(extras_frame, text="Zeigt erstellte Dateien").grid(row=2, column=1, sticky="w", padx=10)
+
+        ttk.Button(extras_frame, text="Projektprofil exportieren", command=self.export_project_profile, width=25)\
+            .grid(row=3, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(extras_frame, text="Export ohne Publisher- und Zertifikatsgeheimnisse").grid(row=3, column=1, sticky="w", padx=10)
+
+        ttk.Button(extras_frame, text="Projektprofil importieren", command=self.import_project_profile, width=25)\
+            .grid(row=4, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(extras_frame, text="Lädt Web-/Desktop-Vorarbeit aus JSON").grid(row=4, column=1, sticky="w", padx=10)
 
         ttk.Separator(frm, orient='horizontal').pack(fill='x', pady=15)
 

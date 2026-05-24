@@ -34,21 +34,20 @@ WinStorePackager bleibt primär eine Windows-Desktop-App, weil der Kernnutzen di
 
 ## Export- und Importlinie
 
-Der Desktop soll `winstorepackager-project-v1.json` exportieren und importieren können. Das Format ist der Brückenkontrakt zwischen Desktop, Web/PWA und optionalen Preflight-Tools. Sensible Werte wie echte Publisher-ID, Zertifikatspfade und Zertifikatspasswörter dürfen nicht exportiert werden; sie bleiben lokale Windows-Einstellungen.
+Der Desktop kann `winstorepackager-project-v1.json` exportieren und importieren. Das Format ist der Brückenkontrakt zwischen Desktop, Web/PWA und optionalen Preflight-Tools. Sensible Werte wie echte Publisher-ID, Zertifikatspfade und Zertifikatspasswörter dürfen nicht exportiert werden; sie bleiben lokale Windows-Einstellungen.
 
 ## Umsetzungsstatus
 
 - Bestehende Planung vor diesem Check: keine eigene `PORTIERUNGSPLAN.md` gefunden.
 - Windows-Desktop-App: vorhanden, Store-Pipeline-Eintrag aktiv.
-- Web/PWA: noch nicht angelegt.
+- Web/PWA: erster statischer Companion unter `web_companion/` angelegt. Er bearbeitet lokale Projektprofile, zeigt Manifest-Vorschau, prüft Icon-Größe und exportiert/importiert `winstorepackager-project-v1.json`.
 - Android/iOS: keine native Planung, PWA-Testziel offen.
 - macOS/Linux: nur Fehlermeldungs-/Preflight-Spuren im Code, keine belastbare Produktlinie.
-- Austauschformat: noch offen.
+- Austauschformat: als `winstorepackager-project-v1.json` dokumentiert und in Desktop-App + Web-Companion verdrahtet.
 
 ## Nächste Schritte
 
-1. `winstorepackager-project-v1.json` als Schema dokumentieren und einen Export/Import-Smoke-Test ergänzen.
-2. Desktop-App um Export/Import der Projektmetadaten erweitern.
-3. Web/PWA-Companion als statischen Fragebogen mit lokalem JSON-Export planen.
-4. macOS-/Linux-Preflight bewusst auf SDK-freie Checks begrenzen.
-5. Store-Dogfooding abschließen: WinStorePackager mit WinStorePackager paketieren, Screenshots und Store-Listing finalisieren.
+1. Web-Companion auf mobilen Browsern als PWA-Testziel prüfen.
+2. Optionalen Listing-Builder für DE/EN-Texte im Companion vertiefen.
+3. macOS-/Linux-Preflight bewusst auf SDK-freie Checks begrenzen.
+4. Store-Dogfooding abschließen: WinStorePackager mit WinStorePackager paketieren, Screenshots und Store-Listing finalisieren.
