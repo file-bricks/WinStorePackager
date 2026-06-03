@@ -6,6 +6,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Hinzugefügt / Added
+- `llms.txt` als maschinenlesbarer Projektkontext für Crawler, LLMs und Repo-Navigation ergänzt.
 - `PORTIERUNGSPLAN.md` ergänzt: Windows Store bleibt Hauptkanal, Web/PWA wird Companion-Linie, Android/iOS nur PWA-Testziel, macOS/Linux nur SDK-freier Preflight.
 - Projektaufgaben um P0-P3-Portierungsschritte für Dogfooding, Austauschformat `winstorepackager-project-v1.json`, Web/PWA und Preflight ergänzt.
 - `PROJECT_PROFILE_FORMAT.md` dokumentiert jetzt das gemeinsame Austauschformat `winstorepackager-project-v1.json`.
@@ -20,6 +21,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - `RELEASES.md` dokumentiert den lokalen Release-Artefakt-Workflow.
 
 ### Geändert / Changed
+- README-Einstieg, Suchphrasen und Discoverability-Kontext für Python-Microsoft-Store-/MSIX-Packaging geschärft.
 - Deutsche Endnutzertexte nutzen echte Umlaute statt Umschreibungen.
 - `.gitignore` deckt zusätzliche Store-, Signier- und WACK-Artefakte ab.
 - Lokale Release-Artefakte werden inklusive Source-ZIP und SHA256-Datei versioniert abgelegt.
