@@ -57,7 +57,11 @@ def detect_project_root(path_values: list[str]) -> Path | None:
 
     if not candidates:
         return None
-    return Path(os.path.commonpath(candidates))
+    try:
+        return Path(os.path.commonpath(candidates))
+    except ValueError:
+        # Mixed-drive Windows paths have no common root; keep absolute paths instead.
+        return None
 
 
 def serialize_project_profile(state: dict[str, Any]) -> dict[str, Any]:

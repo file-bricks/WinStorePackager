@@ -24,11 +24,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - README-Einstieg, Suchphrasen und Discoverability-Kontext für Python-Microsoft-Store-/MSIX-Packaging geschärft.
 - Deutsche Endnutzertexte nutzen echte Umlaute statt Umschreibungen.
 - `.gitignore` deckt zusätzliche Store-, Signier- und WACK-Artefakte ab.
+- `START.bat` bevorzugt jetzt die lokal gebaute `dist\WinStorePackager.exe`; `build_exe.bat` und `WinStorePackager.spec` dokumentieren den reproduzierbaren lokalen PyInstaller-Build.
 - Lokale Release-Artefakte werden inklusive Source-ZIP und SHA256-Datei versioniert abgelegt.
 - README, SECURITY und CONTRIBUTING verweisen jetzt auf `file-bricks/WinStorePackager`.
 - `START.bat` setzt UTF-8 und nutzt bevorzugt `py -3`.
 
 ### Behoben / Fixed
+- Projektprofil-Export bricht bei absoluten Pfaden auf unterschiedlichen Windows-Laufwerken nicht mehr mit `ValueError` ab; in diesem Fall bleiben die Pfade bewusst absolut.
+- `.gitignore` ist wieder UTF-8 ohne BOM und entfernt interne Planungsdateien aus dem öffentlichen Git-Tracking.
 - Persönliche Kontaktadresse aus dem Code of Conduct entfernt.
 - `_WARTUNG/` und lokale Build-/Staging-Artefakte werden nicht mehr im Git-Index geführt.
 

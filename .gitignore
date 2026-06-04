@@ -49,6 +49,7 @@ _WARTUNG/
 *.msix
 *.appx
 *.spec
+!WinStorePackager.spec
 *.tmp
 *.zip
 .licenses_cache.json
@@ -90,3 +91,7 @@ Package.appxmanifest
 wack-results/
 TestResults/
 *.appcertlog
+DECISIONS.md
+PORTIERUNGSPLAN.md
+TODO.md
+DONE.md

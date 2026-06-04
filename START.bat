@@ -4,6 +4,12 @@ cd /d "%~dp0"
 chcp 65001 >nul 2>&1
 set PYTHONIOENCODING=utf-8
 
+if exist "dist\WinStorePackager.exe" (
+    echo Starte WinStorePackager EXE...
+    start "" "dist\WinStorePackager.exe"
+    exit /b 0
+)
+
 where py >nul 2>&1
 if not errorlevel 1 (
     py -3 "WindowsStorePublisher_3.py"

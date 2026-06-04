@@ -99,6 +99,14 @@ Or on Windows, double-click `START.bat`.
 
 ---
 
+## Local EXE Build
+
+Use `build_exe.bat` to create a local `dist\WinStorePackager.exe` from the tracked `WinStorePackager.spec`. The build work directory is outside OneDrive at `C:\_Local_DEV\codex_build\winstorepackager`, while generated executables and release bundles remain ignored by Git.
+
+`START.bat` prefers `dist\WinStorePackager.exe` when it exists and falls back to `python WindowsStorePublisher_3.py`.
+
+---
+
 ## Getting Started
 
 1. **Launch the tool** — `python WindowsStorePublisher_3.py` or `START.bat`
@@ -139,7 +147,7 @@ If dependencies are missing, the launcher can install Python packages from PyPI 
 
 The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. Local Partner Center data, Publisher IDs in `settings_store_packager.json`, certificates, generated manifests, MSIX/AppX packages, WACK logs, screenshots, and release bundles stay outside Git via `.gitignore`.
 
-Last visibility check: 2026-06-04. GitHub traffic showed 4 views from 2 unique visitors and 31 clones from 19 unique cloners in the current 14-day window. Web search for exact repository and product-name phrases did not show broad external visibility, so the README now includes clearer canonical naming and search phrases.
+Last hygiene and visibility check: 2026-06-04. GitHub traffic showed 4 views from 2 unique visitors and 31 clones from 19 unique cloners in the current 14-day window. Web search for exact repository and product-name phrases did not show broad external visibility, so the README now includes clearer canonical naming and search phrases. The same maintenance pass found no tracked ignored files after removing `PORTIERUNGSPLAN.md` from the Git index; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
 
 ---
 

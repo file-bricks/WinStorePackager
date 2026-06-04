@@ -101,3 +101,18 @@ def test_deserialize_profile_resolves_paths_against_profile_root(tmp_path: Path)
 def test_validate_project_profile_rejects_unknown_format():
     errors = validate_project_profile({"format": "wrong", "schema_version": 99})
     assert errors
+
+
+def test_serialize_profile_keeps_absolute_paths_when_drives_do_not_match():
+    state = {
+        "app_name": "Demo App",
+        "script_path": r"C:\Projects\DemoApp\src\main.py",
+        "icon_path": r"D:\Assets\icon.png",
+        "output_dir": r"C:\Projects\DemoApp\releases\store",
+    }
+
+    profile = serialize_project_profile(state)
+
+    assert profile["project_root"] == ""
+    assert profile["paths"]["script_path"] == "C:/Projects/DemoApp/src/main.py"
+    assert profile["paths"]["icon_path"] == "D:/Assets/icon.png"
