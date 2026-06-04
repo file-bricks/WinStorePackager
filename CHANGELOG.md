@@ -6,6 +6,8 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Hinzugefügt / Added
+- `linux_preflight.py` ergänzt: SDK-freier Linux-Preflight prüft Projektstruktur, `store_package.json`, README, Privacy Policy, Store-Listing, Screenshot-/Icon-Artefakte und optional exportierte Projektprofile.
+- `tests/test_linux_preflight.py` deckt gültige Linux-Preflights, fehlende Artefakte und Drift zwischen Projektprofil und Store-Metadaten ab.
 - `llms.txt` als maschinenlesbarer Projektkontext für Crawler, LLMs und Repo-Navigation ergänzt.
 - `PORTIERUNGSPLAN.md` ergänzt: Windows Store bleibt Hauptkanal, Web/PWA wird Companion-Linie, Android/iOS nur PWA-Testziel, macOS/Linux nur SDK-freier Preflight.
 - Projektaufgaben um P0-P3-Portierungsschritte für Dogfooding, Austauschformat `winstorepackager-project-v1.json`, Web/PWA und Preflight ergänzt.
@@ -21,6 +23,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - `RELEASES.md` dokumentiert den lokalen Release-Artefakt-Workflow.
 
 ### Geändert / Changed
+- `PORTIERUNGSPLAN.md`, `AUFGABEN.txt` und README führen den Linux-Preflight jetzt als erledigten P3-Desktop-Schritt; der macOS-Preflight bleibt separat offen.
 - README-Einstieg, Suchphrasen und Discoverability-Kontext für Python-Microsoft-Store-/MSIX-Packaging geschärft.
 - Deutsche Endnutzertexte nutzen echte Umlaute statt Umschreibungen.
 - `.gitignore` deckt zusätzliche Store-, Signier- und WACK-Artefakte ab.

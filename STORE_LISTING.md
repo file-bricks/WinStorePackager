@@ -29,6 +29,11 @@ Python-Entwickler, die ihre Desktop-Anwendungen im Microsoft Store veröffentlic
 - Windows SDK (für makeappx.exe und signtool.exe)
 - Microsoft Store Entwicklerkonto (für die Einreichung)
 
+**Support:**
+
+- GitHub Issues: https://github.com/file-bricks/WinStorePackager/issues
+- Datenschutz und lokale Datenhaltung: https://github.com/file-bricks/WinStorePackager/blob/master/PRIVACY_POLICY.md
+
 ### Schlüsselwörter
 MSIX, Python, Packaging, Microsoft Store, App-Veröffentlichung, Manifest, Icon-Generator, Entwickler-Tool, Windows SDK, Store-Einreichung
 
@@ -65,6 +70,11 @@ Python developers who want to publish their desktop applications on the Microsof
 - Windows 10/11
 - Windows SDK (for makeappx.exe and signtool.exe)
 - Microsoft Store developer account (for submission)
+
+**Support:**
+
+- GitHub Issues: https://github.com/file-bricks/WinStorePackager/issues
+- Privacy and local-data boundary: https://github.com/file-bricks/WinStorePackager/blob/master/PRIVACY_POLICY.md
 
 ### Keywords
 MSIX, Python, packaging, Microsoft Store, app publishing, manifest, icon generator, developer tool, Windows SDK, Store submission

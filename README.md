@@ -17,6 +17,7 @@
 | I want to... | Start with |
 |---|---|
 | Package a Python desktop app for the Microsoft Store | [`WindowsStorePublisher_3.py`](WindowsStorePublisher_3.py) on Windows |
+| Run the SDK-free Linux desktop preflight | [`linux_preflight.py`](linux_preflight.py) |
 | Prepare Store metadata before using Windows SDK tools | [`web_companion/index.html`](web_companion/index.html) |
 | Share project metadata without local secrets | [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) |
 | Check privacy and local-data boundaries | [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) and [Repository Hygiene](#repository-hygiene) |
@@ -96,6 +97,24 @@ python WindowsStorePublisher_3.py
 ```
 
 Or on Windows, double-click `START.bat`.
+
+---
+
+## SDK-free Linux Preflight
+
+For Linux workstations or CI runs without the Windows SDK, the repository now includes a metadata-only preflight:
+
+```bash
+python linux_preflight.py --project-root .
+```
+
+Optional project profile validation:
+
+```bash
+python linux_preflight.py --project-root . --profile-path ./winstorepackager-project-v1.json
+```
+
+The Linux preflight intentionally stays below the Windows packaging layer. It checks project structure, `store_package.json`, README, privacy policy, Store listing, screenshot/icon artifacts, and an optional exported project profile, but it does not build MSIX packages, sign code, or run WACK.
 
 ---
 
