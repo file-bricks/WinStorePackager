@@ -165,14 +165,7 @@ AGE_RATINGS = ["3+", "7+", "12+", "16+", "18+"]
 
 def which(program):
     """Find executable in PATH"""
-    paths = os.environ.get("PATH", "").split(os.pathsep)
-    exts = [""] if os.name != "nt" else os.environ.get("PATHEXT", ".EXE;.BAT;.CMD").split(";")
-    for p in paths:
-        for ext in exts:
-            candidate = os.path.join(p, program + ext)
-            if os.path.isfile(candidate):
-                return candidate
-    return None
+    return shutil.which(program)
 
 def find_windows_sdk_tools():
     """Auto-detect Windows SDK tools"""
@@ -1179,8 +1172,9 @@ def patch_widgets(translator):
                 err_out = e.stderr.decode('utf-8', errors='replace') if e.stderr else "Unbekannter Fehler"
                 self.after(0, lambda: messagebox.showerror("PyInstaller Fehler", f"{err_out}"))
             except Exception as e:
+                err_str = str(e)
                 progress.close()
-                self.after(0, lambda: messagebox.showerror("Fehler", f"EXE-Erzeugung fehlgeschlagen:\n{e}"))
+                self.after(0, lambda: messagebox.showerror("Fehler", f"EXE-Erzeugung fehlgeschlagen:\n{err_str}"))
         
         thread = threading.Thread(target=build_thread, daemon=True)
         thread.start()
@@ -1341,9 +1335,10 @@ def patch_widgets(translator):
                 error_msg = f"Befehl fehlgeschlagen:\n{safe_cmd}\n\nAusgabe:\n{e.stderr if e.stderr else e.stdout}"
                 self.after(0, lambda: messagebox.showerror("Fehler", error_msg))
             except Exception as e:
+                err_str = str(e)
                 progress.close()
-                self.after(0, lambda: messagebox.showerror("Fehler", 
-                    f"MSIX-Build fehlgeschlagen:\n{e}"))
+                self.after(0, lambda: messagebox.showerror("Fehler",
+                    f"MSIX-Build fehlgeschlagen:\n{err_str}"))
         
         thread = threading.Thread(target=build_thread, daemon=True)
         thread.start()
@@ -1434,15 +1429,19 @@ def patch_widgets(translator):
                     proc.kill()
                     proc.wait(timeout=3)
 
-                messagebox.showinfo("Screenshots",
-                    f"Screenshots in Store-Formaten gespeichert:\n{shots_dir}\n\n" +
-                    "\n".join([f"• {w}x{h} ({d})" for w, h, d in formats]))
+                info_msg = (
+                    f"Screenshots in Store-Formaten gespeichert:\n{shots_dir}\n\n"
+                    + "\n".join([f"• {w}x{h} ({d})" for w, h, d in formats])
+                )
+                self.after(0, lambda: messagebox.showinfo("Screenshots", info_msg))
 
             except Exception as e:
-                messagebox.showerror("Fehler", f"Screenshots fehlgeschlagen:\n{e}")
+                err_msg = f"Screenshots fehlgeschlagen:\n{e}"
+                self.after(0, lambda: messagebox.showerror("Fehler", err_msg))
                 if proc is not None:
                     try:
                         proc.terminate()
+                        proc.wait(timeout=3)
                     except Exception:
                         pass
 
@@ -1468,17 +1467,27 @@ def patch_widgets(translator):
                 f"MSIX-Datei nicht gefunden:\n{msix_path}\n\nBitte zuerst MSIX bauen.")
             return
         
-        try:
-            subprocess.run([appcert, "reset"], capture_output=True, timeout=30)
-            
-            messagebox.showinfo("WACK-Test", 
-                "WACK-Test wird gestartet...\n\nDies kann mehrere Minuten dauern.\n" +
-                "Das Ergebnis wird in einem separaten Fenster angezeigt.")
-            
-            subprocess.Popen([appcert, "test", "/packagepath", msix_path])
-            
-        except Exception as e:
-            messagebox.showerror("Fehler", f"WACK-Test fehlgeschlagen:\n{e}")
+        appcert_path = appcert
+        msix_path_captured = msix_path
+
+        def _run_wack():
+            try:
+                subprocess.run([appcert_path, "reset"], capture_output=True, timeout=30)
+                self.after(0, _launch_test)
+            except Exception as exc:
+                err_msg = f"WACK-Test fehlgeschlagen:\n{exc}"
+                self.after(0, lambda: messagebox.showerror("Fehler", err_msg))
+
+        def _launch_test():
+            try:
+                messagebox.showinfo("WACK-Test",
+                    "WACK-Test wird gestartet...\n\nDies kann mehrere Minuten dauern.\n"
+                    "Das Ergebnis wird in einem separaten Fenster angezeigt.")
+                subprocess.Popen([appcert_path, "test", "/packagepath", msix_path_captured])
+            except Exception as exc:
+                messagebox.showerror("Fehler", f"WACK-Test fehlgeschlagen:\n{exc}")
+
+        threading.Thread(target=_run_wack, daemon=True).start()
     
     # ---------- Changelog Generator ----------
     def format_changelog(self):
