@@ -1,11 +1,13 @@
 import json
+import warnings
 from pathlib import Path
 
 from linux_preflight import run_linux_preflight
 from project_profile import write_project_profile
+from unix_preflight import run_unix_preflight
 
 
-def test_linux_preflight_accepts_valid_repo_and_profile(tmp_path: Path):
+def test_unix_preflight_accepts_valid_repo_and_profile(tmp_path: Path):
     root = _create_repo(tmp_path)
     profile_path = root / "winstorepackager-project-v1.json"
     write_project_profile(
@@ -31,13 +33,13 @@ def test_linux_preflight_accepts_valid_repo_and_profile(tmp_path: Path):
         },
     )
 
-    report = run_linux_preflight(root, profile_path=profile_path)
+    report = run_unix_preflight(root, profile_path=profile_path)
 
     assert report["ok"] is True
     assert report["errors"] == []
 
 
-def test_linux_preflight_reports_missing_artifacts_and_invalid_urls(tmp_path: Path):
+def test_unix_preflight_reports_missing_artifacts_and_invalid_urls(tmp_path: Path):
     root = _create_repo(tmp_path)
     (root / "STORE_LISTING.md").unlink()
     (root / "README" / "screenshots" / "main.png").unlink()
@@ -59,7 +61,7 @@ def test_linux_preflight_reports_missing_artifacts_and_invalid_urls(tmp_path: Pa
         encoding="utf-8",
     )
 
-    report = run_linux_preflight(root)
+    report = run_unix_preflight(root)
 
     assert report["ok"] is False
     assert any("Store-Listing fehlt" in item for item in report["errors"])
@@ -69,7 +71,7 @@ def test_linux_preflight_reports_missing_artifacts_and_invalid_urls(tmp_path: Pa
     assert any("Icon-/Screenshot-Artefakte fehlen vollständig" in item for item in report["warnings"])
 
 
-def test_linux_preflight_warns_on_profile_and_store_package_drift(tmp_path: Path):
+def test_unix_preflight_warns_on_profile_and_store_package_drift(tmp_path: Path):
     root = _create_repo(tmp_path)
     profile_path = root / "winstorepackager-project-v1.json"
     write_project_profile(
@@ -95,12 +97,26 @@ def test_linux_preflight_warns_on_profile_and_store_package_drift(tmp_path: Path
         },
     )
 
-    report = run_linux_preflight(root, profile_path=profile_path)
+    report = run_unix_preflight(root, profile_path=profile_path)
 
     assert report["ok"] is True
     assert any("`app_name` stimmt nicht mit `store_package.json` überein" in item for item in report["warnings"])
     assert any("`version` stimmt nicht mit `store_package.json` überein" in item for item in report["warnings"])
     assert any("`privacy_url` weicht von `store_package.json` ab" in item for item in report["warnings"])
+
+
+def test_linux_preflight_deprecated_wrapper(tmp_path: Path):
+    root = _create_repo(tmp_path)
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        report = run_linux_preflight(root)
+
+        assert len(w) == 1
+        assert issubclass(w[0].category, DeprecationWarning)
+        assert "run_linux_preflight is deprecated" in str(w[0].message)
+
+    assert report["ok"] is True
+    assert report["platform"] == "linux"
 
 
 def _create_repo(tmp_path: Path) -> Path:
