@@ -205,8 +205,10 @@ function exportProfile() {
   const link = document.createElement("a");
   link.href = url;
   link.download = "winstorepackager-project-v1.json";
+  document.body.appendChild(link);
   link.click();
-  URL.revokeObjectURL(url);
+  document.body.removeChild(link);
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 async function importProfile(event) {
@@ -259,7 +261,9 @@ async function copyManifest() {
 }
 
 function persistToStorage() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(buildProfile()));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(buildProfile()));
+  } catch (_) {}
 }
 
 function hydrateFromStorage() {
@@ -347,8 +351,11 @@ async function installApp() {
     return;
   }
 
-  deferredInstallPrompt.prompt();
-  const choice = await deferredInstallPrompt.userChoice;
+  const prompt = deferredInstallPrompt;
+  deferredInstallPrompt = null;
+  installAppButton.hidden = true;
+  prompt.prompt();
+  const choice = await prompt.userChoice;
   if (choice.outcome === "accepted") {
     setChip(installState, "Installation bestätigt", "success");
     installHint.textContent = "Der Browser installiert jetzt den Companion.";
@@ -356,8 +363,6 @@ async function installApp() {
     setChip(installState, "Installation abgebrochen", "warning");
     installHint.textContent = "Der Dialog wurde geschlossen. Er kann später erneut erscheinen.";
   }
-  deferredInstallPrompt = null;
-  installAppButton.hidden = true;
 }
 
 function handleAppInstalled() {

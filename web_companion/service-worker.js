@@ -7,6 +7,10 @@ const APP_SHELL = [
   "./manifest.webmanifest",
   "./icon.svg",
   "./offline.html",
+  "./icons/Icon-192.png",
+  "./icons/Icon-512.png",
+  "./icons/Icon-maskable-192.png",
+  "./icons/Icon-maskable-512.png",
 ];
 
 self.addEventListener("install", (event) => {
