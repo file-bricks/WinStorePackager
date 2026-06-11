@@ -17,13 +17,25 @@ WinStorePackager is a local-first Windows GUI for preparing Python applications 
 - `PRIVACY_POLICY.md`: local-data and privacy boundary.
 - `STORE_LISTING.md`: reusable Microsoft Store listing copy.
 
+## Audience
+
+- Solo Python developers who want to submit a desktop app to the Microsoft Store and need a local GUI for the repetitive packaging steps (manifests, icons, screenshots, MSIX)
+- Small teams preparing Store listings and metadata without setting up Visual Studio projects per app
+- Developers on Windows who want a reproducible local workflow from Python source to signed MSIX
+- Bioinformatics, research, or tool developers who have a working PySide6/PyQt6 app and want to distribute it via the Store
+
 ## Search Phrases
 
-- WinStorePackager Python Microsoft Store MSIX
-- file-bricks WinStorePackager
-- Python AppxManifest generator
-- local-first MSIX packaging tool
-- Microsoft Store packaging GUI for Python apps
+```
+WinStorePackager Python Microsoft Store MSIX
+file-bricks WinStorePackager
+Python AppxManifest generator
+local-first MSIX packaging tool
+Microsoft Store packaging GUI for Python apps
+MSIX packaging tool without Visual Studio
+Python app Store submission helper
+AppxManifest XML generator Python
+```
 
 ## Scope Boundary
 
@@ -32,3 +44,5 @@ WinStorePackager is not the official Microsoft MSIX Packaging Tool and does not 
 ## Privacy Boundary
 
 Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifests, MSIX/AppX packages, WACK logs, and release bundles should stay outside Git. Project profile exports intentionally omit sensitive Windows-specific values.
+
+## Last-checked: 2026-06-11
