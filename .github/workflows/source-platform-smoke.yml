@@ -26,4 +26,6 @@ jobs:
         run: pip install pytest
 
       - name: Unix-Preflight- und Profilformat-Tests ausführen
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: pytest tests/test_unix_preflight.py tests/test_project_profile.py -v
