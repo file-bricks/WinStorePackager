@@ -8,18 +8,19 @@ from project_profile import (
 )
 
 
-def test_serialize_profile_uses_relative_project_paths_and_excludes_sensitive_fields():
+def test_serialize_profile_uses_relative_project_paths_and_excludes_sensitive_fields(tmp_path: Path):
+    project_root = tmp_path / "DemoApp"
     state = {
         "app_name": "Demo App",
         "publisher": "CN=REAL-PUBLISHER",
         "publisher_display": "Demo Studio",
         "identity_name": "Demo.App",
         "version": "1.2.3.4",
-        "script_path": r"C:\Projects\DemoApp\src\main.py",
-        "icon_path": r"C:\Projects\DemoApp\assets\icon.png",
-        "source_path": r"C:\Projects\DemoApp\dist\source.zip",
-        "installer_path": r"C:\Projects\DemoApp\dist\DemoApp.exe",
-        "output_dir": r"C:\Projects\DemoApp\releases\store",
+        "script_path": str(project_root / "src" / "main.py"),
+        "icon_path": str(project_root / "assets" / "icon.png"),
+        "source_path": str(project_root / "dist" / "source.zip"),
+        "installer_path": str(project_root / "dist" / "DemoApp.exe"),
+        "output_dir": str(project_root / "releases" / "store"),
         "exe_name": "DemoApp.exe",
         "pfx_path": r"C:\Secrets\demo.pfx",
         "pfx_password": "super-secret",
@@ -33,7 +34,7 @@ def test_serialize_profile_uses_relative_project_paths_and_excludes_sensitive_fi
         "description": "Beschreibung",
         "changelog": "Version 1.2.3.4\n- Neu",
         "readme": "README",
-        "license_files": [r"C:\Projects\DemoApp\LICENSE.txt"],
+        "license_files": [str(project_root / "LICENSE.txt")],
         "license_text_entries": ["MIT"],
         "enable_i18n": True,
     }
@@ -41,7 +42,7 @@ def test_serialize_profile_uses_relative_project_paths_and_excludes_sensitive_fi
     profile = serialize_project_profile(state)
 
     assert profile["format"] == PROFILE_FORMAT
-    assert profile["project_root"] == "C:/Projects/DemoApp"
+    assert profile["project_root"] == project_root.as_posix()
     assert profile["paths"]["script_path"] == "src/main.py"
     assert profile["paths"]["icon_path"] == "assets/icon.png"
     assert profile["documents"]["license_files"] == ["LICENSE.txt"]
