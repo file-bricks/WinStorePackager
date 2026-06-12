@@ -1,3 +1,5 @@
+> English | [Deutsch](README_de.md)
+
 <p align="center">
   <img src="https://img.shields.io/badge/Version-2.3.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.10+-yellow?style=for-the-badge" alt="Python">

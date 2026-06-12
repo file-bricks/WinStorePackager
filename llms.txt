@@ -10,7 +10,8 @@ WinStorePackager is a local-first Windows GUI for preparing Python applications 
 
 ## Key Files
 
-- `README.md`: main landing page, screenshot, quickstart, local-data boundaries.
+- `README.md`: English main landing page, screenshot, quickstart, local-data boundaries.
+- `README_de.md`: German companion README for Microsoft Store packaging users.
 - `WindowsStorePublisher_3.py`: desktop GUI entry point.
 - `PROJECT_PROFILE_FORMAT.md`: `winstorepackager-project-v1` exchange format.
 - `web_companion/index.html`: browser-based local companion for project profile editing.
@@ -35,6 +36,7 @@ Microsoft Store packaging GUI for Python apps
 MSIX packaging tool without Visual Studio
 Python app Store submission helper
 AppxManifest XML generator Python
+Python Microsoft Store packaging German README
 ```
 
 ## Scope Boundary
@@ -45,4 +47,4 @@ WinStorePackager is not the official Microsoft MSIX Packaging Tool and does not 
 
 Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifests, MSIX/AppX packages, WACK logs, and release bundles should stay outside Git. Project profile exports intentionally omit sensitive Windows-specific values.
 
-## Last-checked: 2026-06-11
+## Last-checked: 2026-06-12
