@@ -1,4 +1,6 @@
-> English | [Deutsch](README_de.md)
+<img src="assets/banner.svg" width="100%" alt="WinStorePackager Banner">
+
+> **English** | [Deutsch](README_de.md)
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-2.3.0-blue?style=for-the-badge" alt="Version">

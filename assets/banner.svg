@@ -1,0 +1,340 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="100%" height="100%">
+  <defs>
+    <!-- Fonts -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;800;900&amp;family=Plus+Jakarta+Sans:wght@500;600;700&amp;display=swap');
+      
+      .wordmark {
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 900;
+        fill: url(#text-grad);
+      }
+      .tagline {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 500;
+        fill: #94A3B8;
+      }
+      .badge-text {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+      .card {
+        stroke: #1E293B;
+        stroke-width: 2;
+        fill: url(#card-bg);
+      }
+    </style>
+
+    <!-- Gradients -->
+    <linearGradient id="card-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F19"/>
+      <stop offset="50%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#070A10"/>
+    </linearGradient>
+
+    <linearGradient id="text-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8"/>   <!-- Sky blue -->
+      <stop offset="60%" stop-color="#818CF8"/>   <!-- Indigo -->
+      <stop offset="100%" stop-color="#C084FC"/>  <!-- Purple -->
+    </linearGradient>
+
+    <radialGradient id="scene-glow" cx="330" cy="180" r="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.15"/>
+      <stop offset="60%" stop-color="#818CF8" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#0B0F19" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="text-glow" cx="900" cy="170" r="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#C084FC" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0B0F19" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="laser-glow-radial" cx="330" cy="150" r="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00F2FE" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#38BDF8" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Clip Path for Scanner Tunnel -->
+    <clipPath id="scanner-tunnel-clip">
+      <path d="M 272 210 L 272 150 A 58 58 0 0 1 388 150 L 388 210 Z"/>
+    </clipPath>
+
+    <!-- Grid Pattern -->
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#334155" stroke-width="1" opacity="0.1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Card -->
+  <rect width="1200" height="340" rx="24" class="card"/>
+  <rect width="1200" height="340" rx="24" fill="url(#grid)" opacity="0.6"/>
+
+  <!-- Ambient Glows -->
+  <circle cx="330" cy="180" r="240" fill="url(#scene-glow)"/>
+  <circle cx="900" cy="170" r="280" fill="url(#text-glow)"/>
+
+  <!-- ==================== SCENE (LEFT) ==================== -->
+
+  <!-- Conveyor Shadow -->
+  <ellipse cx="340" cy="270" rx="230" ry="8" fill="#000000" opacity="0.5"/>
+
+  <!-- Conveyor Legs -->
+  <!-- Left Leg -->
+  <g>
+    <rect x="157" y="214" width="6" height="52" fill="#475569"/>
+    <rect x="154" y="262" width="12" height="6" rx="2" fill="#334155"/>
+  </g>
+  <!-- Right Leg -->
+  <g>
+    <rect x="517" y="214" width="6" height="52" fill="#475569"/>
+    <rect x="514" y="262" width="12" height="6" rx="2" fill="#334155"/>
+  </g>
+
+  <!-- Conveyor Belt Rollers (Wheels) -->
+  <g>
+    <!-- Roller 1 -->
+    <circle cx="120" cy="223" r="7" fill="#64748B"/><circle cx="120" cy="223" r="2.5" fill="#1E293B"/>
+    <!-- Roller 2 -->
+    <circle cx="177" cy="223" r="7" fill="#64748B"/><circle cx="177" cy="223" r="2.5" fill="#1E293B"/>
+    <!-- Roller 3 -->
+    <circle cx="234" cy="223" r="7" fill="#64748B"/><circle cx="234" cy="223" r="2.5" fill="#1E293B"/>
+    <!-- Roller 4 -->
+    <circle cx="291" cy="223" r="7" fill="#64748B"/><circle cx="291" cy="223" r="2.5" fill="#1E293B"/>
+    <!-- Roller 5 -->
+    <circle cx="348" cy="223" r="7" fill="#64748B"/><circle cx="348" cy="223" r="2.5" fill="#1E293B"/>
+    <!-- Roller 6 -->
+    <circle cx="405" cy="223" r="7" fill="#64748B"/><circle cx="405" cy="223" r="2.5" fill="#1E293B"/>
+    <!-- Roller 7 -->
+    <circle cx="462" cy="223" r="7" fill="#64748B"/><circle cx="462" cy="223" r="2.5" fill="#1E293B"/>
+    <!-- Roller 8 -->
+    <circle cx="519" cy="223" r="7" fill="#64748B"/><circle cx="519" cy="223" r="2.5" fill="#1E293B"/>
+    <!-- Roller 9 -->
+    <circle cx="576" cy="223" r="7" fill="#64748B"/><circle cx="576" cy="223" r="2.5" fill="#1E293B"/>
+  </g>
+
+  <!-- Conveyor Belt Rail -->
+  <rect x="90" y="210" width="500" height="9" rx="4.5" fill="#1E293B"/>
+  <rect x="92" y="212" width="496" height="5" rx="2.5" fill="#334155"/>
+
+  <!-- Package 1: Plain Cardboard Box (Leftmost) -->
+  <g>
+    <!-- Main Box -->
+    <rect x="120" y="160" width="50" height="50" rx="4" fill="#D7A15C"/>
+    <!-- Shadow Side (Left half) -->
+    <path d="M 120 164 A 4 4 0 0 1 124 160 L 145 160 L 145 210 L 120 210 Z" fill="#C58F49" opacity="0.4"/>
+    <!-- Lid Seam -->
+    <line x1="120" y1="168" x2="170" y2="168" stroke="#9C6934" stroke-width="1.5"/>
+    <line x1="145" y1="168" x2="145" y2="210" stroke="#9C6934" stroke-width="1"/>
+    <!-- Tape -->
+    <rect x="141" y="160" width="8" height="50" fill="#52525B" opacity="0.85"/>
+    <!-- Label -->
+    <rect x="125" y="176" width="13" height="15" rx="1.5" fill="#F8FAFC"/>
+    <line x1="128" y1="180" x2="135" y2="180" stroke="#94A3B8" stroke-width="1.5"/>
+    <line x1="128" y1="184" x2="133" y2="184" stroke="#94A3B8" stroke-width="1.5"/>
+    <line x1="128" y1="188" x2="134" y2="188" stroke="#94A3B8" stroke-width="1.5"/>
+    <!-- Up Arrow -->
+    <path d="M 158 196 L 158 189 M 155 192 L 158 189 L 161 192" stroke="#52525B" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Package 2: Plain Cardboard Box (Entering Scanner) -->
+  <g>
+    <rect x="205" y="168" width="42" height="42" rx="3" fill="#D7A15C"/>
+    <path d="M 205 171 A 3 3 0 0 1 208 168 L 226 168 L 226 210 L 205 210 Z" fill="#C58F49" opacity="0.4"/>
+    <line x1="205" y1="174" x2="247" y2="174" stroke="#9C6934" stroke-width="1.2"/>
+    <line x1="226" y1="174" x2="226" y2="210" stroke="#9C6934" stroke-width="1"/>
+    <rect x="222" y="168" width="7" height="42" fill="#52525B" opacity="0.85"/>
+    <path d="M 238 195 L 238 189 M 235 192 L 238 189 L 241 192" stroke="#52525B" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ==================== SCANNER (CENTER) ==================== -->
+  
+  <!-- Scanner Inner Tunnel Background & Flaps (Clipped) -->
+  <g clip-path="url(#scanner-tunnel-clip)">
+    <!-- Dark Tunnel Interior -->
+    <rect x="270" y="80" width="120" height="135" fill="#090D16"/>
+    
+    <!-- Rubber Curtains/Flaps -->
+    <!-- We draw vertical slits by using rectangles with spaces -->
+    <rect x="278" y="96" width="11" height="114" fill="#1E293B"/>
+    <rect x="291" y="93" width="11" height="117" fill="#111827"/>
+    <rect x="304" y="91" width="11" height="119" fill="#1E293B"/>
+    <rect x="317" y="90" width="11" height="120" fill="#111827"/>
+    <rect x="330" y="90" width="11" height="120" fill="#1E293B"/>
+    <rect x="343" y="91" width="11" height="119" fill="#111827"/>
+    <rect x="356" y="93" width="11" height="117" fill="#1E293B"/>
+    <rect x="369" y="96" width="11" height="114" fill="#111827"/>
+
+    <!-- Flap Shadows/Seams -->
+    <line x1="289" y1="95" x2="289" y2="210" stroke="#020617" stroke-width="1.5"/>
+    <line x1="302" y1="92" x2="302" y2="210" stroke="#020617" stroke-width="1.5"/>
+    <line x1="315" y1="90" x2="315" y2="210" stroke="#020617" stroke-width="1.5"/>
+    <line x1="328" y1="90" x2="328" y2="210" stroke="#020617" stroke-width="1.5"/>
+    <line x1="341" y1="90" x2="341" y2="210" stroke="#020617" stroke-width="1.5"/>
+    <line x1="354" y1="92" x2="354" y2="210" stroke="#020617" stroke-width="1.5"/>
+    <line x1="367" y1="95" x2="367" y2="210" stroke="#020617" stroke-width="1.5"/>
+
+    <!-- Glowing Holographic Box inside the scanner -->
+    <g opacity="0.85">
+      <!-- Glow fill -->
+      <rect x="306" y="165" width="46" height="45" rx="3" fill="#00F2FE" fill-opacity="0.12"/>
+      <!-- Wireframe -->
+      <rect x="306" y="165" width="46" height="45" rx="3" fill="none" stroke="#00F2FE" stroke-width="2" stroke-dasharray="3 2"/>
+      <!-- Scanline indicator -->
+      <line x1="303" y1="188" x2="355" y2="188" stroke="#FFFFFF" stroke-width="2" opacity="0.9"/>
+      <!-- 3D projection lines inside -->
+      <line x1="306" y1="165" x2="320" y2="175" stroke="#00F2FE" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+      <line x1="352" y1="165" x2="338" y2="175" stroke="#00F2FE" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+      <line x1="306" y1="210" x2="320" y2="200" stroke="#00F2FE" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+      <line x1="352" y1="210" x2="338" y2="200" stroke="#00F2FE" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+    </g>
+
+    <!-- Laser Scanning Beam (Inner) -->
+    <rect x="327" y="80" width="6" height="130" fill="url(#text-grad)" opacity="0.25"/>
+    <line x1="330" y1="80" x2="330" y2="210" stroke="#00F2FE" stroke-width="2" opacity="0.8"/>
+  </g>
+
+  <!-- Laser Beam Radial Ambient (placed behind outer arch but in front of conveyor) -->
+  <circle cx="330" cy="150" r="75" fill="url(#laser-glow-radial)" pointer-events="none"/>
+
+  <!-- Scanner Outer Arch & Shielding -->
+  <g>
+    <!-- Base mounts -->
+    <rect x="250" y="206" width="160" height="7" rx="3.5" fill="#1E293B"/>
+    <rect x="264" y="201" width="132" height="5" fill="#334155"/>
+    
+    <!-- Outer Heavy Arch -->
+    <path d="M 270 210 L 270 150 A 60 60 0 0 1 390 150 L 390 210" stroke="#334155" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <!-- Inner Cyan Light Stripe -->
+    <path d="M 271 210 L 271 150 A 59 59 0 0 1 389 150 L 389 210" stroke="#38BDF8" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8"/>
+    
+    <!-- Status Display Screen -->
+    <rect x="257" y="130" width="6" height="16" rx="1.5" fill="#090D16" stroke="#475569" stroke-width="1"/>
+    <line x1="260" y1="133" x2="260" y2="143" stroke="#10B981" stroke-width="1.5" stroke-linecap="round"/>
+    
+    <!-- Top Glowing Dome / Light -->
+    <path d="M 324 90 A 6 6 0 0 1 336 90 Z" fill="#10B981"/>
+    <circle cx="330" cy="88" r="3" fill="#34D399"/>
+    <!-- Soft green aura -->
+    <circle cx="330" cy="88" r="8" fill="#10B981" opacity="0.3"/>
+  </g>
+
+  <!-- ==================== PACKAGES (RIGHT) ==================== -->
+
+  <!-- Package 3: Newly Wrapped Blue Gift Box (Just exited) -->
+  <g>
+    <!-- Gift Box -->
+    <rect x="415" y="162" width="48" height="48" rx="4" fill="#0284C7"/>
+    <!-- Shadow Side -->
+    <path d="M 415 166 A 4 4 0 0 1 419 162 L 439 162 L 439 210 L 415 210 Z" fill="#0369A1" opacity="0.4"/>
+    
+    <!-- Vertical Ribbon -->
+    <rect x="435" y="162" width="8" height="48" fill="#F59E0B"/>
+    <!-- Horizontal Ribbon -->
+    <rect x="415" y="182" width="48" height="8" fill="#F59E0B"/>
+    <!-- Ribbon Seam/Details -->
+    <line x1="439" y1="162" x2="439" y2="210" stroke="#D97706" stroke-width="0.75"/>
+    <line x1="415" y1="186" x2="463" y2="186" stroke="#D97706" stroke-width="0.75"/>
+    
+    <!-- Bow Loops -->
+    <path d="M 439 162 C 424 148, 432 144, 439 162 C 446 144, 454 148, 439 162 Z" fill="#F59E0B"/>
+    <!-- Bow Center Knot -->
+    <rect x="433" y="180" width="12" height="12" rx="2" fill="#D97706"/>
+    <!-- Ribbon Tails -->
+    <path d="M 436 162 L 429 170 M 442 162 L 449 170" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Microsoft Store Style Windows Logo on Gift -->
+    <g transform="translate(421, 169)" opacity="0.95">
+      <rect x="0" y="0" width="3.5" height="3.5" fill="#EF4444"/>
+      <rect x="4.5" y="0" width="3.5" height="3.5" fill="#22C55E"/>
+      <rect x="0" y="4.5" width="3.5" height="3.5" fill="#3B82F6"/>
+      <rect x="4.5" y="4.5" width="3.5" height="3.5" fill="#EAB308"/>
+    </g>
+  </g>
+
+  <!-- Package 4: Perfected Red Gift Box (Far Right) -->
+  <g>
+    <!-- Gift Box -->
+    <rect x="505" y="155" width="55" height="55" rx="5" fill="#EF4444"/>
+    <!-- Shadow Side -->
+    <path d="M 505 160 A 5 5 0 0 1 510 155 L 532 155 L 532 210 L 505 210 Z" fill="#DC2626" opacity="0.4"/>
+    
+    <!-- Vertical Ribbon -->
+    <rect x="528" y="155" width="9" height="55" fill="#F8FAFC"/>
+    <!-- Horizontal Ribbon -->
+    <rect x="505" y="177" width="55" height="9" fill="#F8FAFC"/>
+    <!-- Ribbon Seam/Details -->
+    <line x1="532.5" y1="155" x2="532.5" y2="210" stroke="#CBD5E1" stroke-width="0.75"/>
+    <line x1="505" y1="181.5" x2="560" y2="181.5" stroke="#CBD5E1" stroke-width="0.75"/>
+    
+    <!-- Bow Loops -->
+    <path d="M 532 155 C 516 139, 524 135, 532 155 C 540 135, 548 139, 532 155 Z" fill="#F8FAFC"/>
+    <!-- Bow Center Knot -->
+    <rect x="526" y="175" width="13" height="13" rx="2.5" fill="#E2E8F0"/>
+    <!-- Ribbon Tails -->
+    <path d="M 529 155 L 521 164 M 536 155 L 544 164" stroke="#F8FAFC" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Python Logo on Gift -->
+    <g transform="translate(512, 161)">
+      <!-- Blue snake top -->
+      <path d="M 5.5 0.5 H 2.5 A 2.5 2.5 0 0 0 0 3 V 6 H 3 A 1 1 0 0 1 4 7 V 8 H 7 V 5 A 2.5 2.5 0 0 0 4.5 2.5 H 2.5 Z" fill="#38BDF8"/>
+      <!-- Yellow snake bottom -->
+      <path d="M 3.5 9.5 H 6.5 A 2.5 2.5 0 0 0 9 7 V 4 H 6 A 1 1 0 0 1 5 3 V 2 H 2 V 5 A 2.5 2.5 0 0 0 4.5 7.5 H 6.5 Z" fill="#F59E0B"/>
+      <!-- Eyes -->
+      <circle cx="1.5" cy="1.8" r="0.4" fill="#FFFFFF"/>
+      <circle cx="7.5" cy="8.2" r="0.4" fill="#FFFFFF"/>
+    </g>
+  </g>
+
+  <!-- ==================== EFFECTS (SPARKLES & CHECKS) ==================== -->
+
+  <!-- Verified/Success Checkmark Badge (Above blue gift) -->
+  <g transform="translate(470, 80)">
+    <!-- Glow -->
+    <circle cx="12" cy="12" r="16" fill="#10B981" opacity="0.25"/>
+    <!-- Badge -->
+    <circle cx="12" cy="12" r="13" fill="#10B981" stroke="#F8FAFC" stroke-width="2"/>
+    <!-- Checkmark Path -->
+    <path d="M 7.5 12 L 10.5 15 L 16.5 9" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <!-- Sparkles (Signed/Published magic) -->
+  <!-- Sparkle 1 (Large Gold) -->
+  <path d="M 545 115 L 547 122 L 554 124 L 547 126 L 545 133 L 543 126 L 536 124 L 543 122 Z" fill="#F59E0B" opacity="0.9"/>
+  <!-- Sparkle 2 (Medium Cyan) -->
+  <path d="M 485 133 L 486 137 L 490 138 L 486 139 L 485 143 L 484 139 L 480 138 L 484 137 Z" fill="#38BDF8" opacity="0.8"/>
+  <!-- Sparkle 3 (Small White) -->
+  <path d="M 435 121 L 436 124 L 439 125 L 436 126 L 435 129 L 434 126 L 431 125 L 434 124 Z" fill="#FFFFFF" opacity="0.85"/>
+  <!-- Sparkle 4 (Tiny White near scanner exit) -->
+  <circle cx="400" cy="145" r="1.5" fill="#FFFFFF" opacity="0.7"/>
+  <circle cx="465" cy="115" r="1" fill="#FFFFFF" opacity="0.6"/>
+
+  <!-- ==================== WORDMARK & TYPOGRAPHY (RIGHT) ==================== -->
+
+  <!-- Wordmark -->
+  <text class="wordmark" x="650" y="166" font-size="52" letter-spacing="-0.5px">WinStorePackager</text>
+
+  <!-- Tagline -->
+  <text class="tagline" x="650" y="208" font-size="20">Python apps to Microsoft Store</text>
+
+  <!-- Badges -->
+  <!-- Badge 1: MSIX Packaging -->
+  <g transform="translate(650, 232)">
+    <rect x="0" y="0" width="122" height="24" rx="12" fill="#1E293B" stroke="#38BDF8" stroke-width="1.2" opacity="0.85"/>
+    <text class="badge-text" x="61" y="15" font-size="10.5" fill="#38BDF8" text-anchor="middle">MSIX PACKAGER</text>
+  </g>
+
+  <!-- Badge 2: Auto-Sign -->
+  <g transform="translate(784, 232)">
+    <rect x="0" y="0" width="112" height="24" rx="12" fill="#1E293B" stroke="#10B981" stroke-width="1.2" opacity="0.85"/>
+    <text class="badge-text" x="56" y="15" font-size="10.5" fill="#10B981" text-anchor="middle">STORE SIGNED</text>
+  </g>
+
+  <!-- Badge 3: CLI & CI/CD -->
+  <g transform="translate(908, 232)">
+    <rect x="0" y="0" width="94" height="24" rx="12" fill="#1E293B" stroke="#C084FC" stroke-width="1.2" opacity="0.85"/>
+    <text class="badge-text" x="47" y="15" font-size="10.5" fill="#C084FC" text-anchor="middle">CLI &amp; CI/CD</text>
+  </g>
+
+</svg>
