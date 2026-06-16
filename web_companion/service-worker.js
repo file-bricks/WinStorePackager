@@ -1,4 +1,4 @@
-const CACHE_NAME = "wsp-companion-v2";
+const CACHE_NAME = "wsp-companion-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,6 +11,7 @@ const APP_SHELL = [
   "./icons/Icon-512.png",
   "./icons/Icon-maskable-192.png",
   "./icons/Icon-maskable-512.png",
+  "./icons/apple-touch-icon-180.png",
 ];
 
 self.addEventListener("install", (event) => {
@@ -47,6 +48,6 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith(
-    caches.match(request).then((cached) => cached || fetch(request))
+    caches.match(request, { ignoreSearch: true }).then((cached) => cached || fetch(request))
   );
 });
