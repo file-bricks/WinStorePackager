@@ -48,6 +48,16 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith(
-    caches.match(request, { ignoreSearch: true }).then((cached) => cached || fetch(request))
+    caches.match(request, { ignoreSearch: true }).then(
+      (cached) =>
+        cached ||
+        fetch(request).catch(
+          () =>
+            new Response("Offline", {
+              status: 503,
+              headers: { "Content-Type": "text/plain" },
+            })
+        )
+    )
   );
 });

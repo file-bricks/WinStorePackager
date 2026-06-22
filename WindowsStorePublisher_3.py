@@ -907,8 +907,12 @@ class Translator:
         full_path = os.path.join(base_path, file_path)
         
         if os.path.exists(full_path):
-            with open(full_path, "r", encoding="utf-8") as f:
-                self.translations = json.load(f)
+            try:
+                with open(full_path, "r", encoding="utf-8") as f:
+                    self.translations = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                self.translations = {}
+                print(f"Warning: Translation file could not be parsed: {full_path}")
         else:
             self.translations = {}
             print(f"Warning: Translation file not found at {full_path}")
@@ -1076,8 +1080,8 @@ def patch_widgets(translator):
 
         # Check if PyInstaller is available in that environment
         try:
-            subprocess.run([python_exe, "-m", "PyInstaller", "--version"], 
-                           capture_output=True, check=True)
+            subprocess.run([python_exe, "-m", "PyInstaller", "--version"],
+                           capture_output=True, check=True, timeout=10)
         except Exception:
             if not messagebox.askyesno("Warnung", 
                 f"Es scheint, als sei PyInstaller in diesem Python nicht installiert:\n{python_exe}\n\n"

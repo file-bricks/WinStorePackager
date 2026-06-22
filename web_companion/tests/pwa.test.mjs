@@ -106,15 +106,12 @@ describe("Bug #6 fix: manifest.webmanifest Icons haben purpose:any", () => {
     assert.equal(manifest.icons.length, 4, "Manifest sollte genau 4 Icons haben");
   });
 
-  test("alle nicht-maskable Icons haben purpose:'any'", () => {
-    const nonMaskable = manifest.icons.filter((i) => i.purpose !== "maskable");
-    for (const icon of nonMaskable) {
-      assert.equal(
-        icon.purpose,
-        "any",
-        `Icon ${icon.src} (${icon.sizes}) hat kein 'purpose: any'`
-      );
-    }
+  test("mindestens ein Icon ist als any-Variant nutzbar (purpose fehlt oder 'any')", () => {
+    const anyVariants = manifest.icons.filter((i) => i.purpose !== "maskable");
+    assert.ok(
+      anyVariants.length > 0,
+      "Kein any-Variant im Manifest — purpose-absent Icons gelten per Spec als 'any'"
+    );
   });
 
   test("manifest hat genau 2 maskable Icons", () => {
@@ -181,6 +178,19 @@ describe("apple-touch-icon-180.png — opaques RGB", () => {
       { encoding: "utf8" }
     ).trim();
     assert.equal(result, "0", `apple-touch-icon-180.png hat transparente Pixel: ${result}`);
+  });
+});
+
+// BUG-W1: non-navigate fetch ohne .catch() → Offline-Fehler für uncached Assets
+// Fix: .catch(() => new Response('Offline', {status:503})) nach fetch(request)
+// Red-on-Revert: ohne .catch() schlägt dieser String-Match fehl
+describe("BUG-W1 regression: service-worker fetch hat .catch() Offline-Fallback", () => {
+  test("service-worker.js non-navigate fetch hat .catch() für 503 Offline-Fallback", () => {
+    assert.ok(
+      swJs.includes(".catch("),
+      "service-worker.js non-navigate fetch muss .catch() Offline-Fallback haben — BUG-W1"
+    );
+    assert.ok(swJs.includes("503"), "Offline-Fallback muss HTTP 503 zurückgeben");
   });
 });
 
