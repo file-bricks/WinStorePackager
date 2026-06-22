@@ -30,7 +30,9 @@ def install_and_import(package_name, import_name=None):
         print(f"⚠️  Modul '{import_name}' fehlt. Installiere '{package_name}'...")
         try:
             # sys.executable garantiert, dass wir das pip des aktuellen Interpreters nutzen
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package_name])
+            # Bugsweep 25: timeout, sonst friert der App-Start bei haengendem pip (kein Netz/Proxy)
+            # dauerhaft ein; TimeoutExpired faellt in den except-Block unten.
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package_name], timeout=300)
             print(f"✅ '{package_name}' erfolgreich installiert.")
         except Exception as e:
             print(f"❌ Fehler bei der Installation von {package_name}: {e}")
@@ -359,8 +361,12 @@ class StorePackagerApp(tk.Tk):
         }
             
         try:
-            with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
+            # Bugsweep 25: atomar schreiben (tmp + os.replace), sonst korrupte Settings bei Absturz/
+            # OneDrive-Lock mitten im json.dump.
+            tmp = f"{SETTINGS_FILE}.tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
+            os.replace(tmp, SETTINGS_FILE)
             messagebox.showinfo("Gespeichert", "Einstellungen wurden gespeichert.")
         except Exception as e:
             messagebox.showerror("Fehler", f"Einstellungen konnten nicht gespeichert werden:\n{e}")
@@ -1137,7 +1143,9 @@ def patch_widgets(translator):
 
                 build_env = os.environ.copy()
                 build_env["PYTHONIOENCODING"] = "utf-8"
-                subprocess.run(cmd, capture_output=True, check=True, startupinfo=startupinfo, env=build_env)
+                # Bugsweep 25: grosszuegiger Timeout (30 min) als Notbremse gegen einen haengenden
+                # PyInstaller-Lauf; normale Builds bleiben weit darunter. TimeoutExpired -> Fehlerdialog.
+                subprocess.run(cmd, capture_output=True, check=True, startupinfo=startupinfo, env=build_env, timeout=1800)
                 
                 progress.update_status("Aufräumen...")
                 # Cleanup relativ zum Output-Verzeichnis (nicht cwd!)
@@ -1304,7 +1312,9 @@ def patch_widgets(translator):
             try:
                 progress.update_status("Erstelle MSIX-Paket...")
                 cmd_pack = [makeappx, "pack", "/d", outdir, "/p", msix_path, "/o"]
-                result = subprocess.run(cmd_pack, capture_output=True, text=True, check=True)
+                # Bugsweep 25 BUG-msix (KRITISCH): timeout, sonst kann makeappx/signtool haengen und
+                # die App friert dauerhaft ein (signtool wartet ggf. auf Timestamp-Server uebers Netz).
+                result = subprocess.run(cmd_pack, capture_output=True, text=True, check=True, timeout=300)
 
                 pfx = self.pfx_path.get().strip()
                 pfx_pw = self.pfx_password.get()
@@ -1326,10 +1336,10 @@ def patch_widgets(translator):
                     "/td", "SHA256",
                     "/v", msix_path
                 ]
-                subprocess.run(cmd_sign, capture_output=True, text=True, check=True)
-                
+                subprocess.run(cmd_sign, capture_output=True, text=True, check=True, timeout=120)
+
                 progress.close()
-                self.after(0, lambda: messagebox.showinfo("Fertig", 
+                self.after(0, lambda: messagebox.showinfo("Fertig",
                     f"MSIX gebaut und signiert:\n{msix_path}\n\nBereit für den Store!"))
                     
             except subprocess.CalledProcessError as e:
@@ -1352,20 +1362,24 @@ def patch_widgets(translator):
         desc = self.desc_box.get("1.0", tk.END).strip()
         manifest = MANIFEST_TEMPLATE
         
-        manifest = manifest.replace("{{IDENTITY_NAME}}", 
-            self.identity_name.get().strip() or f"YourCompany.{self.app_name.get().strip()}")
-        manifest = manifest.replace("{{PUBLISHER}}", 
-            self.publisher.get().strip() or "CN=YourPublisher")
+        # Bugsweep 25 BUG-manifest (KRITISCH): ALLE user-kontrollierten Felder XML-escapen, nicht nur
+        # APPNAME. Ein '&', '<' oder '"' in Publisher/Description/Identity/Executable brach sonst das
+        # AppxManifest.xml -> ungueltiges MSIX. (Der Cert-DN in {{PUBLISHER}} ist nach XML-Parse
+        # semantisch identisch -> Cert-Matching bleibt korrekt.)
+        manifest = manifest.replace("{{IDENTITY_NAME}}",
+            html.escape(self.identity_name.get().strip() or f"YourCompany.{self.app_name.get().strip()}"))
+        manifest = manifest.replace("{{PUBLISHER}}",
+            html.escape(self.publisher.get().strip() or "CN=YourPublisher"))
         manifest = manifest.replace("{{APPNAME}}",
             html.escape(self.app_name.get().strip() or "MyApp"))
-        manifest = manifest.replace("{{PUBLISHER_DISPLAY}}", 
-            self.publisher_display.get().strip() or self.publisher.get().strip().replace("CN=", "") or "YourPublisher")
-        manifest = manifest.replace("{{DESCRIPTION}}", 
-            desc or "No description provided.")
-        manifest = manifest.replace("{{VERSION}}", 
-            self.version.get().strip() or DEFAULT_VERSION)
-        manifest = manifest.replace("{{EXECUTABLE}}", 
-            executable_name or "MyApp.exe")
+        manifest = manifest.replace("{{PUBLISHER_DISPLAY}}",
+            html.escape(self.publisher_display.get().strip() or self.publisher.get().strip().replace("CN=", "") or "YourPublisher"))
+        manifest = manifest.replace("{{DESCRIPTION}}",
+            html.escape(desc or "No description provided."))
+        manifest = manifest.replace("{{VERSION}}",
+            html.escape(self.version.get().strip() or DEFAULT_VERSION))
+        manifest = manifest.replace("{{EXECUTABLE}}",
+            html.escape(executable_name or "MyApp.exe"))
         
         caps = ""
         if self.capabilities.get().strip():
