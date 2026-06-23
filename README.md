@@ -24,6 +24,7 @@
 | Run the SDK-free Unix (Linux/macOS) desktop preflight | [`unix_preflight.py`](unix_preflight.py) |
 | Prepare Store metadata before using Windows SDK tools | [`web_companion/index.html`](web_companion/index.html) |
 | Share project metadata without local secrets | [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) |
+| Dogfood the WinStorePackager Store profile | [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json) |
 | Check privacy and local-data boundaries | [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) and [Repository Hygiene](#repository-hygiene) |
 
 WinStorePackager is built for solo developers and small teams that need a practical Python-to-Microsoft-Store workflow without setting up Visual Studio projects for every app. It focuses on the repetitive pieces: Store manifest fields, required icon sizes, screenshot collection, profile exchange, and Windows SDK packaging commands.
@@ -53,6 +54,14 @@ The current UI combines manifest fields, icon generation, screenshot capture, an
 ## Project Profile Exchange and Web Companion
 
 WinStorePackager now ships with a shared project profile format: [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md). The desktop app can import and export `winstorepackager-project-v1.json` so that Store metadata can be prepared outside Windows without exposing local Publisher IDs, SDK paths, certificate paths, or passwords.
+
+This repository also includes its own dogfooding profile, [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json). Load it in the desktop app to package WinStorePackager with WinStorePackager, or validate it without the Windows SDK:
+
+```bash
+python unix_preflight.py --project-root . --profile-path winstorepackager-project-v1.json
+```
+
+The profile intentionally keeps Partner Center Publisher IDs, certificate paths, SDK paths, and passwords out of Git. Add those values only in local settings before building or signing an MSIX.
 
 The browser-based companion lives in [`web_companion/index.html`](web_companion/index.html). It offers the same project questionnaire, manifest preview, icon-size check, and JSON import/export as before, but now also supports a local app shell with service worker, offline fallback, install prompt, and a small cross-platform localhost starter.
 

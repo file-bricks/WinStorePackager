@@ -13,6 +13,7 @@ WinStorePackager ist ein lokales Windows-GUI für Entwicklerinnen und Entwickler
 | Python-App für den Microsoft Store vorbereiten | `python WindowsStorePublisher_3.py` oder `START.bat` |
 | Store-Metadaten ohne Windows SDK prüfen | `python unix_preflight.py --project-root .` |
 | Projektprofil austauschen | `PROJECT_PROFILE_FORMAT.md` |
+| WinStorePackager mit sich selbst testen | `winstorepackager-project-v1.json` |
 | Browser-Companion lokal starten | `python web_companion/serve_companion.py` |
 | Datenschutz- und Git-Grenzen prüfen | `PRIVACY_POLICY.md` und `llms.txt` |
 
@@ -53,6 +54,14 @@ Danach öffnet sich `http://127.0.0.1:8765/index.html`. Direktes Öffnen von `we
 ## Lokale Daten
 
 Publisher-IDs, Zertifikatspfade, Passwörter, Windows-SDK-Pfade, generierte Manifeste, MSIX/AppX-Pakete, WACK-Logs und Release-Bundles gehören nicht ins Git-Repo. Die Projektprofile sind so angelegt, dass sensible lokale Werte ausgelassen werden.
+
+Das Repo enthält ein eigenes Dogfooding-Profil [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json). Es kann in der Desktop-App geladen oder ohne Windows SDK geprüft werden:
+
+```bash
+python unix_preflight.py --project-root . --profile-path winstorepackager-project-v1.json
+```
+
+Echte Partner-Center-Publisher-Daten, Zertifikate und SDK-Pfade werden erst lokal ergänzt, bevor ein MSIX gebaut oder signiert wird.
 
 ## Suchkontext
 

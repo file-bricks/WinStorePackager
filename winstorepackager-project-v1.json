@@ -1,0 +1,44 @@
+{
+  "format": "winstorepackager-project-v1",
+  "schema_version": 1,
+  "project_root": ".",
+  "metadata": {
+    "app_name": "WinStorePackager",
+    "publisher_display": "Your Publisher Name",
+    "identity_name": "YourPublisher.WinStorePackager",
+    "version": "2.3.0.0"
+  },
+  "paths": {
+    "script_path": "WindowsStorePublisher_3.py",
+    "icon_path": "WinStorePackager.ico",
+    "source_path": "releases/v2.3.0/WinStorePackager-2.3.0-source.zip",
+    "installer_path": "dist/WinStorePackager.exe",
+    "output_dir": "store_package",
+    "exe_name": "WinStorePackager.exe"
+  },
+  "store": {
+    "privacy_url": "https://github.com/file-bricks/WinStorePackager/blob/master/PRIVACY_POLICY.md",
+    "support_url": "https://github.com/file-bricks/WinStorePackager/issues",
+    "capabilities": [
+      "internetClient",
+      "runFullTrust"
+    ],
+    "category": "Developer Tools",
+    "age_rating": "3+",
+    "description": "Python-Apps für den Microsoft Store packen (MSIX). Manifest-Generierung, Icon-Builder, PyInstaller-Integration, Code-Signing, WACK-Tests.",
+    "changelog": "Version 2.3.0: Projektprofile, lokaler Companion, reproduzierbarer EXE-Build und Store-Dogfooding-Vorbereitung."
+  },
+  "documents": {
+    "readme": "README.md",
+    "license_files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt"
+    ],
+    "license_text_entries": [
+      "MIT License"
+    ]
+  },
+  "settings": {
+    "enable_i18n": true
+  }
+}
