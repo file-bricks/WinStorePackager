@@ -42,7 +42,11 @@ secrets.*
 keyring/
 
 # ---- Build-Artefakte & Releases ----
-releases/
+releases/*
+!releases/windowsstore/
+releases/windowsstore/*
+!releases/windowsstore/screenshots/
+!releases/windowsstore/screenshots/*.png
 _WARTUNG/
 *.exe
 *.msi

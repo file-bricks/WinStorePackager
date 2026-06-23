@@ -51,6 +51,16 @@ WinStorePackager is built for solo developers and small teams that need a practi
 
 The current UI combines manifest fields, icon generation, screenshot capture, and MSIX build preparation in one desktop workflow.
 
+## Store Screenshot Set
+
+Rebuild the curated Microsoft Store screenshot set with:
+
+```bash
+python generate_store_screenshots.py
+```
+
+The generator writes four 1920x1080 PNGs to `releases/windowsstore/screenshots/` and uses only neutral demo metadata. It does not expose Partner Center publisher DNs, certificate paths, passwords, Windows SDK paths, or private project paths.
+
 ## Project Profile Exchange and Web Companion
 
 WinStorePackager now ships with a shared project profile format: [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md). The desktop app can import and export `winstorepackager-project-v1.json` so that Store metadata can be prepared outside Windows without exposing local Publisher IDs, SDK paths, certificate paths, or passwords.
@@ -177,7 +187,7 @@ If dependencies are missing, the launcher can install Python packages from PyPI 
 
 ## Repository Hygiene
 
-The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. Local Partner Center data, Publisher IDs in `settings_store_packager.json`, certificates, generated manifests, MSIX/AppX packages, WACK logs, screenshots, and release bundles stay outside Git via `.gitignore`.
+The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. The curated demo Store screenshots under `releases/windowsstore/screenshots/` are kept as submission references. Local Partner Center data, Publisher IDs in `settings_store_packager.json`, certificates, generated manifests, MSIX/AppX packages, WACK logs, ad-hoc captures, and release bundles stay outside Git via `.gitignore`.
 
 Last hygiene and visibility check: 2026-06-04. GitHub traffic showed 4 views from 2 unique visitors and 31 clones from 19 unique cloners in the current 14-day window. Web search for exact repository and product-name phrases did not show broad external visibility, so the README now includes clearer canonical naming and search phrases. The same maintenance pass found no tracked ignored files after removing `PORTIERUNGSPLAN.md` from the Git index; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
 

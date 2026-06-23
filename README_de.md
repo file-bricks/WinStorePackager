@@ -12,6 +12,7 @@ WinStorePackager ist ein lokales Windows-GUI für Entwicklerinnen und Entwickler
 |---|---|
 | Python-App für den Microsoft Store vorbereiten | `python WindowsStorePublisher_3.py` oder `START.bat` |
 | Store-Metadaten ohne Windows SDK prüfen | `python unix_preflight.py --project-root .` |
+| Store-Screenshots neu erzeugen | `python generate_store_screenshots.py` |
 | Projektprofil austauschen | `PROJECT_PROFILE_FORMAT.md` |
 | WinStorePackager mit sich selbst testen | `winstorepackager-project-v1.json` |
 | Browser-Companion lokal starten | `python web_companion/serve_companion.py` |
@@ -29,6 +30,10 @@ WinStorePackager richtet sich an kleine Teams und Einzelentwickler, die eine bes
 - Vorbereitung für `makeappx.exe`, `signtool.exe` und Partner Center
 
 WinStorePackager ersetzt weder das offizielle Microsoft MSIX Packaging Tool noch die eigentliche Einreichung im Partner Center. Es ist ein lokaler Helfer vor dem finalen Build- und Veröffentlichungsprozess.
+
+## Store-Screenshots
+
+`python generate_store_screenshots.py` erzeugt vier kuratierte Microsoft-Store-Screenshots in `releases/windowsstore/screenshots/`. Die Bilder sind 1920x1080 px groß, verwenden neutrale Demo-Metadaten und zeigen keine echten Partner-Center-Publisher-DNs, Zertifikatspfade, Passwörter, Windows-SDK-Pfade oder privaten Projektpfade.
 
 ## Installation
 
