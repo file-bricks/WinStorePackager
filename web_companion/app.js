@@ -24,6 +24,7 @@ const cacheState = document.getElementById("cacheState");
 const installHint = document.getElementById("installHint");
 
 let deferredInstallPrompt = null;
+const SAFE_ICON_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 
 init();
 
@@ -279,28 +280,53 @@ function hydrateFromStorage() {
   }
 }
 
-function handleIconUpload(event) {
+function renderIconPreview(bitmap) {
+  const maxPreviewSize = 180;
+  const scale = Math.min(maxPreviewSize / bitmap.width, maxPreviewSize / bitmap.height, 1);
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+  canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+
+  const context = canvas.getContext("2d");
+  if (!context) {
+    throw new Error("Canvas-Vorschau nicht verfügbar.");
+  }
+
+  context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  iconPreview.src = canvas.toDataURL("image/png");
+  iconPreview.hidden = false;
+}
+
+async function handleIconUpload(event) {
   const [file] = event.target.files || [];
   if (!file) {
     return;
   }
 
-  const imageUrl = URL.createObjectURL(file);
-  const image = new Image();
-  image.onload = () => {
-    iconPreview.src = imageUrl;
+  if (!SAFE_ICON_TYPES.has(file.type) || typeof createImageBitmap !== "function") {
+    iconPreview.hidden = true;
+    iconPreview.removeAttribute("src");
+    setChip(iconStatus, "Nur PNG, JPG oder WebP als Icon-Vorschau erlaubt", "warning");
+    return;
+  }
+
+  let bitmap = null;
+  try {
+    bitmap = await createImageBitmap(file);
+    renderIconPreview(bitmap);
     iconPreview.hidden = false;
-    if (image.width >= 310 && image.height >= 310) {
-      setChip(iconStatus, `Icon ok: ${image.width}×${image.height}px`, "success");
+    if (bitmap.width >= 310 && bitmap.height >= 310) {
+      setChip(iconStatus, `Icon ok: ${bitmap.width}×${bitmap.height}px`, "success");
     } else {
-      setChip(iconStatus, `Zu klein: ${image.width}×${image.height}px`, "warning");
+      setChip(iconStatus, `Zu klein: ${bitmap.width}×${bitmap.height}px`, "warning");
     }
-  };
-  image.onerror = () => {
-    URL.revokeObjectURL(imageUrl);
+  } catch (_) {
+    iconPreview.hidden = true;
+    iconPreview.removeAttribute("src");
     setChip(iconStatus, "Icon konnte nicht gelesen werden", "warning");
-  };
-  image.src = imageUrl;
+  } finally {
+    bitmap?.close?.();
+  }
 }
 
 async function registerServiceWorker() {

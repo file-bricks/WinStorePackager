@@ -38,6 +38,9 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - `START.bat` setzt UTF-8 und nutzt bevorzugt `py -3`.
 
 ### Behoben / Fixed
+- `web_companion`: Icon-Uploads werden für die Vorschau nur noch als PNG/JPG/WebP
+  akzeptiert und über `createImageBitmap` plus Canvas gerendert, statt einen
+  Datei-Object-URL direkt an `img.src` zu übergeben.
 - Projektprofil-Export bricht bei absoluten Pfaden auf unterschiedlichen Windows-Laufwerken nicht mehr mit `ValueError` ab; in diesem Fall bleiben die Pfade bewusst absolut.
 - `.gitignore` ist wieder UTF-8 ohne BOM und entfernt interne Planungsdateien aus dem öffentlichen Git-Tracking.
 - Persönliche Kontaktadresse aus dem Code of Conduct entfernt.

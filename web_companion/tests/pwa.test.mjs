@@ -210,3 +210,15 @@ describe("service-worker.js iOS-Härtung", () => {
     );
   });
 });
+
+describe("Icon-Preview-Härtung", () => {
+  test("app.js setzt keinen Datei-Object-URL direkt als img.src", () => {
+    assert.doesNotMatch(appJs, /URL\.createObjectURL\(file\)/);
+    assert.doesNotMatch(appJs, /iconPreview\.src\s*=\s*imageUrl/);
+  });
+
+  test("app.js erlaubt nur Rasterbild-MIME-Typen für Icon-Uploads", () => {
+    assert.ok(appJs.includes('["image/png", "image/jpeg", "image/webp"]'));
+    assert.ok(appJs.includes("SAFE_ICON_TYPES.has(file.type)"));
+  });
+});
