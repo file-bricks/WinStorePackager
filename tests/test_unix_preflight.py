@@ -66,9 +66,40 @@ def test_unix_preflight_reports_missing_artifacts_and_invalid_urls(tmp_path: Pat
     assert report["ok"] is False
     assert any("Store-Listing fehlt" in item for item in report["errors"])
     assert any("Version hat falsches Format" in item for item in report["errors"])
+    assert any("`executable` muss auf `.exe` enden" in item for item in report["errors"])
     assert any("`privacy_url` muss mit http:// oder https:// beginnen" in item for item in report["errors"])
     assert any("`support_url` fehlt" in item for item in report["errors"])
     assert any("Icon-/Screenshot-Artefakte fehlen vollständig" in item for item in report["warnings"])
+
+
+def test_unix_preflight_reports_missing_executable_as_missing(tmp_path: Path):
+    """Leeres `executable`-Feld muss als „fehlt" gemeldet werden, nicht als „muss auf .exe enden"."""
+    root = _create_repo(tmp_path)
+    (root / "store_package.json").write_text(
+        json.dumps(
+            {
+                "app_name": "WinStorePackager",
+                "version": "2.3.0.0",
+                "description": "MSIX helper",
+                "executable": "",
+                "category": "Developer Tools",
+                "age_rating": "3+",
+                "privacy_url": "https://example.com/privacy",
+                "support_url": "https://example.com/support",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = run_unix_preflight(root)
+
+    assert report["ok"] is False
+    assert any("`executable` fehlt" in item for item in report["errors"]), (
+        "Leeres executable muss als 'fehlt' gemeldet werden"
+    )
+    assert not any("`executable` muss auf `.exe` enden" in item for item in report["errors"]), (
+        "Bei leerem executable darf NICHT 'muss auf .exe enden' erscheinen"
+    )
 
 
 def test_unix_preflight_warns_on_profile_and_store_package_drift(tmp_path: Path):

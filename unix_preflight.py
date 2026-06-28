@@ -141,7 +141,9 @@ def _validate_store_package(data: dict[str, Any], errors: list[str], warnings: l
         errors.append(f"store_package.json: Version hat falsches Format: {version!r}")
 
     executable = str(data.get("executable", "")).strip()
-    if not executable.endswith(".exe"):
+    if not executable:
+        errors.append("store_package.json: `executable` fehlt.")
+    elif not executable.endswith(".exe"):
         errors.append("store_package.json: `executable` muss auf `.exe` enden.")
 
     description = str(data.get("description", "")).strip()
