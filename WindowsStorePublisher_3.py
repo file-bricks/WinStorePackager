@@ -17,16 +17,61 @@ import importlib
 # ------------------------------------------------------------
 # 0. Auto-Installation fehlender Pakete (Bootstrapper)
 # ------------------------------------------------------------
+def _fatal_missing_module_frozen(package_name, import_name):
+    """Sauberer Fehlerdialog für fehlende Module in einer Frozen-EXE (PyInstaller).
+
+    KEIN subprocess-/pip-Fallback hier: In einer Frozen-EXE zeigt sys.executable
+    auf die EXE selbst (nicht auf ein python.exe). Ein Aufruf von
+    "sys.executable -m pip install ..." würde also nicht pip starten, sondern
+    die App selbst erneut ausführen -- rekursiv, ohne Ende (Fork-Bombe, siehe
+    AUFGABEN.txt U1f: 491 Prozesse in der Praxis). Store-Apps dürfen ohnehin
+    nie zur Laufzeit nachinstallieren, deshalb hier ausschließlich melden und
+    beenden, statt zu reparieren. `input()` wird bewusst NICHT genutzt: in
+    einer windowed/--noconsole-EXE ist sys.stdin verloren
+    ("RuntimeError: input(): lost sys.stdin").
+    """
+    message = (
+        f"Fehlendes Modul: '{import_name}'\n\n"
+        f"Diese Programmversion wurde ohne das Paket '{package_name}' gebaut "
+        "(Packaging-Fehler). Bitte eine aktuelle Release-Version verwenden "
+        "oder den Support kontaktieren.\n\n"
+        "Aus Sicherheitsgründen installiert diese App zur Laufzeit keine "
+        "Pakete nach."
+    )
+    try:
+        print(f"❌ {message}")
+    except Exception:
+        pass  # stdout kann in einer windowed-EXE fehlen/umgeleitet sein.
+    try:
+        import tkinter as tk
+        from tkinter import messagebox
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror("Fehlendes Modul", message)
+        root.destroy()
+    except Exception:
+        pass  # Wenn selbst Tkinter fehlt, bleibt nur die (ggf. unsichtbare) Konsolen-Ausgabe.
+    sys.exit(1)
+
+
 def install_and_import(package_name, import_name=None):
     """
     Versucht ein Modul zu importieren. Falls es fehlt, wird es per pip installiert.
+
+    Läuft NIE in einer Frozen-EXE (sys.frozen): dort gibt es keinen echten
+    Interpreter/kein pip hinter sys.executable und keinen stdin für input() --
+    siehe _fatal_missing_module_frozen().
     """
     if import_name is None:
         import_name = package_name
-    
+
     try:
         importlib.import_module(import_name)
     except ImportError:
+        if getattr(sys, "frozen", False):
+            _fatal_missing_module_frozen(package_name, import_name)
+            return
+
         print(f"⚠️  Modul '{import_name}' fehlt. Installiere '{package_name}'...")
         try:
             # sys.executable garantiert, dass wir das pip des aktuellen Interpreters nutzen
@@ -39,7 +84,7 @@ def install_and_import(package_name, import_name=None):
             print("Bitte führen Sie das Skript als Administrator aus oder installieren Sie manuell.")
             input("Drücken Sie Enter zum Beenden...")
             sys.exit(1)
-        
+
         # Cache invalidieren und neu importieren
         try:
             importlib.invalidate_caches()
@@ -52,7 +97,12 @@ def install_and_import(package_name, import_name=None):
 # 0b. Abhängigkeiten sicherstellen (nur wenn direkt ausgeführt)
 # ------------------------------------------------------------
 def ensure_dependencies():
-    """Prüft und installiert fehlende Abhängigkeiten (nur beim Start als Hauptskript)."""
+    """Prüft und installiert fehlende Abhängigkeiten (nur beim Start als Hauptskript).
+
+    In einer Frozen-EXE müssen alle Abhängigkeiten bereits gebündelt sein
+    (siehe WinStorePackager.spec, hiddenimports). install_and_import()
+    installiert dort NICHTS nach, sondern meldet einen Packaging-Fehler.
+    """
     print("--- Prüfe Abhängigkeiten ---")
     install_and_import("Pillow", "PIL")        # Für Icon-Resizing
     install_and_import("pygetwindow")          # Für Screenshots
@@ -83,6 +133,7 @@ import hashlib
 from pathlib import Path
 
 from project_profile import read_project_profile, write_project_profile
+from translator import TranslationSystem
 
 # ------------------------------------------------------------
 # 2. Tkinter Sicherheits-Import
@@ -103,11 +154,17 @@ except ImportError:
         print("LÖSUNG (Linux):")
         print("Installieren Sie das Paket python3-tk (z.B. 'sudo apt-get install python3-tk').")
     print("-" * 50)
-    input("Drücken Sie Enter zum Beenden...")
+    # Kein input() in einer Frozen-/windowed-EXE: dort ist sys.stdin verloren
+    # ("RuntimeError: input(): lost sys.stdin"), siehe _fatal_missing_module_frozen().
+    if not getattr(sys, "frozen", False):
+        input("Drücken Sie Enter zum Beenden...")
     sys.exit(1)
 
 # ---------- Configuration ----------
-HAS_KEYRING = True # Jetzt garantiert, da oben installiert
+HAS_KEYRING = keyring is not None
+# WELLE-1-USERTEST U2 (2026-07-23): sichtbare Sprachumschaltung Deutsch/Englisch.
+# Anzeige-Namen in der Combobox <-> interner Sprachcode fuer TranslationSystem/translations.json.
+LANGUAGES = {"de": "Deutsch", "en": "English"}
 OUTPUT_ROOT = str(Path(__file__).parent / "store_package")
 SETTINGS_FILE = str(Path(__file__).parent / "settings_store_packager.json")
 ICON_SIZES = [44, 50, 150, 310]  # Square sizes
@@ -270,8 +327,16 @@ class StorePackagerApp(tk.Tk):
         self.license_files = []
         self.license_text_entries = []
 
-        # i18n toggle
+        # i18n toggle (fuer das GEPACKTE Zielprojekt, siehe build_build_tab)
         self.enable_i18n = tk.BooleanVar(value=True)
+
+        # Anwendungssprache von WinStorePackager selbst (U2, Welle-1-Usertest 2026-07-23).
+        # self.translator uebersetzt einzelne, bewusst live nachgezogene "Chrome"-Texte
+        # (Fenstertitel, Reiter); die restlichen Strings der App wirken nach einem Neustart,
+        # siehe _apply_language_to_chrome()/on_language_change().
+        self.translator = TranslationSystem(default_lang="de", app_dir=Path(__file__).parent)
+        self.app_language = tk.StringVar(value=LANGUAGES["de"])
+        self.notebook = None  # wird in build_gui() gesetzt, fuer Live-Retranslation der Reiter
 
         # Text widgets
         self.readme_box = None
@@ -280,6 +345,7 @@ class StorePackagerApp(tk.Tk):
 
         self.load_settings()
         self.build_gui()
+        self._apply_language_to_chrome()
         self.autodetect_sdk_tools()
 
     # ---------- Settings ----------
@@ -306,6 +372,9 @@ class StorePackagerApp(tk.Tk):
                 self.timestamp_url.set(data.get("timestamp_url", self.timestamp_url.get()))
                 self.msix_name.set(data.get("msix_name", ""))
                 self.python_path.set(data.get("python_path", ""))
+                lang_code = data.get("language", "de")
+                self.app_language.set(LANGUAGES.get(lang_code, LANGUAGES["de"]))
+                self.translator.set_language(lang_code)
                 self.license_files = data.get("license_files", [])
                 self.license_text_entries = data.get("license_text_entries", [])
                 self.enable_i18n.set(data.get("enable_i18n", True))
@@ -350,6 +419,7 @@ class StorePackagerApp(tk.Tk):
             "timestamp_url": self.timestamp_url.get(),
             "msix_name": self.msix_name.get(),
             "python_path": self.python_path.get(),
+            "language": self._current_language_code(),
             "license_files": self.license_files,
             "license_text_entries": self.license_text_entries,
             "enable_i18n": self.enable_i18n.get(),
@@ -370,6 +440,57 @@ class StorePackagerApp(tk.Tk):
             messagebox.showinfo("Gespeichert", "Einstellungen wurden gespeichert.")
         except Exception as e:
             messagebox.showerror("Fehler", f"Einstellungen konnten nicht gespeichert werden:\n{e}")
+
+    # ---------- Sprache (U2, Welle-1-Usertest 2026-07-23) ----------
+    def _current_language_code(self):
+        return "en" if self.app_language.get() == LANGUAGES["en"] else "de"
+
+    def _persist_language_only(self):
+        """Schreibt nur das 'language'-Feld, ohne den vollen save_settings()-Ablauf
+        (Keyring-Schreibzugriff + 'Gespeichert'-Dialog) auszulösen -- die Sprachwahl
+        soll sofort sitzen, auch ohne expliziten Klick auf 'Einstellungen speichern'."""
+        data = {}
+        if os.path.exists(SETTINGS_FILE):
+            try:
+                with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+            except Exception:
+                data = {}
+        data["language"] = self._current_language_code()
+        try:
+            tmp = f"{SETTINGS_FILE}.tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+            os.replace(tmp, SETTINGS_FILE)
+        except Exception as e:
+            print(f"Warnung: Sprachwahl konnte nicht gespeichert werden: {e}")
+
+    def _apply_language_to_chrome(self):
+        """Übersetzt sofort sichtbare 'Chrome'-Texte (Fenstertitel, Reiter) live.
+        Die übrigen ~100 GUI-Strings der App bleiben aus Aufwands-/Risikogründen
+        (kein vollständiges i18n-Refactoring aller Widgets in dieser Runde) in
+        der zuletzt aktiven Sprache, bis die Anwendung neu gestartet wird --
+        siehe on_language_change()."""
+        self.title(self.translator.t("Windows Store Packager v2.3 (Auto-Setup)"))
+        if self.notebook is not None:
+            for idx, key in enumerate(["Metadaten", "Build-Einstellungen", "Store-Informationen", "Aktionen"]):
+                try:
+                    self.notebook.tab(idx, text=self.translator.t(key))
+                except tk.TclError:
+                    pass
+
+    def on_language_change(self, *_event):
+        code = self._current_language_code()
+        self.translator.set_language(code)
+        self._apply_language_to_chrome()
+        self._persist_language_only()
+        messagebox.showinfo(
+            self.translator.t("Sprache geändert"),
+            self.translator.t(
+                "Titel und Reiter wurden aktualisiert. Für die vollständige Wirkung auf "
+                "alle Texte bitte die Anwendung neu starten."
+            ),
+        )
 
     def _get_text_widget_value(self, widget):
         if widget is None:
@@ -487,19 +608,20 @@ class StorePackagerApp(tk.Tk):
     def build_gui(self):
         notebook = ttk.Notebook(self)
         notebook.pack(fill="both", expand=True, padx=10, pady=10)
-        
+        self.notebook = notebook  # fuer Live-Retranslation der Reiter, siehe _apply_language_to_chrome()
+
         tab1 = ttk.Frame(notebook)
         notebook.add(tab1, text="Metadaten")
         self.build_metadata_tab(tab1)
-        
+
         tab2 = ttk.Frame(notebook)
         notebook.add(tab2, text="Build-Einstellungen")
         self.build_build_tab(tab2)
-        
+
         tab3 = ttk.Frame(notebook)
         notebook.add(tab3, text="Store-Informationen")
         self.build_store_tab(tab3)
-        
+
         tab4 = ttk.Frame(notebook)
         notebook.add(tab4, text="Aktionen")
         self.build_actions_tab(tab4)
@@ -579,6 +701,22 @@ class StorePackagerApp(tk.Tk):
             if browse_cmd:
                 ttk.Button(frm, text="Wählen", command=browse_cmd).grid(row=row, column=2, sticky="w")
             row += 1
+
+        # Anwendungssprache von WinStorePackager selbst (U2, Welle-1-Usertest 2026-07-23)
+        ttk.Label(frm, text="Anwendungssprache / Application Language", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
+        row += 1
+
+        ttk.Label(frm, text="Sprache / Language:").grid(row=row, column=0, sticky="w", pady=3)
+        lang_combo = ttk.Combobox(
+            frm, textvariable=self.app_language, values=list(LANGUAGES.values()),
+            state="readonly", width=20,
+        )
+        lang_combo.grid(row=row, column=1, sticky="w", pady=3, padx=5)
+        lang_combo.bind("<<ComboboxSelected>>", self.on_language_change)
+        row += 1
+
+        ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
+        row += 1
 
         # NEU: Python Environment für externe Builds
         ttk.Label(frm, text="Python Umgebung (für Builds)", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))

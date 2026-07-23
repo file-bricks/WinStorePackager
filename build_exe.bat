@@ -9,7 +9,7 @@ if not exist "%BUILD_ROOT%" mkdir "%BUILD_ROOT%"
 
 where py >nul 2>&1
 if not errorlevel 1 (
-    py -3 -m PyInstaller --noconfirm --workpath "%BUILD_ROOT%\build" --distpath "%cd%\dist" WinStorePackager.spec
+    set PYCMD=py -3
 ) else (
     where python >nul 2>&1
     if errorlevel 1 (
@@ -17,8 +17,21 @@ if not errorlevel 1 (
         pause
         exit /b 1
     )
-    python -m PyInstaller --noconfirm --workpath "%BUILD_ROOT%\build" --distpath "%cd%\dist" WinStorePackager.spec
+    set PYCMD=python
 )
+
+rem WELLE-1-USERTEST U1 (2026-07-23): requirements.txt MUSS im Build-Interpreter
+rem installiert sein, bevor PyInstaller laeuft -- sonst kann PyInstaller ein
+rem Modul (z. B. keyring) nicht bundeln, obwohl das Skript es importiert
+rem (Root-Cause des Startcrashs "ModuleNotFoundError: No module named 'keyring'").
+%PYCMD% -m pip install --quiet --disable-pip-version-check -r requirements.txt pyinstaller
+if errorlevel 1 (
+    echo [FEHLER] Build-Abhaengigkeiten ^(requirements.txt / pyinstaller^) konnten nicht installiert werden.
+    pause
+    exit /b 1
+)
+
+%PYCMD% -m PyInstaller --noconfirm --workpath "%BUILD_ROOT%\build" --distpath "%cd%\dist" WinStorePackager.spec
 
 if errorlevel 1 (
     echo [FEHLER] EXE-Build fehlgeschlagen.

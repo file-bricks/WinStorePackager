@@ -1,4 +1,8 @@
 {
+  "Aktionen": {
+    "de": "Aktionen",
+    "en": "Actions"
+  },
   "Ausgabeordner öffnen": {
     "de": "Ausgabeordner öffnen",
     "en": "Open Output Folder"
@@ -23,6 +27,10 @@
     "de": "Lizenz (Text/Dateien):",
     "en": "License (Text/Files):"
   },
+  "Metadaten": {
+    "de": "Metadaten",
+    "en": "Metadata"
+  },
   "Python Umgebung (für Builds)": {
     "de": "Python Umgebung (für Builds)",
     "en": "Python Environment (for Builds)"
@@ -31,9 +39,25 @@
     "de": "README (Text oder Datei):",
     "en": "README (Text or File):"
   },
+  "Sprache geändert": {
+    "de": "Sprache geändert",
+    "en": "Language changed"
+  },
+  "Store-Informationen": {
+    "de": "Store-Informationen",
+    "en": "Store Information"
+  },
+  "Titel und Reiter wurden aktualisiert. Für die vollständige Wirkung auf alle Texte bitte die Anwendung neu starten.": {
+    "de": "Titel und Reiter wurden aktualisiert. Für die vollständige Wirkung auf alle Texte bitte die Anwendung neu starten.",
+    "en": "The title and tabs have been updated. Restart the application for the change to take full effect on all texts."
+  },
   "WACK-Test starten": {
     "de": "WACK-Test starten",
     "en": "Run WACK Test"
+  },
+  "Windows Store Packager v2.3 (Auto-Setup)": {
+    "de": "Windows Store Packager v2.3 (Auto-Setup)",
+    "en": "Windows Store Packager v2.3 (Auto-Setup)"
   },
   "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.": {
     "de": "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.",

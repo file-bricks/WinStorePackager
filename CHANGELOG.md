@@ -6,6 +6,20 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Hinzugefügt / Added
+- Sichtbare Anwendungssprache Deutsch/Englisch unter "Build-Einstellungen"
+  (Combobox, persistiert in `settings_store_packager.json`, nutzt
+  `translator.py`/`locales/translations.json`). Fenstertitel und Reiter
+  werden sofort neu übersetzt; die übrigen GUI-Texte wirken nach einem
+  Neustart vollständig (WELLE-1-USERTEST U2, 2026-07-23).
+- `tests/test_language_switch.py` deckt Persistenz, Reload und sichtbares
+  Combobox-Widget der Sprachumschaltung ab.
+- `tests/test_frozen_guard.py` deckt den Frozen-Guard in `install_and_import`
+  (kein Laufzeit-pip-Fallback, kein `input()` in einer Frozen-EXE) sowie die
+  `hiddenimports` in `WinStorePackager.spec` ab.
+- `tests/pretest_exe_startup.py`: eigenständiger Pretest, der die reale
+  gebaute EXE startet und die Prozesszahl überwacht (Fork-Bomben-Erkennung) --
+  schließt die Lücke, dass der bisherige Pretest nur den Python-Quellimport
+  prüfte und den Startcrash der Frozen-EXE nicht fing.
 - `winstorepackager-project-v1.json` als eigenes Self-Dogfooding-Profil ergänzt; es enthält Store-Metadaten, Projektpfade und Listing-Kontext ohne Publisher-DN, SDK-Pfade oder Zertifikatsdaten.
 - `tests/test_self_dogfood_profile.py` validiert das eigene Projektprofil gegen `store_package.json`, prüft sensible Felder und führt den SDK-freien Preflight mit dem Profil aus.
 - `generate_store_screenshots.py` erzeugt ein kuratiertes Microsoft-Store-Screenshot-Set mit vier 1920x1080-PNGs ohne Publisher-, Zertifikats- oder Privatpfad-Daten.
@@ -41,6 +55,21 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - `START.bat` setzt UTF-8 und nutzt bevorzugt `py -3`.
 
 ### Behoben / Fixed
+- **KRITISCH (WELLE-1-USERTEST U1, 2026-07-23):** Release-EXE v2.3.0 stürzte
+  beim Start ab (`ModuleNotFoundError: No module named 'keyring'`, danach
+  `RuntimeError: lost sys.stdin`), weil `WinStorePackager.spec` keine
+  `hiddenimports` für `keyring` (inkl. Windows-Backend/`win32ctypes`) enthielt
+  und PyInstaller das Modul daher nicht bündelte. Der anschließende
+  Laufzeit-pip-Fallback in `install_and_import()` wirkte in der Frozen-EXE
+  zusätzlich als FORK-BOMBE, da `sys.executable` dort auf die EXE selbst
+  zeigt (`sys.executable -m pip install ...` startet die App erneut statt
+  pip; real 491 Prozesse). Fix: `WinStorePackager.spec` bündelt jetzt
+  `keyring`/`win32ctypes` über `collect_submodules()`; `install_and_import()`
+  installiert in Frozen-Builds (`sys.frozen`) ersatzlos nichts mehr nach,
+  sondern zeigt einen Fehlerdialog (`_fatal_missing_module_frozen`) und
+  beendet sich sauber ohne `input()`/`subprocess`. `build_exe.bat`
+  installiert `requirements.txt` jetzt vor jedem Build im Build-Interpreter,
+  damit PyInstaller neue Abhängigkeiten überhaupt bündeln kann.
 - `web_companion`: Icon-Uploads werden für die Vorschau nur noch als PNG/JPG/WebP
   akzeptiert und über `createImageBitmap` plus Canvas gerendert, statt einen
   Datei-Object-URL direkt an `img.src` zu übergeben.
