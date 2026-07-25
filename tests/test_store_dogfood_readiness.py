@@ -64,9 +64,12 @@ def test_store_dogfood_docs_use_portable_paths():
 
 
 def test_store_listing_profile_and_settings_stay_in_sync():
+    settings_file = WINDOWS_STORE / "store_settings.json"
+    if not settings_file.exists():
+        pytest.skip(f"local Store dogfood artifact is not present: {settings_file}")
     profile = json.loads((ROOT / "winstorepackager-project-v1.json").read_text(encoding="utf-8"))
     store_package = json.loads((ROOT / "store_package.json").read_text(encoding="utf-8"))
-    store_settings = json.loads((WINDOWS_STORE / "store_settings.json").read_text(encoding="utf-8"))
+    store_settings = json.loads(settings_file.read_text(encoding="utf-8"))
     listing_de = _read_text(WINDOWS_STORE / "store_listing_de.md")
     listing_en = _read_text(WINDOWS_STORE / "store_listing_en.md")
 

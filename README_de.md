@@ -1,8 +1,11 @@
-> [English](README.md) | Deutsch
+> [English](README.md) | **Deutsch**
 
 # WinStorePackager
 
 WinStorePackager ist ein lokales Windows-GUI für Entwicklerinnen und Entwickler, die Python-Desktop-Apps für den Microsoft Store vorbereiten. Das Tool bündelt die wiederkehrenden Arbeitsschritte rund um AppxManifest-Metadaten, Store-Icons, Screenshots, Projektprofile und MSIX/AppX-Build-Eingaben.
+
+> [!NOTE]
+> **Hinweis für KI-Agenten & LLMs**: Die Repository-Struktur und KI-Kontextgrenzen sind in [`llms.txt`](llms.txt) beschrieben. Austauschformate und Metadaten-Schemas finden sich in [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md).
 
 ![WinStorePackager-Hauptfenster](README/screenshots/main.png)
 
@@ -15,7 +18,6 @@ WinStorePackager ist ein lokales Windows-GUI für Entwicklerinnen und Entwickler
 | Store-Screenshots neu erzeugen | `python generate_store_screenshots.py` |
 | Projektprofil austauschen | `PROJECT_PROFILE_FORMAT.md` |
 | WinStorePackager mit sich selbst testen | `winstorepackager-project-v1.json` |
-| Browser-Companion lokal starten | `python web_companion/serve_companion.py` |
 | Datenschutz- und Git-Grenzen prüfen | `PRIVACY_POLICY.md` und `llms.txt` |
 
 ## Wofür das Projekt gedacht ist
@@ -45,16 +47,6 @@ python WindowsStorePublisher_3.py
 ```
 
 Unter Windows kann alternativ `START.bat` gestartet werden. Wenn ein lokales EXE-Bundle unter `dist\WinStorePackager.exe` vorhanden ist, bevorzugt `START.bat` diese Version.
-
-## Browser-Companion
-
-Der lokale Companion unter `web_companion/` erlaubt Projektprofil-Import und -Export, Manifest-Vorschau, Icon-Prüfung und Offline-Nutzung als lokale PWA:
-
-```bash
-python web_companion/serve_companion.py
-```
-
-Danach öffnet sich `http://127.0.0.1:8765/index.html`. Direktes Öffnen von `web_companion/index.html` funktioniert weiterhin für lokale Bearbeitung und JSON-Export; Installations- und Offline-Funktionen brauchen jedoch `localhost` oder `https`.
 
 ## Lokale Daten
 

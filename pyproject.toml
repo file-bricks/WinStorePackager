@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "winstorepackager"
+version = "3.1.0"
+description = "Desktop-App & CLI-Tool zur automatisierten Erstellung und Validierung von Windows Store MSIX-Paketen mit WACK-Integration"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Lukas Geiger"}
+]
+keywords = [
+    "msix",
+    "windows-store",
+    "wack",
+    "packager",
+    "appx",
+    "tkinter",
+    "desktop-app",
+    "local-first",
+    "llm-ready"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Build Tools",
+]
+
+[project.urls]
+Homepage = "https://github.com/file-bricks/WinStorePackager"
+Repository = "https://github.com/file-bricks/WinStorePackager"
+Documentation = "https://github.com/file-bricks/WinStorePackager#readme"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
