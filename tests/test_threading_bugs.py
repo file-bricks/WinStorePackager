@@ -86,7 +86,10 @@ class TestWACKTestNonBlocking(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.app = _minimal_app()
+        try:
+            cls.app = _minimal_app()
+        except Exception as err:
+            raise unittest.SkipTest(f"Tkinter GUI display unavailable: {err}")
 
     @classmethod
     def tearDownClass(cls):
