@@ -5,6 +5,17 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Geändert / Changed (2026-07-26)
+- Technische Hygiene & Doku-Wartung: `llms.txt` Header auf `Last-checked: 2026-07-26` und Testsuite-Status (33 Tests) aktualisiert.
+- `README.md` und `README_de.md` aktualisiert: Shields.io Badges, GFM LLM Integrations-Hinweis (`> [!NOTE]`) & Mermaid Architektur-/Paketierungs-Pipeline Diagramm eingebunden.
+
+### Geändert / Changed (2026-07-25)
+- Standardisiertes PEP 621 `pyproject.toml` mit Paket-Metadaten und Pytest-Konfiguration (`pythonpath = ["."]`) angelegt.
+- GitHub Actions CI-Workflow (`.github/workflows/ci.yml`) für Python 3.10–3.12 auf Windows & Linux hinzugefügt.
+- Testsuite-Resilienz in `tests/test_store_dogfood_readiness.py` und `tests/test_threading_bugs.py` gehärtet (30 passed, 3 skipped).
+- README.md und README_de.md aktualisiert (Shields.io Badges, GFM LLM Integrations-Hinweis `> [!NOTE]` hinzugefügt, veraltete web_companion-Referenzen bereinigt).
+- `llms.txt` Header auf `Last-checked: 2026-07-25` aktualisiert, veraltete web_companion-Dateireferenzen entfernt, Testsuite-Verifikation (33 Tests) ergänzt.
+
 ### Hinzugefügt / Added
 - `tests/test_windows_source_smoke.py` und Windows-Matrix-Ziel in `.github/workflows/source-platform-smoke.yml` für Windows-Source-Smoke CI-Parität ergänzt (TASKPLAN #894 / TW-WSP-07).
 - `winstorepackager-project-v1.json` als eigenes Self-Dogfooding-Profil ergänzt; es enthält Store-Metadaten, Projektpfade und Listing-Kontext ohne Publisher-DN, SDK-Pfade oder Zertifikatsdaten.

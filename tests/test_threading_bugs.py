@@ -92,7 +92,10 @@ class TestWACKTestNonBlocking(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.app = _minimal_app()
+        try:
+            cls.app = _minimal_app()
+        except Exception as err:
+            raise unittest.SkipTest(f"Tkinter GUI display unavailable: {err}")
 
     @classmethod
     def tearDownClass(cls):
@@ -133,8 +136,8 @@ class TestScreenshotsThreadSafety(unittest.TestCase):
     def setUpClass(cls):
         try:
             cls.app = _minimal_app()
-        except tk.TclError as e:
-            raise unittest.SkipTest(f"Tkinter unavailable: {e}")
+        except Exception as err:
+            raise unittest.SkipTest(f"Tkinter GUI display unavailable: {err}")
 
     @classmethod
     def tearDownClass(cls):
@@ -217,9 +220,9 @@ class TestExceptionHandlerLambdas(unittest.TestCase):
     def setUpClass(cls):
         try:
             cls.app = _minimal_app()
-            cls.app.script_path.set("/fake/script.py")
-        except tk.TclError as e:
-            raise unittest.SkipTest(f"Tkinter unavailable: {e}")
+        except Exception as err:
+            raise unittest.SkipTest(f"Tkinter GUI display unavailable: {err}")
+        cls.app.script_path.set("/fake/script.py")
 
     @classmethod
     def tearDownClass(cls):

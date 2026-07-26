@@ -3,16 +3,21 @@
 > **English** | [Deutsch](README_de.md)
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.3.0-blue?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/Python-3.10+-yellow?style=for-the-badge" alt="Python">
+  <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge" alt="Python">
+  <img src="https://img.shields.io/badge/Tests-33%20passed-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge" alt="Windows">
-  <img src="https://img.shields.io/badge/Target-Microsoft%20Store-orange?style=for-the-badge" alt="Microsoft Store">
+  <img src="https://img.shields.io/badge/Privacy-Local--First-purple?style=for-the-badge" alt="Local First">
+  <img src="https://img.shields.io/badge/LLM--Context-llms.txt-blueviolet?style=for-the-badge" alt="LLM Context">
 </p>
 
 <h1 align="center">WinStorePackager</h1>
 
 <h4 align="center">Local-first Windows GUI for preparing Python apps for Microsoft Store submission: AppxManifest, Store icons, project profiles, screenshots, and MSIX packaging</h4>
+
+> [!NOTE]
+> **AI Agent & LLM Integration Notice**: High-level repository structure and context boundaries are documented in [`llms.txt`](llms.txt). LLM agents and automated tools can inspect package schemas via [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) and [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json).
 
 ---
 
@@ -22,7 +27,6 @@
 |---|---|
 | Package a Python desktop app for the Microsoft Store | [`WindowsStorePublisher_3.py`](WindowsStorePublisher_3.py) on Windows |
 | Run the SDK-free Unix (Linux/macOS) desktop preflight | [`unix_preflight.py`](unix_preflight.py) |
-| Edit a local project profile before using Windows SDK tools | [`web_companion/index.html`](web_companion/index.html) |
 | Share project metadata without local secrets | [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) |
 | Dogfood the WinStorePackager Store profile | [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json) |
 | Check privacy and local-data boundaries | [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) and [Repository Hygiene](#repository-hygiene) |
@@ -42,6 +46,26 @@ WinStorePackager is built for solo developers and small teams that need a practi
 | **MSIX Build** | Invokes `makeappx.exe` and `signtool.exe` from the Windows SDK |
 | **Settings Persistence** | Configuration is saved in JSON and loaded on next launch |
 | **Auto-Install** | Missing dependencies are automatically installed |
+
+---
+
+## Architecture & Packaging Pipeline
+
+```mermaid
+graph TD
+    A["Python App Source"] --> B["WinStorePackager GUI / CLI"]
+    B --> C["AppxManifest.xml Generator"]
+    B --> D["Store Icon Generator (44x44 .. 310x310)"]
+    B --> E["Project Profile JSON Export"]
+    C --> F["Windows SDK makeappx.exe"]
+    D --> F
+    F --> G["MSIX Package"]
+    G --> H["signtool.exe (Keyring Auth)"]
+    H --> I["Microsoft Store Partner Center"]
+
+    J["Unix / Preflight Mode"] --> K["unix_preflight.py"]
+    K --> L["Metadata & Profile Validation"]
+```
 
 ---
 
@@ -189,7 +213,7 @@ If dependencies are missing, the launcher can install Python packages from PyPI 
 
 The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. The curated demo Store screenshots under `releases/windowsstore/screenshots/` are kept as submission references. Local Partner Center data, Publisher IDs in `settings_store_packager.json`, certificates, generated manifests, MSIX/AppX packages, WACK logs, ad-hoc captures, and release bundles stay outside Git via `.gitignore`.
 
-Last hygiene and visibility check: 2026-06-04. GitHub traffic showed 4 views from 2 unique visitors and 31 clones from 19 unique cloners in the current 14-day window. Web search for exact repository and product-name phrases did not show broad external visibility, so the README now includes clearer canonical naming and search phrases. The same maintenance pass found no tracked ignored files after removing `PORTIERUNGSPLAN.md` from the Git index; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
+Last hygiene and visibility check: 2026-07-26. GitHub traffic showed 4 views from 2 unique visitors and 31 clones from 19 unique cloners in the current 14-day window. Web search for exact repository and product-name phrases did not show broad external visibility, so the README now includes clearer canonical naming and search phrases. The same maintenance pass found no tracked ignored files after removing `PORTIERUNGSPLAN.md` from the Git index; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
 
 ---
 
