@@ -33,6 +33,24 @@ WinStorePackager richtet sich an kleine Teams und Einzelentwickler, die eine bes
 
 WinStorePackager ersetzt weder das offizielle Microsoft MSIX Packaging Tool noch die eigentliche Einreichung im Partner Center. Es ist ein lokaler Helfer vor dem finalen Build- und Veröffentlichungsprozess.
 
+## Architektur & Paketierungs-Pipeline
+
+```mermaid
+graph TD
+    A["Python App Quellcode"] --> B["WinStorePackager GUI / CLI"]
+    B --> C["AppxManifest.xml Generator"]
+    B --> D["Store Icon Generator (44x44 .. 310x310)"]
+    B --> E["Projektprofil JSON Export"]
+    C --> F["Windows SDK makeappx.exe"]
+    D --> F
+    F --> G["MSIX Paket"]
+    G --> H["signtool.exe (Keyring Auth)"]
+    H --> I["Microsoft Store Partner Center"]
+
+    J["Unix / Preflight Modus"] --> K["unix_preflight.py"]
+    K --> L["Metadaten & Profil Validierung"]
+```
+
 ## Store-Screenshots
 
 `python generate_store_screenshots.py` erzeugt vier kuratierte Microsoft-Store-Screenshots in `releases/windowsstore/screenshots/`. Die Bilder sind 1920x1080 px groß, verwenden neutrale Demo-Metadaten und zeigen keine echten Partner-Center-Publisher-DNs, Zertifikatspfade, Passwörter, Windows-SDK-Pfade oder privaten Projektpfade.

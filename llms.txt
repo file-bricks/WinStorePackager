@@ -49,6 +49,7 @@ Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifest
 
 ## Verification & Test Suite
 
-Tested with Pytest: 33 test cases (30 passed, 3 skipped for optional local Store dogfood/GUI artifacts). Execute via `pytest`.
+Tested with Pytest: 33 test cases (29 passed, 4 skipped for optional local Store dogfood/GUI artifacts). Execute via `pytest`.
 
-## Last-checked: 2026-07-25
+## Last-checked: 2026-07-26
+
