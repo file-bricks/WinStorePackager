@@ -6,6 +6,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Geändert / Changed (2026-07-26)
+- CI überspringt absichtlich nicht versionierte WACK-Protokolle und Tkinter-UI-Tests ohne verfügbares Display, statt dadurch die plattformübergreifende Quellprüfung fälschlich fehlschlagen zu lassen.
 - Technische Hygiene & Doku-Wartung: `llms.txt` Header auf `Last-checked: 2026-07-26` und Testsuite-Status (33 Tests) aktualisiert.
 - `README.md` und `README_de.md` aktualisiert: Shields.io Badges, GFM LLM Integrations-Hinweis (`> [!NOTE]`) & Mermaid Architektur-/Paketierungs-Pipeline Diagramm eingebunden.
 

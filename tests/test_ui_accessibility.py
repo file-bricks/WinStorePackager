@@ -54,7 +54,10 @@ def _button_texts(parent: tk.Misc) -> list[str]:
 class TestUiAccessibility(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.app = _minimal_app()
+        try:
+            cls.app = _minimal_app()
+        except tk.TclError as exc:
+            raise unittest.SkipTest(f"Tkinter display is unavailable: {exc}") from exc
 
     @classmethod
     def tearDownClass(cls):
