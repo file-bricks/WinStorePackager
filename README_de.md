@@ -15,7 +15,7 @@ WinStorePackager ist ein lokales Windows-GUI für Entwicklerinnen und Entwickler
 | Store-Screenshots neu erzeugen | `python generate_store_screenshots.py` |
 | Projektprofil austauschen | `PROJECT_PROFILE_FORMAT.md` |
 | WinStorePackager mit sich selbst testen | `winstorepackager-project-v1.json` |
-| Browser-Companion lokal starten | `python web_companion/serve_companion.py` |
+| Projektprofil-Helfer lokal starten | `python web_companion/serve_companion.py` |
 | Datenschutz- und Git-Grenzen prüfen | `PRIVACY_POLICY.md` und `llms.txt` |
 
 ## Wofür das Projekt gedacht ist
@@ -46,15 +46,15 @@ python WindowsStorePublisher_3.py
 
 Unter Windows kann alternativ `START.bat` gestartet werden. Wenn ein lokales EXE-Bundle unter `dist\WinStorePackager.exe` vorhanden ist, bevorzugt `START.bat` diese Version.
 
-## Browser-Companion
+## Lokaler Projektprofil-Helfer
 
-Der lokale Companion unter `web_companion/` erlaubt Projektprofil-Import und -Export, Manifest-Vorschau, Icon-Prüfung und Offline-Nutzung als lokale PWA:
+Der lokale Helfer unter `web_companion/` erlaubt Projektprofil-Import und -Export, Manifest-Vorschau, Icon-Prüfung und eine optionale Offline-Hülle im Browser:
 
 ```bash
 python web_companion/serve_companion.py
 ```
 
-Danach öffnet sich `http://127.0.0.1:8765/index.html`. Direktes Öffnen von `web_companion/index.html` funktioniert weiterhin für lokale Bearbeitung und JSON-Export; Installations- und Offline-Funktionen brauchen jedoch `localhost` oder `https`.
+Danach öffnet sich `http://127.0.0.1:8765/index.html`. Direktes Öffnen von `web_companion/index.html` funktioniert weiterhin für lokale Bearbeitung und JSON-Export; Installations- und Offline-Funktionen brauchen jedoch `localhost` oder `https`. Der Scope bleibt bewusst lokal: kein öffentlicher Upload, keine Cloud-Synchronisierung und keine eigenständige Android-/iOS-/Web-Produktlinie.
 
 ## Lokale Daten
 

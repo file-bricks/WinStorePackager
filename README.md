@@ -22,7 +22,7 @@
 |---|---|
 | Package a Python desktop app for the Microsoft Store | [`WindowsStorePublisher_3.py`](WindowsStorePublisher_3.py) on Windows |
 | Run the SDK-free Unix (Linux/macOS) desktop preflight | [`unix_preflight.py`](unix_preflight.py) |
-| Prepare Store metadata before using Windows SDK tools | [`web_companion/index.html`](web_companion/index.html) |
+| Edit a local project profile before using Windows SDK tools | [`web_companion/index.html`](web_companion/index.html) |
 | Share project metadata without local secrets | [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) |
 | Dogfood the WinStorePackager Store profile | [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json) |
 | Check privacy and local-data boundaries | [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) and [Repository Hygiene](#repository-hygiene) |
@@ -61,7 +61,7 @@ python generate_store_screenshots.py
 
 The generator writes four 1920x1080 PNGs to `releases/windowsstore/screenshots/` and uses only neutral demo metadata. It does not expose Partner Center publisher DNs, certificate paths, passwords, Windows SDK paths, or private project paths.
 
-## Project Profile Exchange and Web Companion
+## Project Profile Exchange and Local Profile Helper
 
 WinStorePackager now ships with a shared project profile format: [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md). The desktop app can import and export `winstorepackager-project-v1.json` so that Store metadata can be prepared outside Windows without exposing local Publisher IDs, SDK paths, certificate paths, or passwords.
 
@@ -73,7 +73,7 @@ python unix_preflight.py --project-root . --profile-path winstorepackager-projec
 
 The profile intentionally keeps Partner Center Publisher IDs, certificate paths, SDK paths, and passwords out of Git. Add those values only in local settings before building or signing an MSIX.
 
-The browser-based companion lives in [`web_companion/index.html`](web_companion/index.html). It offers the same project questionnaire, manifest preview, icon-size check, and JSON import/export as before, but now also supports a local app shell with service worker, offline fallback, install prompt, and a small cross-platform localhost starter.
+The local browser helper lives in [`web_companion/index.html`](web_companion/index.html). It stays intentionally narrow: project questionnaire, manifest preview, icon-size check, and JSON import/export for `winstorepackager-project-v1.json`. The optional service worker, offline fallback, install prompt, and localhost starter exist only to make that local helper easier to use on the same machine; they do not turn `web_companion/` into a public web app, cloud service, Android app, or iOS product line.
 
 ```bash
 python web_companion/serve_companion.py
@@ -224,7 +224,7 @@ A GUI tool for preparing Python applications for the Microsoft Store (MSIX packa
 - Icon and asset management
 - Store submission preparation
 - Shared project profile exchange via `winstorepackager-project-v1.json`
-- Installable local browser companion with offline shell, manifest preview, and icon checks
+- Installable local project-profile helper with offline shell, manifest preview, and icon checks
 
 ### Installation
 

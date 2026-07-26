@@ -14,7 +14,7 @@ WinStorePackager is a local-first Windows GUI for preparing Python applications 
 - `README_de.md`: German companion README for Microsoft Store packaging users.
 - `WindowsStorePublisher_3.py`: desktop GUI entry point.
 - `PROJECT_PROFILE_FORMAT.md`: `winstorepackager-project-v1` exchange format.
-- `web_companion/index.html`: browser-based local companion for project profile editing.
+- `web_companion/index.html`: browser-based local project-profile helper for manifest preview, icon checks, and JSON editing.
 - `PRIVACY_POLICY.md`: local-data and privacy boundary.
 - `STORE_LISTING.md`: reusable Microsoft Store listing copy.
 
@@ -42,6 +42,7 @@ Python Microsoft Store packaging German README
 ## Scope Boundary
 
 WinStorePackager is not the official Microsoft MSIX Packaging Tool and does not submit apps to Partner Center. It prepares local metadata, icons, manifests, screenshots, and build inputs for developers who already have the Windows SDK and a Microsoft Store developer account.
+`web_companion/` is part of that same local workflow only; it is not a public web app, cloud service, Android app, or iOS product line.
 
 ## Privacy Boundary
 

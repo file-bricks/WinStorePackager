@@ -509,13 +509,13 @@ class StorePackagerApp(tk.Tk):
         frm.pack(fill="both", expand=True, padx=12, pady=12)
         row = 0
 
-        def add_row(label, var, browse_cmd=None, width=60):
+        def add_row(label, var, browse_cmd=None, browse_label="Wählen", width=60):
             nonlocal row
             ttk.Label(frm, text=label).grid(row=row, column=0, sticky="w", pady=3)
             ent = ttk.Entry(frm, textvariable=var, width=width)
             ent.grid(row=row, column=1, sticky="we", pady=3, padx=5)
             if browse_cmd:
-                ttk.Button(frm, text="Wählen", command=browse_cmd).grid(row=row, column=2, sticky="w")
+                ttk.Button(frm, text=browse_label, command=browse_cmd).grid(row=row, column=2, sticky="w")
             row += 1
 
         add_row("App-Name:", self.app_name)
@@ -527,10 +527,10 @@ class StorePackagerApp(tk.Tk):
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
 
-        add_row("Haupt-Skript (.py):", self.script_path, self.choose_script)
-        add_row("Icon (PNG, mind. 310x310):", self.icon_path, self.choose_icon)
-        add_row("Quelltext (ZIP oder Datei):", self.source_path, self.choose_source)
-        add_row("Installer (EXE oder MSIX):", self.installer_path, self.choose_installer)
+        add_row("Haupt-Skript (.py):", self.script_path, self.choose_script, browse_label="Skript wählen")
+        add_row("Icon (PNG, mind. 310x310):", self.icon_path, self.choose_icon, browse_label="Icon wählen")
+        add_row("Quelltext (ZIP oder Datei):", self.source_path, self.choose_source, browse_label="Quelle wählen")
+        add_row("Installer (EXE oder MSIX):", self.installer_path, self.choose_installer, browse_label="Installer wählen")
         add_row("Ausgabeordner:", self.output_dir)
         add_row("EXE-Name (z.B. MyApp.exe):", self.exe_name)
 
@@ -542,7 +542,7 @@ class StorePackagerApp(tk.Tk):
         readme_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.readme_box = scrolledtext.ScrolledText(readme_frame, width=70, height=5)
         self.readme_box.pack(fill="both", expand=True)
-        ttk.Button(frm, text="Datei laden", command=self.load_readme_file).grid(row=row, column=2, sticky="nw")
+        ttk.Button(frm, text="README laden", command=self.load_readme_file).grid(row=row, column=2, sticky="nw")
         row += 1
 
         ttk.Label(frm, text="Lizenz (Text/Dateien):").grid(row=row, column=0, sticky="nw", pady=5)
@@ -561,7 +561,7 @@ class StorePackagerApp(tk.Tk):
         desc_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.desc_box = scrolledtext.ScrolledText(desc_frame, width=70, height=5)
         self.desc_box.pack(fill="both", expand=True)
-        ttk.Button(frm, text="Datei laden", command=self.load_desc_file).grid(row=row, column=2, sticky="nw")
+        ttk.Button(frm, text="Beschreibung laden", command=self.load_desc_file).grid(row=row, column=2, sticky="nw")
         row += 1
 
         frm.columnconfigure(1, weight=1)
@@ -571,20 +571,20 @@ class StorePackagerApp(tk.Tk):
         frm.pack(fill="both", expand=True, padx=12, pady=12)
         row = 0
 
-        def add_row(label, var, browse_cmd=None, width=60, show=None):
+        def add_row(label, var, browse_cmd=None, browse_label="Wählen", width=60, show=None):
             nonlocal row
             ttk.Label(frm, text=label).grid(row=row, column=0, sticky="w", pady=3)
             ent = ttk.Entry(frm, textvariable=var, width=width, show=show)
             ent.grid(row=row, column=1, sticky="we", pady=3, padx=5)
             if browse_cmd:
-                ttk.Button(frm, text="Wählen", command=browse_cmd).grid(row=row, column=2, sticky="w")
+                ttk.Button(frm, text=browse_label, command=browse_cmd).grid(row=row, column=2, sticky="w")
             row += 1
 
         # NEU: Python Environment für externe Builds
         ttk.Label(frm, text="Python Umgebung (für Builds)", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
         row += 1
         
-        add_row("Python.exe Pfad:", self.python_path, self.choose_python_exe)
+        add_row("Python.exe Pfad:", self.python_path, self.choose_python_exe, browse_label="Python wählen")
         ttk.Label(frm, text="Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.", foreground="gray").grid(row=row, column=1, sticky="w")
         row += 1
         
@@ -594,9 +594,9 @@ class StorePackagerApp(tk.Tk):
         ttk.Label(frm, text="Windows SDK Tools", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
         row += 1
 
-        add_row("MakeAppx.exe:", self.makeappx_path, self.choose_makeappx)
-        add_row("SignTool.exe:", self.signtool_path, self.choose_signtool)
-        add_row("AppCert.exe (WACK):", self.appcert_path, self.choose_appcert)
+        add_row("MakeAppx.exe:", self.makeappx_path, self.choose_makeappx, browse_label="MakeAppx wählen")
+        add_row("SignTool.exe:", self.signtool_path, self.choose_signtool, browse_label="SignTool wählen")
+        add_row("AppCert.exe (WACK):", self.appcert_path, self.choose_appcert, browse_label="AppCert wählen")
         
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
@@ -604,7 +604,7 @@ class StorePackagerApp(tk.Tk):
         ttk.Label(frm, text="Zertifikat & Signierung", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
         row += 1
 
-        add_row("Zertifikat (.pfx):", self.pfx_path, self.choose_pfx)
+        add_row("Zertifikat (.pfx):", self.pfx_path, self.choose_pfx, browse_label="Zertifikat wählen")
         add_row("PFX Passwort:", self.pfx_password, show="*")
         add_row("Timestamp URL:", self.timestamp_url)
         add_row("MSIX Name:", self.msix_name)
@@ -1177,16 +1177,16 @@ def patch_widgets(translator):
                 else:
                     msg += f"\n\nLizenzen-Warnung:\n{info_lic}"
                 
-                self.after(0, lambda: messagebox.showinfo("Fertig", msg))
+                self.after(0, lambda m=msg: messagebox.showinfo("Fertig", m))
                 
             except subprocess.CalledProcessError as e:
                 progress.close()
                 err_out = e.stderr.decode('utf-8', errors='replace') if e.stderr else "Unbekannter Fehler"
-                self.after(0, lambda: messagebox.showerror("PyInstaller Fehler", f"{err_out}"))
+                self.after(0, lambda err=err_out: messagebox.showerror("PyInstaller Fehler", f"{err}"))
             except Exception as e:
                 err_str = str(e)
                 progress.close()
-                self.after(0, lambda: messagebox.showerror("Fehler", f"EXE-Erzeugung fehlgeschlagen:\n{err_str}"))
+                self.after(0, lambda err=err_str: messagebox.showerror("Fehler", f"EXE-Erzeugung fehlgeschlagen:\n{err}"))
         
         thread = threading.Thread(target=build_thread, daemon=True)
         thread.start()
@@ -1347,12 +1347,12 @@ def patch_widgets(translator):
                 # Passwort aus Fehlermeldung entfernen
                 safe_cmd = [x if x != pfx_pw else "***" for x in (e.cmd or [])]
                 error_msg = f"Befehl fehlgeschlagen:\n{safe_cmd}\n\nAusgabe:\n{e.stderr if e.stderr else e.stdout}"
-                self.after(0, lambda: messagebox.showerror("Fehler", error_msg))
+                self.after(0, lambda msg=error_msg: messagebox.showerror("Fehler", msg))
             except Exception as e:
                 err_str = str(e)
                 progress.close()
-                self.after(0, lambda: messagebox.showerror("Fehler",
-                    f"MSIX-Build fehlgeschlagen:\n{err_str}"))
+                self.after(0, lambda err=err_str: messagebox.showerror("Fehler",
+                    f"MSIX-Build fehlgeschlagen:\n{err}"))
         
         thread = threading.Thread(target=build_thread, daemon=True)
         thread.start()
@@ -1451,11 +1451,11 @@ def patch_widgets(translator):
                     f"Screenshots in Store-Formaten gespeichert:\n{shots_dir}\n\n"
                     + "\n".join([f"• {w}x{h} ({d})" for w, h, d in formats])
                 )
-                self.after(0, lambda: messagebox.showinfo("Screenshots", info_msg))
+                self.after(0, lambda m=info_msg: messagebox.showinfo("Screenshots", m))
 
             except Exception as e:
                 err_msg = f"Screenshots fehlgeschlagen:\n{e}"
-                self.after(0, lambda: messagebox.showerror("Fehler", err_msg))
+                self.after(0, lambda err=err_msg: messagebox.showerror("Fehler", err))
                 if proc is not None:
                     try:
                         proc.terminate()
@@ -1494,7 +1494,7 @@ def patch_widgets(translator):
                 self.after(0, _launch_test)
             except Exception as exc:
                 err_msg = f"WACK-Test fehlgeschlagen:\n{exc}"
-                self.after(0, lambda: messagebox.showerror("Fehler", err_msg))
+                self.after(0, lambda err=err_msg: messagebox.showerror("Fehler", err))
 
         def _launch_test():
             try:

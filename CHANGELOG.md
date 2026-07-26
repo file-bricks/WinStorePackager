@@ -6,6 +6,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Hinzugefügt / Added
+- `tests/test_windows_source_smoke.py` und Windows-Matrix-Ziel in `.github/workflows/source-platform-smoke.yml` für Windows-Source-Smoke CI-Parität ergänzt (TASKPLAN #894 / TW-WSP-07).
 - `winstorepackager-project-v1.json` als eigenes Self-Dogfooding-Profil ergänzt; es enthält Store-Metadaten, Projektpfade und Listing-Kontext ohne Publisher-DN, SDK-Pfade oder Zertifikatsdaten.
 - `tests/test_self_dogfood_profile.py` validiert das eigene Projektprofil gegen `store_package.json`, prüft sensible Felder und führt den SDK-freien Preflight mit dem Profil aus.
 - `generate_store_screenshots.py` erzeugt ein kuratiertes Microsoft-Store-Screenshot-Set mit vier 1920x1080-PNGs ohne Publisher-, Zertifikats- oder Privatpfad-Daten.
@@ -13,12 +14,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - `unix_preflight.py` ergänzt: SDK-freier Unix-Preflight (für Linux und macOS) prüft Projektstruktur, `store_package.json`, README, Privacy Policy, Store-Listing, Screenshot-/Icon-Artefakte und optional exportierte Projektprofile.
 - `tests/test_unix_preflight.py` deckt gültige Unix-Preflights, fehlende Artefakte, Drift zwischen Projektprofil und Store-Metadaten sowie den Abwärtskompatibilitäts-Wrapper ab.
 - `llms.txt` als maschinenlesbarer Projektkontext für Crawler, LLMs und Repo-Navigation ergänzt.
-- `PORTIERUNGSPLAN.md` ergänzt: Windows Store bleibt Hauptkanal, Web/PWA wird Companion-Linie, Android/iOS nur PWA-Testziel, macOS/Linux nur SDK-freier Preflight.
-- Projektaufgaben um P0-P3-Portierungsschritte für Dogfooding, Austauschformat `winstorepackager-project-v1.json`, Web/PWA und Preflight ergänzt.
+- `PORTIERUNGSPLAN.md` ergänzt: Windows Store bleibt Hauptkanal, `web_companion/` bleibt lokaler Hilfsweg für Projektprofile; Android/iOS sind Nicht-Ziele, macOS/Linux bleiben SDK-freier Preflight.
+- Projektaufgaben um P0-P3-Portierungsschritte für Dogfooding, Austauschformat `winstorepackager-project-v1.json`, lokalen Helper-Scope und Preflight ergänzt.
 - `PROJECT_PROFILE_FORMAT.md` dokumentiert jetzt das gemeinsame Austauschformat `winstorepackager-project-v1.json`.
 - Desktop-App kann Projektprofile jetzt sicher importieren und exportieren, ohne Publisher-ID, SDK-Pfade oder Zertifikatsdaten mitzuschreiben.
-- `web_companion/` als lokaler Browser-Companion für Manifest-Vorschau, Icon-Check und JSON-Import/Export ergänzt.
-- `web_companion/` ist jetzt als installierbare PWA nutzbar: `service-worker.js`, `offline.html`, `icon.svg` und `serve_companion.py` ergänzen Offline-Shell, Install-Flow und localhost-Start.
+- `web_companion/` als lokaler Projektprofil-Helfer für Manifest-Vorschau, Icon-Check und JSON-Import/Export ergänzt.
+- `web_companion/` hat jetzt eine optionale installierbare Offline-Hülle: `service-worker.js`, `offline.html`, `icon.svg` und `serve_companion.py` ergänzen lokalen Cache, Install-Flow und localhost-Start für denselben lokalen Helper.
 - `tests/test_project_profile.py` deckt Profil-Serialisierung und Pfadauflösung ab.
 - Repo-Hygiene-Check vom 2026-05-17 in README und Projektlog dokumentiert.
 - `.gitattributes` ergänzt, damit Text- und Binärdateien konsistent behandelt werden.

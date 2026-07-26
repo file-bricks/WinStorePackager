@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
       - name: pytest installieren
         run: pip install pytest
 
-      - name: Unix-Preflight- und Profilformat-Tests ausführen
+      - name: Source-Platform-Smoke-Tests ausführen
         env:
           PYTHONPATH: ${{ github.workspace }}
-        run: pytest tests/test_unix_preflight.py tests/test_project_profile.py -v
+        run: pytest tests/test_unix_preflight.py tests/test_project_profile.py tests/test_windows_source_smoke.py -v

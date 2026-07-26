@@ -11,6 +11,7 @@ Bug #4: except Exception as e in Hintergrundthreads verwendete e direkt
         in Lambdas -- Python 3 loescht e am Ende des except-Blocks
         (NameError wenn Lambda spaeter ausgefuehrt wird).
 """
+import os
 import sys
 import threading
 import unittest
@@ -18,6 +19,11 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+tcl_dir = os.path.join(sys.prefix, 'tcl', 'tcl8.6')
+if os.path.exists(tcl_dir):
+    os.environ.setdefault('TCL_LIBRARY', tcl_dir)
+    os.environ.setdefault('TK_LIBRARY', os.path.join(sys.prefix, 'tcl', 'tk8.6'))
 
 import tkinter as tk
 import WindowsStorePublisher_3 as _wsp
@@ -91,7 +97,7 @@ class TestWACKTestNonBlocking(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         try:
-            cls.app.withdraw()
+            cls.app.destroy()
         except Exception:
             pass
 
@@ -104,6 +110,8 @@ class TestWACKTestNonBlocking(unittest.TestCase):
             reset_thread_ids.append(threading.current_thread().ident)
             done.set()
             return MagicMock(returncode=0)
+
+        self.app.after = lambda delay, func, *args: None
 
         with patch("subprocess.run", fake_run), \
              patch("subprocess.Popen"), \
@@ -123,14 +131,18 @@ class TestScreenshotsThreadSafety(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.app = _minimal_app()
+        try:
+            cls.app = _minimal_app()
+        except tk.TclError as e:
+            raise unittest.SkipTest(f"Tkinter unavailable: {e}")
 
     @classmethod
     def tearDownClass(cls):
-        try:
-            cls.app.withdraw()
-        except Exception:
-            pass
+        if hasattr(cls, "app"):
+            try:
+                cls.app.destroy()
+            except Exception:
+                pass
 
     def _reset_after(self):
         """Ersetzt self.after mit Capture-Funktion; gibt done-Event zurueck."""
@@ -203,15 +215,19 @@ class TestExceptionHandlerLambdas(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.app = _minimal_app()
-        cls.app.script_path.set("/fake/script.py")
+        try:
+            cls.app = _minimal_app()
+            cls.app.script_path.set("/fake/script.py")
+        except tk.TclError as e:
+            raise unittest.SkipTest(f"Tkinter unavailable: {e}")
 
     @classmethod
     def tearDownClass(cls):
-        try:
-            cls.app.withdraw()
-        except Exception:
-            pass
+        if hasattr(cls, "app"):
+            try:
+                cls.app.destroy()
+            except Exception:
+                pass
 
     def test_build_exe_exception_lambda_callable_without_name_error(self):
         """Bug #4: Lambda im except Exception as e:-Block von build_exe muss NameError-frei aufrufbar sein."""
