@@ -186,6 +186,68 @@ def validate_publisher_cn(publisher):
         return False, "Publisher muss mit 'CN=' beginnen"
     return True, ""
 
+def validate_signing_credentials(pfx_path, pfx_pw, publisher_cn, timestamp_url):
+    """
+    Validates PFX certificate path, password, publisher format, and timestamp URL before calling signtool.
+    Returns (valid: bool, errors: list[str]).
+    """
+    errors = []
+    if not pfx_path or not os.path.isfile(pfx_path):
+        errors.append("PFX-Zertifikatsdatei fehlt oder ist ungültig.")
+    
+    val_pub, msg_pub = validate_publisher_cn(publisher_cn or "")
+    if not val_pub:
+        errors.append(f"Publisher-ID Format ungültig: {msg_pub}")
+        
+    if not timestamp_url or not (timestamp_url.startswith("http://") or timestamp_url.startswith("https://")):
+        errors.append("Timestamp URL muss mit http:// oder https:// beginnen.")
+        
+    return (len(errors) == 0), errors
+
+def parse_wack_report(report_path: str):
+    """
+    Parses a WACK XML report produced by appcert.exe.
+    Returns (passed: bool, summary_message: str, details: dict).
+    """
+    if not report_path or not os.path.exists(report_path):
+        return False, f"WACK-Report nicht gefunden: {report_path}", {}
+    
+    try:
+        import xml.etree.ElementTree as ET
+        tree = ET.parse(report_path)
+        root = tree.getroot()
+        
+        overall = root.attrib.get("OVERALL_RESULT", "").upper()
+        
+        failed_tests = []
+        passed_tests = []
+        for test in root.iter("TEST"):
+            name = test.attrib.get("NAME", "Unknown")
+            result = test.attrib.get("RESULT", "").upper()
+            if result == "FAIL":
+                failed_tests.append(name)
+            elif result == "PASS":
+                passed_tests.append(name)
+        
+        passed = (overall == "PASS") or (len(failed_tests) == 0 and len(passed_tests) > 0)
+        
+        details = {
+            "overall": overall,
+            "failed_count": len(failed_tests),
+            "passed_count": len(passed_tests),
+            "failed_tests": failed_tests,
+            "passed_tests": passed_tests,
+        }
+        
+        if passed:
+            msg = f"✅ WACK-Test BESTANDEN ({len(passed_tests)} Prüfungen ok)."
+        else:
+            msg = f"❌ WACK-Test FEHLGESCHLAGEN ({len(failed_tests)} Fehler: {', '.join(failed_tests[:5])})."
+            
+        return passed, msg, details
+    except Exception as e:
+        return False, f"Fehler beim Parsen des WACK-Reports: {e}", {}
+
 class ProgressDialog(tk.Toplevel):
     """Modal progress dialog for long operations - Thread Safe Fix Applied"""
     def __init__(self, parent, title="Verarbeitung..."):
@@ -1314,16 +1376,17 @@ def patch_widgets(translator):
                 cmd_pack = [makeappx, "pack", "/d", outdir, "/p", msix_path, "/o"]
                 # Bugsweep 25 BUG-msix (KRITISCH): timeout, sonst kann makeappx/signtool haengen und
                 # die App friert dauerhaft ein (signtool wartet ggf. auf Timestamp-Server uebers Netz).
-                result = subprocess.run(cmd_pack, capture_output=True, text=True, check=True, timeout=300)
+                subprocess.run(cmd_pack, capture_output=True, text=True, check=True, timeout=300)
 
                 pfx = self.pfx_path.get().strip()
                 pfx_pw = self.pfx_password.get()
                 ts_url = self.timestamp_url.get().strip()
 
-                if not pfx or not os.path.isfile(pfx):
+                valid_cred, cred_errs = validate_signing_credentials(pfx, pfx_pw, self.publisher.get(), ts_url)
+                if not valid_cred:
                     progress.close()
-                    self.after(0, lambda: messagebox.showerror("Fehler", 
-                        "Zertifikat (.pfx) nicht gesetzt oder nicht gefunden."))
+                    err_msg = "Zertifikats- und Signatur-Prüfung fehlgeschlagen:\n\n" + "\n".join(cred_errs)
+                    self.after(0, lambda msg=err_msg: messagebox.showerror("Fehler", msg))
                     return
 
                 progress.update_status("Signiere MSIX...")
@@ -1487,23 +1550,25 @@ def patch_widgets(translator):
         
         appcert_path = appcert
         msix_path_captured = msix_path
+        report_path = os.path.join(self.package_dir(), "WACK_Report.xml")
 
         def _run_wack():
             try:
                 subprocess.run([appcert_path, "reset"], capture_output=True, timeout=30)
                 self.after(0, _launch_test)
             except Exception as exc:
-                err_msg = f"WACK-Test fehlgeschlagen:\n{exc}"
+                err_msg = f"WACK-Test Reset fehlgeschlagen:\n{exc}"
                 self.after(0, lambda err=err_msg: messagebox.showerror("Fehler", err))
 
         def _launch_test():
             try:
                 messagebox.showinfo("WACK-Test",
-                    "WACK-Test wird gestartet...\n\nDies kann mehrere Minuten dauern.\n"
-                    "Das Ergebnis wird in einem separaten Fenster angezeigt.")
-                subprocess.Popen([appcert_path, "test", "/packagepath", msix_path_captured])
+                    f"WACK-Test wird gestartet...\n\nDies kann mehrere Minuten dauern.\n"
+                    f"Ergebnisbericht wird gespeichert unter:\n{report_path}")
+                cmd = [appcert_path, "test", "-apptype", "uap", "-packagepath", msix_path_captured, "-reportpath", report_path]
+                subprocess.Popen(cmd)
             except Exception as exc:
-                messagebox.showerror("Fehler", f"WACK-Test fehlgeschlagen:\n{exc}")
+                messagebox.showerror("Fehler", f"WACK-Test Start fehlgeschlagen:\n{exc}")
 
         threading.Thread(target=_run_wack, daemon=True).start()
     
