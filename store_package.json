@@ -3,7 +3,7 @@
   "publisher": "CN=YOUR-PUBLISHER-ID",
   "publisher_display": "Your Publisher Name",
   "identity_name": "YourPublisher.WinStorePackager",
-  "version": "2.3.0.0",
+  "version": "3.1.0.0",
   "description": "Python-Apps für den Microsoft Store packen (MSIX). Manifest-Generierung, Icon-Builder, PyInstaller-Integration, Code-Signing, WACK-Tests.",
   "executable": "WinStorePackager.exe",
   "capabilities": "internetClient,runFullTrust",

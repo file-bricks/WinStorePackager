@@ -15,49 +15,43 @@ import os
 import importlib
 
 # ------------------------------------------------------------
-# 0. Auto-Installation fehlender Pakete (Bootstrapper)
+# 0. Reproduzierbarer Dependency-Check (Bootstrapper)
 # ------------------------------------------------------------
 def install_and_import(package_name, import_name=None):
     """
-    Versucht ein Modul zu importieren. Falls es fehlt, wird es per pip installiert.
+    Prüft ein Modul ohne die Laufzeitumgebung zu verändern.
+
+    Die Installation erfolgt bewusst nur vor dem Start mit requirements.txt:
+    eine GUI oder Frozen-EXE darf nicht von Netzwerk, pip oder einem
+    interaktiven Admin-Prompt abhängen.
     """
     if import_name is None:
         import_name = package_name
 
     try:
         importlib.import_module(import_name)
+        return True
     except ImportError:
-        print(f"⚠️  Modul '{import_name}' fehlt. Installiere '{package_name}'...")
-        try:
-            # sys.executable garantiert, dass wir das pip des aktuellen Interpreters nutzen
-            # Bugsweep 25: timeout, sonst friert der App-Start bei haengendem pip (kein Netz/Proxy)
-            # dauerhaft ein; TimeoutExpired faellt in den except-Block unten.
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package_name], timeout=300)
-            print(f"✅ '{package_name}' erfolgreich installiert.")
-        except Exception as e:
-            print(f"❌ Fehler bei der Installation von {package_name}: {e}")
-            print("Bitte führen Sie das Skript als Administrator aus oder installieren Sie manuell.")
-            input("Drücken Sie Enter zum Beenden...")
-            sys.exit(1)
-
-        # Cache invalidieren und neu importieren
-        try:
-            importlib.invalidate_caches()
-            importlib.import_module(import_name)
-        except ImportError:
-            print(f"❌ Import von '{import_name}' nach Installation immer noch nicht möglich.")
-            sys.exit(1)
+        return False
 
 # ------------------------------------------------------------
 # 0b. Abhängigkeiten sicherstellen (nur wenn direkt ausgeführt)
 # ------------------------------------------------------------
 def ensure_dependencies():
-    """Prüft und installiert fehlende Abhängigkeiten (nur beim Start als Hauptskript)."""
+    """Prüft deklarierte Abhängigkeiten ohne Netzwerk- oder pip-Seiteneffekt."""
     print("--- Prüfe Abhängigkeiten ---")
-    install_and_import("Pillow", "PIL")        # Für Icon-Resizing
-    install_and_import("pygetwindow")          # Für Screenshots
-    install_and_import("keyring")              # Für sichere Passwort-Speicherung
+    missing = [
+        (package_name, import_name)
+        for package_name, import_name in RUNTIME_DEPENDENCIES.items()
+        if not install_and_import(package_name, import_name)
+    ]
+    if missing:
+        names = ", ".join(package_name for package_name, _ in missing)
+        print(f"❌ Fehlende Abhängigkeiten: {names}")
+        print(f"Bitte vor dem Start ausführen: {install_command()}")
+        return False
     print("--- Abhängigkeiten OK ---")
+    return True
 
 # ------------------------------------------------------------
 # 1. Imports der nachgeladenen Module & Standard-Libs
@@ -84,6 +78,7 @@ import logging
 from pathlib import Path
 
 from project_profile import read_project_profile, write_project_profile
+from release_contract import RUNTIME_DEPENDENCIES, install_command
 from runtime_paths import (
     configure_runtime_logging,
     get_log_path,
@@ -1724,7 +1719,8 @@ def patch_widgets(translator):
 
 # ---------- main ----------
 if __name__ == "__main__":
-    ensure_dependencies()
+    if not ensure_dependencies():
+        sys.exit(1)
     runtime_logger = configure_runtime_logging(LOG_FILE)
     runtime_logger.info("WinStorePackager wird gestartet.")
     app = StorePackagerApp()

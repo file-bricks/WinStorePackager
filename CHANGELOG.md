@@ -6,6 +6,9 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unreleased]
 
 ### Geändert / Changed (2026-07-29)
+- TASKPLAN #890 / TW-WSP-03: Runtime-Dependency-Checks installieren keine Pakete mehr beim GUI-Start. Der standardbibliotheksbasierte Release-Contract prüft Requirements, Lizenzprovenienz, Store-Claims, Projektprofil und Store-Metadaten reproduzierbar; die öffentliche Store-Version folgt jetzt `pyproject.toml` (`3.1.0.0`).
+
+### Geändert / Changed (2026-07-29)
 - `TW-WSP-02`: Maschinenspezifische Einstellungen und rotierende UTF-8-Laufzeitlogs liegen nun
   außerhalb des Quell-Checkouts in den nativen Host-Datenpfaden. Gültige alte
   `settings_store_packager.json`-Dateien werden atomar und ohne Überschreiben bestehender

@@ -7,7 +7,7 @@ subprocess-Timeouts + atomares Save -> statische Assertions. Red-on-revert: WSP_
   M  generate_manifest: ALLE Felder XML-escapen (nicht nur APPNAME) -> kein kaputtes MSIX bei &/<.
   T1 build_and_sign_msix: makeappx/signtool subprocess.run mit timeout.
   T2 build_exe: PyInstaller-Timeout (Notbremse).
-  T3 install_and_import: pip-Timeout.
+  T3 install_and_import: kein Runtime-pip.
   A  save_settings: atomar über den Runtime-Pfad-Helper.
 """
 import os
@@ -79,8 +79,11 @@ def test_pyinstaller_timeout():
     assert has("env=build_env, timeout=1800"), "PyInstaller-Timeout fehlt"
 
 
-def test_pip_timeout():
-    assert has('"pip", "install", package_name], timeout=300'), "pip-Timeout fehlt"
+def test_runtime_bootstrap_never_installs_packages():
+    assert '"pip", "install", package_name' not in WSP, "Runtime-Bootstrap darf kein pip starten"
+    assert "from release_contract import RUNTIME_DEPENDENCIES, install_command" in WSP
+    contract = (_SRC / "release_contract.py").read_text(encoding="utf-8")
+    assert "python -m pip install -r requirements.txt" in contract, "Reproduzierbarer Setup-Hinweis fehlt"
 
 
 def test_save_settings_atomic():
