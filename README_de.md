@@ -70,6 +70,19 @@ Unter Windows kann alternativ `START.bat` gestartet werden. Wenn ein lokales EXE
 
 Publisher-IDs, Zertifikatspfade, Passwörter, Windows-SDK-Pfade, generierte Manifeste, MSIX/AppX-Pakete, WACK-Logs und Release-Bundles gehören nicht ins Git-Repo. Die Projektprofile sind so angelegt, dass sensible lokale Werte ausgelassen werden.
 
+Maschinenspezifische Einstellungen und Laufzeitlogs liegen außerhalb des Quell-Checkouts:
+
+- Windows: `%LOCALAPPDATA%\WinStorePackager\settings_store_packager.json` und `...\logs\`
+- macOS-Quellstart: `~/Library/Application Support/WinStorePackager/` und `~/Library/Logs/WinStorePackager/`
+- Linux-Quellstart: `${XDG_CONFIG_HOME:-~/.config}/winstorepackager/` und `${XDG_STATE_HOME:-~/.local/state}/winstorepackager/logs/`
+
+Für kontrollierte Test- oder portable Umgebungen können `WINSTOREPACKAGER_DATA_DIR` und
+`WINSTOREPACKAGER_LOG_DIR` gesetzt werden. Eine gültige alte
+`settings_store_packager.json` neben dem Quellcode wird beim ersten Start atomar in den
+Runtime-Pfad migriert und erst nach erfolgreichem Readback entfernt. Bereits vorhandene
+Runtime-Einstellungen werden nie überschrieben. Zertifikatspasswörter bleiben ausschließlich
+im Keyring des Betriebssystems.
+
 Das Repo enthält ein eigenes Dogfooding-Profil [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json). Es kann in der Desktop-App geladen oder ohne Windows SDK geprüft werden:
 
 ```bash

@@ -45,10 +45,10 @@ WinStorePackager is not the official Microsoft MSIX Packaging Tool and does not 
 
 ## Privacy Boundary
 
-Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifests, MSIX/AppX packages, WACK logs, and release bundles should stay outside Git. Project profile exports intentionally omit sensitive Windows-specific values.
+Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifests, MSIX/AppX packages, WACK logs, and release bundles should stay outside Git. Runtime settings and rotating logs live outside the checkout in host-local directories; certificate passwords remain in the operating-system Keyring. Project profile exports intentionally omit sensitive Windows-specific values.
 
 ## Verification & Test Suite
 
-Tested with Pytest: 33 test cases (29 passed, 4 skipped for optional local Store dogfood/GUI artifacts). Execute via `pytest`.
+Tested with Pytest: 60 collected tests; optional local Store, WACK, and Tkinter-display checks may skip on headless runs. Execute via `pytest`.
 
 ## Last-checked: 2026-07-29

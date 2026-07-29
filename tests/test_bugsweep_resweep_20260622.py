@@ -8,7 +8,7 @@ subprocess-Timeouts + atomares Save -> statische Assertions. Red-on-revert: WSP_
   T1 build_and_sign_msix: makeappx/signtool subprocess.run mit timeout.
   T2 build_exe: PyInstaller-Timeout (Notbremse).
   T3 install_and_import: pip-Timeout.
-  A  save_settings: atomar (tmp + os.replace).
+  A  save_settings: atomar über den Runtime-Pfad-Helper.
 """
 import os
 import sys
@@ -84,7 +84,7 @@ def test_pip_timeout():
 
 
 def test_save_settings_atomic():
-    assert has('tmp = f"{SETTINGS_FILE}.tmp"') and has("os.replace(tmp, SETTINGS_FILE)"), "save_settings atomar fehlt"
+    assert has("write_json_atomic(SETTINGS_FILE, data)"), "save_settings atomar fehlt"
 
 
 if __name__ == "__main__":

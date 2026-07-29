@@ -57,5 +57,10 @@ def test_windows_source_wack_protocol_present():
 def test_windows_source_import_wsp_module():
     """Prueft, dass WindowsStorePublisher_3 importierbar ist ohne Nebenwirkungen."""
     import WindowsStorePublisher_3 as wsp
+
+    root = Path(__file__).parent.parent.resolve()
     assert hasattr(wsp, "StorePackagerApp")
     assert hasattr(wsp, "install_and_import")
+    assert not Path(wsp.SETTINGS_FILE).resolve().is_relative_to(root)
+    assert not Path(wsp.LOG_FILE).resolve().is_relative_to(root)
+    assert wsp.LEGACY_SETTINGS_FILE.resolve() == root / "settings_store_packager.json"

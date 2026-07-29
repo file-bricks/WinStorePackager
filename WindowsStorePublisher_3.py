@@ -80,9 +80,17 @@ import time
 import threading
 import html
 import hashlib
+import logging
 from pathlib import Path
 
 from project_profile import read_project_profile, write_project_profile
+from runtime_paths import (
+    configure_runtime_logging,
+    get_log_path,
+    get_settings_path,
+    migrate_legacy_settings,
+    write_json_atomic,
+)
 
 # ------------------------------------------------------------
 # 2. Tkinter Sicherheits-Import
@@ -109,7 +117,10 @@ except ImportError:
 # ---------- Configuration ----------
 HAS_KEYRING = True # Jetzt garantiert, da oben installiert
 OUTPUT_ROOT = str(Path(__file__).parent / "store_package")
-SETTINGS_FILE = str(Path(__file__).parent / "settings_store_packager.json")
+LEGACY_SETTINGS_FILE = Path(__file__).parent / "settings_store_packager.json"
+SETTINGS_FILE = str(get_settings_path())
+LOG_FILE = str(get_log_path())
+LOGGER = logging.getLogger("winstorepackager")
 ICON_SIZES = [44, 50, 150, 310]  # Square sizes
 WIDE_ICON_SIZE = (310, 150)  # Wide tile
 DEFAULT_VERSION = "1.0.0.0"
@@ -346,6 +357,17 @@ class StorePackagerApp(tk.Tk):
 
     # ---------- Settings ----------
     def load_settings(self):
+        try:
+            migrated = migrate_legacy_settings(LEGACY_SETTINGS_FILE, SETTINGS_FILE)
+            if migrated:
+                LOGGER.info("Checkout-lokale Einstellungen wurden in den Runtime-Pfad migriert.")
+            elif LEGACY_SETTINGS_FILE.exists() and Path(SETTINGS_FILE).exists():
+                LOGGER.warning(
+                    "Legacy-Einstellungen bleiben erhalten, weil Runtime-Einstellungen bereits existieren."
+                )
+        except Exception as e:
+            LOGGER.warning("Legacy-Einstellungen konnten nicht migriert werden: %s", e)
+
         if os.path.exists(SETTINGS_FILE):
             try:
                 with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
@@ -384,7 +406,7 @@ class StorePackagerApp(tk.Tk):
 
             except Exception as e:
                 # Fallback für alte Settings-Files oder Keyring-Fehler
-                print(f"Warnung: Einstellungen konnten nicht vollständig geladen werden: {e}")
+                LOGGER.warning("Einstellungen konnten nicht vollständig geladen werden: %s", e)
 
     def save_settings(self):
         if self.pfx_password.get():
@@ -423,14 +445,11 @@ class StorePackagerApp(tk.Tk):
         }
             
         try:
-            # Bugsweep 25: atomar schreiben (tmp + os.replace), sonst korrupte Settings bei Absturz/
-            # OneDrive-Lock mitten im json.dump.
-            tmp = f"{SETTINGS_FILE}.tmp"
-            with open(tmp, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
-            os.replace(tmp, SETTINGS_FILE)
+            write_json_atomic(SETTINGS_FILE, data)
+            LOGGER.info("Einstellungen wurden atomar im Runtime-Pfad gespeichert.")
             messagebox.showinfo("Gespeichert", "Einstellungen wurden gespeichert.")
         except Exception as e:
+            LOGGER.exception("Einstellungen konnten nicht gespeichert werden.")
             messagebox.showerror("Fehler", f"Einstellungen konnten nicht gespeichert werden:\n{e}")
 
     def _get_text_widget_value(self, widget):
@@ -1706,5 +1725,7 @@ def patch_widgets(translator):
 # ---------- main ----------
 if __name__ == "__main__":
     ensure_dependencies()
+    runtime_logger = configure_runtime_logging(LOG_FILE)
+    runtime_logger.info("WinStorePackager wird gestartet.")
     app = StorePackagerApp()
     app.mainloop()
