@@ -23,7 +23,7 @@ def install_and_import(package_name, import_name=None):
     """
     if import_name is None:
         import_name = package_name
-    
+
     try:
         importlib.import_module(import_name)
     except ImportError:
@@ -39,7 +39,7 @@ def install_and_import(package_name, import_name=None):
             print("Bitte führen Sie das Skript als Administrator aus oder installieren Sie manuell.")
             input("Drücken Sie Enter zum Beenden...")
             sys.exit(1)
-        
+
         # Cache invalidieren und neu importieren
         try:
             importlib.invalidate_caches()
@@ -198,7 +198,7 @@ def validate_signing_credentials(pfx_path, pfx_pw, publisher_cn, timestamp_url):
     val_pub, msg_pub = validate_publisher_cn(publisher_cn or "")
     if not val_pub:
         errors.append(f"Publisher-ID Format ungültig: {msg_pub}")
-        
+
     if not timestamp_url or not (timestamp_url.startswith("http://") or timestamp_url.startswith("https://")):
         errors.append("Timestamp URL muss mit http:// oder https:// beginnen.")
         
@@ -211,14 +211,14 @@ def parse_wack_report(report_path: str):
     """
     if not report_path or not os.path.exists(report_path):
         return False, f"WACK-Report nicht gefunden: {report_path}", {}
-    
+
     try:
         import xml.etree.ElementTree as ET
         tree = ET.parse(report_path)
         root = tree.getroot()
-        
+
         overall = root.attrib.get("OVERALL_RESULT", "").upper()
-        
+
         failed_tests = []
         passed_tests = []
         for test in root.iter("TEST"):
@@ -228,9 +228,9 @@ def parse_wack_report(report_path: str):
                 failed_tests.append(name)
             elif result == "PASS":
                 passed_tests.append(name)
-        
+
         passed = (overall == "PASS") or (len(failed_tests) == 0 and len(passed_tests) > 0)
-        
+
         details = {
             "overall": overall,
             "failed_count": len(failed_tests),
@@ -238,12 +238,12 @@ def parse_wack_report(report_path: str):
             "failed_tests": failed_tests,
             "passed_tests": passed_tests,
         }
-        
+
         if passed:
             msg = f"✅ WACK-Test BESTANDEN ({len(passed_tests)} Prüfungen ok)."
         else:
             msg = f"❌ WACK-Test FEHLGESCHLAGEN ({len(failed_tests)} Fehler: {', '.join(failed_tests[:5])})."
-            
+
         return passed, msg, details
     except Exception as e:
         return False, f"Fehler beim Parsen des WACK-Reports: {e}", {}
