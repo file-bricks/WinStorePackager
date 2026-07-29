@@ -35,6 +35,14 @@ def test_windows_source_dogfood_readiness():
     assert "support_url" in data and data["support_url"].startswith("http")
 
 
+def test_public_docs_do_not_reference_removed_web_companion():
+    """Verhindert falsche Startanweisungen fuer den entfernten lokalen Web-Helfer."""
+    root = Path(__file__).parent.parent
+    for name in ("README.md", "README_de.md", "llms.txt"):
+        content = (root / name).read_text(encoding="utf-8")
+        assert "web_companion/" not in content, f"{name} verweist auf den entfernten Web-Helfer"
+
+
 def test_windows_source_wack_protocol_present():
     """Prueft ein vorhandenes lokales WACK-Pruefprotokoll."""
     root = Path(__file__).parent.parent

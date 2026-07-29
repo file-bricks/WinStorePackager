@@ -97,13 +97,7 @@ python unix_preflight.py --project-root . --profile-path winstorepackager-projec
 
 The profile intentionally keeps Partner Center Publisher IDs, certificate paths, SDK paths, and passwords out of Git. Add those values only in local settings before building or signing an MSIX.
 
-The local browser helper lives in [`web_companion/index.html`](web_companion/index.html). It stays intentionally narrow: project questionnaire, manifest preview, icon-size check, and JSON import/export for `winstorepackager-project-v1.json`. The optional service worker, offline fallback, install prompt, and localhost starter exist only to make that local helper easier to use on the same machine; they do not turn `web_companion/` into a public web app, cloud service, Android app, or iOS product line.
-
-```bash
-python web_companion/serve_companion.py
-```
-
-Open `http://127.0.0.1:8765/index.html` if the browser does not launch automatically. Directly opening `web_companion/index.html` still works for local editing and JSON export, but install and offline features only work via `localhost` or `https`.
+Project-profile exchange is handled by the desktop app and the documented `winstorepackager-project-v1.json` format. WinStorePackager is not a web app, cloud service, Android app, or iOS product line.
 
 ---
 
@@ -213,7 +207,7 @@ If dependencies are missing, the launcher can install Python packages from PyPI 
 
 The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. The curated demo Store screenshots under `releases/windowsstore/screenshots/` are kept as submission references. Local Partner Center data, Publisher IDs in `settings_store_packager.json`, certificates, generated manifests, MSIX/AppX packages, WACK logs, ad-hoc captures, and release bundles stay outside Git via `.gitignore`.
 
-Last hygiene and visibility check: 2026-07-26. GitHub traffic showed 4 views from 2 unique visitors and 31 clones from 19 unique cloners in the current 14-day window. Web search for exact repository and product-name phrases did not show broad external visibility, so the README now includes clearer canonical naming and search phrases. The same maintenance pass found no tracked ignored files after removing `PORTIERUNGSPLAN.md` from the Git index; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
+Last hygiene and visibility check: 2026-07-29. The repository documentation describes only the maintained desktop and SDK-free preflight workflows; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
 
 ---
 
