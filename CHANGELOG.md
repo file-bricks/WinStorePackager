@@ -5,6 +5,10 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Geändert / Changed (2026-07-30)
+- Discoverability, README-Design & SEO Audit (Pfad B): `llms.txt` Header auf `Last-checked: 2026-07-30` und Testsuite-Status (56 passed, 7 skipped) aktualisiert.
+- `README.md` & `README_de.md` Badges und Sichtbarkeits-Timestamps auf 2026-07-30 synchronisiert; bilinguale Badge-Reihe in `README_de.md` zur optischen Nutzerführung ergänzt.
+
 ### Geändert / Changed (2026-07-29)
 - TASKPLAN #890 / TW-WSP-03: Runtime-Dependency-Checks installieren keine Pakete mehr beim GUI-Start. Der standardbibliotheksbasierte Release-Contract prüft Requirements, Lizenzprovenienz, Store-Claims, Projektprofil und Store-Metadaten reproduzierbar; die öffentliche Store-Version folgt jetzt `pyproject.toml` (`3.1.0.0`).
 

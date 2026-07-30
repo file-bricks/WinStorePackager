@@ -49,6 +49,6 @@ Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifest
 
 ## Verification & Test Suite
 
-Tested with Pytest: 60 collected tests; optional local Store, WACK, and Tkinter-display checks may skip on headless runs. Execute via `pytest`.
+Tested with Pytest: 63 collected tests (56 passed, 7 skipped in headless runs); optional local Store, WACK, and Tkinter-display checks may skip on headless runs. Execute via `pytest`.
 
-## Last-checked: 2026-07-29
+## Last-checked: 2026-07-30

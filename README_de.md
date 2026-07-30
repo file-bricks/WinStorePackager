@@ -1,5 +1,15 @@
 > [English](README.md) | **Deutsch**
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge" alt="Python">
+  <img src="https://img.shields.io/badge/Tests-56%20passed-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Lizenz-MIT-green?style=for-the-badge" alt="Lizenz">
+  <img src="https://img.shields.io/badge/Plattform-Windows-0078D6?style=for-the-badge" alt="Windows">
+  <img src="https://img.shields.io/badge/Datenschutz-Local--First-purple?style=for-the-badge" alt="Local First">
+  <img src="https://img.shields.io/badge/LLM--Kontext-llms.txt-blueviolet?style=for-the-badge" alt="LLM Kontext">
+</p>
+
 # WinStorePackager
 
 WinStorePackager ist ein lokales Windows-GUI für Entwicklerinnen und Entwickler, die Python-Desktop-Apps für den Microsoft Store vorbereiten. Das Tool bündelt die wiederkehrenden Arbeitsschritte rund um AppxManifest-Metadaten, Store-Icons, Screenshots, Projektprofile und MSIX/AppX-Build-Eingaben.
