@@ -49,6 +49,11 @@ Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifest
 
 ## Verification & Test Suite
 
-Tested with Pytest: 63 collected tests (56 passed, 7 skipped in headless runs); optional local Store, WACK, and Tkinter-display checks may skip on headless runs. Execute via `pytest`.
+Tested with Pytest: 63 collected tests (55 passed, 8 skipped in headless runs); optional local Store, WACK, and Tkinter-display checks may skip on headless runs. Execute via `pytest`.
 
 ## Last-checked: 2026-08-01
+
+Verification: the local Pytest suite collected 63 tests, with 55 passed and 8
+skipped because Store/WACK artifacts and a complete Tk runtime are unavailable;
+the SDK-free Unix preflight found no issues across 12 artifacts, and the
+deprecated Linux wrapper found no issues across 11 artifacts.

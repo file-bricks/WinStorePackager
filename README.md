@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Umbrella-open--bricks-orange?style=for-the-badge" alt="Umbrella">
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge" alt="Python">
-  <img src="https://img.shields.io/badge/Tests-56%20passed-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-55%20passed%20%7C%208%20skipped-yellow?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge" alt="Windows">
   <img src="https://img.shields.io/badge/Privacy-Local--First-purple?style=for-the-badge" alt="Local First">
@@ -223,7 +223,7 @@ If dependencies are missing, the launcher can install Python packages from PyPI 
 
 The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. The curated demo Store screenshots under `releases/windowsstore/screenshots/` are kept as submission references. Local Partner Center data, Publisher IDs, certificates, generated manifests, MSIX/AppX packages, WACK logs, ad-hoc captures, and release bundles stay outside Git. The legacy settings ignore rule remains as defense in depth for older checkouts.
 
-Last hygiene and visibility check: 2026-08-01. The repository documentation describes only the maintained desktop and SDK-free preflight workflows; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
+Last hygiene and visibility check: 2026-08-01. Local verification recorded 55 passed and 8 skipped tests; the SDK-free preflight found no issues. The repository documentation describes only the maintained desktop and SDK-free preflight workflows; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
 
 ---
 

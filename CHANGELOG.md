@@ -43,6 +43,11 @@ im CLI-Zwilling `_STORE/store_packager.py` auftraten.
 - `llms.txt` Header auf `Last-checked: 2026-08-01` aktualisiert.
 - Repository Hygiene Zeitstempel in `README.md` auf 2026-08-01 nachgeführt.
 
+### Maintainer verification (2026-08-01)
+- Lokaler Pytest-Lauf: 55 Tests bestanden, 8 wegen absichtlich lokaler Store-/WACK-
+  Artefaktgrenzen und fehlender Tk-Dateien übersprungen. `unix_preflight.py` fand
+  über 12 Artefakte keine Befunde; der deprecated Linux-Wrapper über 11 ebenfalls.
+
 ### Geändert / Changed (2026-07-30)
 - Discoverability, README-Design & SEO Audit (Pfad B): `llms.txt` Header auf `Last-checked: 2026-07-30` und Testsuite-Status (56 passed, 7 skipped) aktualisiert.
 - `README.md` & `README_de.md` Badges und Sichtbarkeits-Timestamps auf 2026-07-30 synchronisiert; bilinguale Badge-Reihe in `README_de.md` zur optischen Nutzerführung ergänzt.
