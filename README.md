@@ -3,6 +3,8 @@
 > **English** | [Deutsch](README_de.md)
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Ecosystem-file--bricks-blue?style=for-the-badge" alt="Ecosystem">
+  <img src="https://img.shields.io/badge/Umbrella-open--bricks-orange?style=for-the-badge" alt="Umbrella">
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/Tests-56%20passed-brightgreen?style=for-the-badge" alt="Tests">
@@ -221,7 +223,7 @@ If dependencies are missing, the launcher can install Python packages from PyPI 
 
 The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. The curated demo Store screenshots under `releases/windowsstore/screenshots/` are kept as submission references. Local Partner Center data, Publisher IDs, certificates, generated manifests, MSIX/AppX packages, WACK logs, ad-hoc captures, and release bundles stay outside Git. The legacy settings ignore rule remains as defense in depth for older checkouts.
 
-Last hygiene and visibility check: 2026-07-30. The repository documentation describes only the maintained desktop and SDK-free preflight workflows; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
+Last hygiene and visibility check: 2026-08-01. The repository documentation describes only the maintained desktop and SDK-free preflight workflows; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
 
 ---
 
