@@ -21,6 +21,14 @@ We will respond as soon as possible.
 - MSIX packaging
 - Manifest generation
 - Keyring credentials
+- Host-local runtime settings and logs
+
+## Local secrets and machine data
+
+Certificate passwords are stored only through the operating-system Keyring. Publisher IDs,
+certificate paths, SDK paths, settings, and logs are kept outside the source checkout under
+the host-local runtime directory. A legacy checkout-local settings file is migrated only
+after JSON validation and atomic readback; existing runtime settings are never overwritten.
 
 ## Response
 

@@ -97,13 +97,7 @@ python unix_preflight.py --project-root . --profile-path winstorepackager-projec
 
 The profile intentionally keeps Partner Center Publisher IDs, certificate paths, SDK paths, and passwords out of Git. Add those values only in local settings before building or signing an MSIX.
 
-The local browser helper lives in [`web_companion/index.html`](web_companion/index.html). It stays intentionally narrow: project questionnaire, manifest preview, icon-size check, and JSON import/export for `winstorepackager-project-v1.json`. The optional service worker, offline fallback, install prompt, and localhost starter exist only to make that local helper easier to use on the same machine; they do not turn `web_companion/` into a public web app, cloud service, Android app, or iOS product line.
-
-```bash
-python web_companion/serve_companion.py
-```
-
-Open `http://127.0.0.1:8765/index.html` if the browser does not launch automatically. Directly opening `web_companion/index.html` still works for local editing and JSON export, but install and offline features only work via `localhost` or `https`.
+Project-profile exchange is handled by the desktop app and the documented `winstorepackager-project-v1.json` format. WinStorePackager is not a web app, cloud service, Android app, or iOS product line.
 
 ---
 
@@ -186,7 +180,21 @@ Use `build_exe.bat` to create a local `dist\WinStorePackager.exe` from the track
 
 ## Configuration
 
-On first launch, `settings_store_packager.json` is created locally and ignored by Git. It may contain local Publisher IDs, certificate paths, Windows SDK paths, and other machine-specific settings. Template:
+On first launch, machine-specific settings are stored outside the source checkout:
+
+- Windows: `%LOCALAPPDATA%\WinStorePackager\settings_store_packager.json`
+- macOS source runs: `~/Library/Application Support/WinStorePackager/settings_store_packager.json`
+- Linux source runs: `${XDG_CONFIG_HOME:-~/.config}/winstorepackager/settings_store_packager.json`
+
+Runtime logs are also host-local (`%LOCALAPPDATA%\WinStorePackager\logs` on Windows).
+`WINSTOREPACKAGER_DATA_DIR` and `WINSTOREPACKAGER_LOG_DIR` provide explicit overrides for
+controlled test or portable environments. A valid legacy `settings_store_packager.json`
+beside the source file is migrated atomically on first launch and removed only after a
+successful readback. Existing runtime settings are never overwritten. Certificate passwords
+remain in the operating-system Keyring and are never written to the JSON file.
+
+The settings file may contain local Publisher IDs, certificate paths, Windows SDK paths, and
+other machine-specific values. Template:
 
 ```json
 {
@@ -205,15 +213,15 @@ You can find your Publisher ID in the [Microsoft Partner Center](https://partner
 
 ## Local Data and Build Artifacts
 
-WinStorePackager works on local project files only. Generated MSIX packages, EXE builds, temporary staging folders, local settings, certificates, and release bundles are intentionally ignored by Git and should be distributed through GitHub Releases, Microsoft Store submissions, or another release channel instead of source commits.
+WinStorePackager works on local project files only. Generated MSIX packages, EXE builds, temporary staging folders, certificates, and release bundles are intentionally ignored by Git. Machine-specific settings and runtime logs live outside the checkout. Release artifacts should be distributed through GitHub Releases, Microsoft Store submissions, or another release channel instead of source commits.
 
 If dependencies are missing, the launcher can install Python packages from PyPI via `pip`. After dependencies are installed, the packaging workflow itself runs locally and uses the Windows SDK tools configured on your machine.
 
 ## Repository Hygiene
 
-The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. The curated demo Store screenshots under `releases/windowsstore/screenshots/` are kept as submission references. Local Partner Center data, Publisher IDs in `settings_store_packager.json`, certificates, generated manifests, MSIX/AppX packages, WACK logs, ad-hoc captures, and release bundles stay outside Git via `.gitignore`.
+The repository intentionally tracks only source code, documentation, workflow files, and static sample assets. The curated demo Store screenshots under `releases/windowsstore/screenshots/` are kept as submission references. Local Partner Center data, Publisher IDs, certificates, generated manifests, MSIX/AppX packages, WACK logs, ad-hoc captures, and release bundles stay outside Git. The legacy settings ignore rule remains as defense in depth for older checkouts.
 
-Last hygiene and visibility check: 2026-07-26. GitHub traffic showed 4 views from 2 unique visitors and 31 clones from 19 unique cloners in the current 14-day window. Web search for exact repository and product-name phrases did not show broad external visibility, so the README now includes clearer canonical naming and search phrases. The same maintenance pass found no tracked ignored files after removing `PORTIERUNGSPLAN.md` from the Git index; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
+Last hygiene and visibility check: 2026-07-29. The repository documentation describes only the maintained desktop and SDK-free preflight workflows; local planning files, Partner Center settings, certificates, SDK paths, generated packages, and release artifacts remain ignored.
 
 ---
 

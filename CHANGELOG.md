@@ -5,6 +5,16 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Geändert / Changed (2026-07-29)
+- `TW-WSP-02`: Maschinenspezifische Einstellungen und rotierende UTF-8-Laufzeitlogs liegen nun
+  außerhalb des Quell-Checkouts in den nativen Host-Datenpfaden. Gültige alte
+  `settings_store_packager.json`-Dateien werden atomar und ohne Überschreiben bestehender
+  Runtime-Einstellungen migriert; Zertifikatspasswörter bleiben ausschließlich im Keyring.
+
+### Behoben / Fixed (2026-07-29)
+- Veraltete Verweise auf den entfernten `web_companion/` aus `README.md` und `llms.txt` entfernt; die öffentliche Dokumentation beschreibt nur die vorhandenen Desktop- und SDK-freien Preflight-Workflows.
+- Regressionstest ergänzt, damit öffentliche Einstiegsdokumente nicht erneut auf den entfernten lokalen Web-Helfer verweisen.
+
 ### Geändert / Changed (2026-07-26)
 - CI überspringt absichtlich nicht versionierte WACK-Protokolle und Tkinter-UI-Tests ohne verfügbares Display, statt dadurch die plattformübergreifende Quellprüfung fälschlich fehlschlagen zu lassen.
 - Technische Hygiene & Doku-Wartung: `llms.txt` Header auf `Last-checked: 2026-07-26` und Testsuite-Status (33 Tests) aktualisiert.

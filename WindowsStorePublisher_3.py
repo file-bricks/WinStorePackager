@@ -23,7 +23,7 @@ def install_and_import(package_name, import_name=None):
     """
     if import_name is None:
         import_name = package_name
-    
+
     try:
         importlib.import_module(import_name)
     except ImportError:
@@ -39,7 +39,7 @@ def install_and_import(package_name, import_name=None):
             print("Bitte führen Sie das Skript als Administrator aus oder installieren Sie manuell.")
             input("Drücken Sie Enter zum Beenden...")
             sys.exit(1)
-        
+
         # Cache invalidieren und neu importieren
         try:
             importlib.invalidate_caches()
@@ -80,9 +80,17 @@ import time
 import threading
 import html
 import hashlib
+import logging
 from pathlib import Path
 
 from project_profile import read_project_profile, write_project_profile
+from runtime_paths import (
+    configure_runtime_logging,
+    get_log_path,
+    get_settings_path,
+    migrate_legacy_settings,
+    write_json_atomic,
+)
 
 # ------------------------------------------------------------
 # 2. Tkinter Sicherheits-Import
@@ -109,7 +117,10 @@ except ImportError:
 # ---------- Configuration ----------
 HAS_KEYRING = True # Jetzt garantiert, da oben installiert
 OUTPUT_ROOT = str(Path(__file__).parent / "store_package")
-SETTINGS_FILE = str(Path(__file__).parent / "settings_store_packager.json")
+LEGACY_SETTINGS_FILE = Path(__file__).parent / "settings_store_packager.json"
+SETTINGS_FILE = str(get_settings_path())
+LOG_FILE = str(get_log_path())
+LOGGER = logging.getLogger("winstorepackager")
 ICON_SIZES = [44, 50, 150, 310]  # Square sizes
 WIDE_ICON_SIZE = (310, 150)  # Wide tile
 DEFAULT_VERSION = "1.0.0.0"
@@ -198,7 +209,7 @@ def validate_signing_credentials(pfx_path, pfx_pw, publisher_cn, timestamp_url):
     val_pub, msg_pub = validate_publisher_cn(publisher_cn or "")
     if not val_pub:
         errors.append(f"Publisher-ID Format ungültig: {msg_pub}")
-        
+
     if not timestamp_url or not (timestamp_url.startswith("http://") or timestamp_url.startswith("https://")):
         errors.append("Timestamp URL muss mit http:// oder https:// beginnen.")
         
@@ -211,14 +222,14 @@ def parse_wack_report(report_path: str):
     """
     if not report_path or not os.path.exists(report_path):
         return False, f"WACK-Report nicht gefunden: {report_path}", {}
-    
+
     try:
         import xml.etree.ElementTree as ET
         tree = ET.parse(report_path)
         root = tree.getroot()
-        
+
         overall = root.attrib.get("OVERALL_RESULT", "").upper()
-        
+
         failed_tests = []
         passed_tests = []
         for test in root.iter("TEST"):
@@ -228,9 +239,9 @@ def parse_wack_report(report_path: str):
                 failed_tests.append(name)
             elif result == "PASS":
                 passed_tests.append(name)
-        
+
         passed = (overall == "PASS") or (len(failed_tests) == 0 and len(passed_tests) > 0)
-        
+
         details = {
             "overall": overall,
             "failed_count": len(failed_tests),
@@ -238,12 +249,12 @@ def parse_wack_report(report_path: str):
             "failed_tests": failed_tests,
             "passed_tests": passed_tests,
         }
-        
+
         if passed:
             msg = f"✅ WACK-Test BESTANDEN ({len(passed_tests)} Prüfungen ok)."
         else:
             msg = f"❌ WACK-Test FEHLGESCHLAGEN ({len(failed_tests)} Fehler: {', '.join(failed_tests[:5])})."
-            
+
         return passed, msg, details
     except Exception as e:
         return False, f"Fehler beim Parsen des WACK-Reports: {e}", {}
@@ -346,6 +357,17 @@ class StorePackagerApp(tk.Tk):
 
     # ---------- Settings ----------
     def load_settings(self):
+        try:
+            migrated = migrate_legacy_settings(LEGACY_SETTINGS_FILE, SETTINGS_FILE)
+            if migrated:
+                LOGGER.info("Checkout-lokale Einstellungen wurden in den Runtime-Pfad migriert.")
+            elif LEGACY_SETTINGS_FILE.exists() and Path(SETTINGS_FILE).exists():
+                LOGGER.warning(
+                    "Legacy-Einstellungen bleiben erhalten, weil Runtime-Einstellungen bereits existieren."
+                )
+        except Exception as e:
+            LOGGER.warning("Legacy-Einstellungen konnten nicht migriert werden: %s", e)
+
         if os.path.exists(SETTINGS_FILE):
             try:
                 with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
@@ -384,7 +406,7 @@ class StorePackagerApp(tk.Tk):
 
             except Exception as e:
                 # Fallback für alte Settings-Files oder Keyring-Fehler
-                print(f"Warnung: Einstellungen konnten nicht vollständig geladen werden: {e}")
+                LOGGER.warning("Einstellungen konnten nicht vollständig geladen werden: %s", e)
 
     def save_settings(self):
         if self.pfx_password.get():
@@ -423,14 +445,11 @@ class StorePackagerApp(tk.Tk):
         }
             
         try:
-            # Bugsweep 25: atomar schreiben (tmp + os.replace), sonst korrupte Settings bei Absturz/
-            # OneDrive-Lock mitten im json.dump.
-            tmp = f"{SETTINGS_FILE}.tmp"
-            with open(tmp, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
-            os.replace(tmp, SETTINGS_FILE)
+            write_json_atomic(SETTINGS_FILE, data)
+            LOGGER.info("Einstellungen wurden atomar im Runtime-Pfad gespeichert.")
             messagebox.showinfo("Gespeichert", "Einstellungen wurden gespeichert.")
         except Exception as e:
+            LOGGER.exception("Einstellungen konnten nicht gespeichert werden.")
             messagebox.showerror("Fehler", f"Einstellungen konnten nicht gespeichert werden:\n{e}")
 
     def _get_text_widget_value(self, widget):
@@ -1706,5 +1725,7 @@ def patch_widgets(translator):
 # ---------- main ----------
 if __name__ == "__main__":
     ensure_dependencies()
+    runtime_logger = configure_runtime_logging(LOG_FILE)
+    runtime_logger.info("WinStorePackager wird gestartet.")
     app = StorePackagerApp()
     app.mainloop()
