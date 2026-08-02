@@ -43,6 +43,12 @@ im CLI-Zwilling `_STORE/store_packager.py` auftraten.
 - `llms.txt` Header auf `Last-checked: 2026-08-01` aktualisiert.
 - Repository Hygiene Zeitstempel in `README.md` auf 2026-08-01 nachgeführt.
 
+### Maintainer verification (2026-08-02)
+- Der lokale Pytest-Lauf bestand mit 59 Tests und übersprang 4 Tests wegen
+  fehlender lokaler Store-/MSIX-/WACK-Artefakte. `unix_preflight.py` fand über
+  12 Artefakte keine Befunde; der deprecated Linux-Wrapper über 11 ebenfalls.
+- Ruff meldet 18 bestehende Befunde; im MAINTAINER-Lauf wurde kein Code geändert.
+
 ### Maintainer verification (2026-08-01)
 - Lokaler Pytest-Lauf: 55 Tests bestanden, 8 wegen absichtlich lokaler Store-/WACK-
   Artefaktgrenzen und fehlender Tk-Dateien übersprungen. `unix_preflight.py` fand
