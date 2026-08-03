@@ -749,7 +749,7 @@ class StorePackagerApp(tk.Tk):
 
         btn_frame = ttk.Frame(frm)
         btn_frame.grid(row=row, column=1, sticky="w", pady=5, padx=5)
-        ttk.Button(btn_frame, text="Format fuer Store", command=self.format_changelog).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text="Format für Store", command=self.format_changelog).pack(side="left", padx=2)
         ttk.Button(btn_frame, text="In Zwischenablage", command=self.copy_changelog).pack(side="left", padx=2)
         row += 1
 
@@ -1611,7 +1611,7 @@ def patch_widgets(translator):
         result = '\n'.join(formatted)
         self.changelog_box.delete("1.0", tk.END)
         self.changelog_box.insert(tk.END, result)
-        messagebox.showinfo("Formatiert", "Changelog wurde fuer Store-Listing formatiert.")
+        messagebox.showinfo("Formatiert", "Changelog wurde für Store-Listing formatiert.")
     
     def copy_changelog(self):
         """Copy changelog to clipboard."""

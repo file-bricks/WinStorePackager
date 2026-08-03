@@ -5,6 +5,9 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Geändert / Changed (2026-08-03)
+- UX-/Accessibility-Review: Der Changelog-Formatierungsfluss im Store-Tab nutzt jetzt echte deutsche Umlaute (`Format für Store`, `für Store-Listing`) statt der Umschreibung `fuer`.
+
 ### Geändert / Changed (2026-08-01)
 - Discoverability, README-Design & SEO Check (Pfad B): Ecosystem (`file-bricks`) & Umbrella (`open-bricks`) Shields.io-Badges in `README.md` ergänzt.
 - `llms.txt` Header auf `Last-checked: 2026-08-01` aktualisiert.

@@ -33,6 +33,11 @@ def _minimal_app() -> "_wsp.StorePackagerApp":
     app.msix_name = tk.StringVar(value="TestApp.msix")
     app.python_path = tk.StringVar()
     app.enable_i18n = tk.BooleanVar(value=False)
+    app.privacy_url = tk.StringVar(value="https://example.test/privacy")
+    app.support_url = tk.StringVar(value="https://example.test/support")
+    app.capabilities = tk.StringVar(value="internetClient")
+    app.category = tk.StringVar(value="Productivity")
+    app.age_rating = tk.StringVar(value="3+")
     return app
 
 
@@ -96,6 +101,14 @@ class TestUiAccessibility(unittest.TestCase):
             self.assertIn(label, texts)
 
         self.assertNotIn("Wählen", texts)
+
+    def test_store_tab_uses_real_german_umlaut_for_format_action(self):
+        parent = tk.Frame(self.app)
+        self.app.build_store_tab(parent)
+        texts = _button_texts(parent)
+
+        self.assertIn("Format für Store", texts)
+        self.assertNotIn("Format fuer Store", texts)
 
 
 if __name__ == "__main__":
