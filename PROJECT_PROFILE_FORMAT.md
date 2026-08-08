@@ -1,6 +1,13 @@
 # Projektprofilformat `winstorepackager-project-v1`
 
-Dieses JSON-Format ist der gemeinsame Kontrakt zwischen der Windows-Desktop-App und dem Web-Companion von WinStorePackager.
+Dieses JSON-Format ist der gemeinsame, plattformneutrale Kontrakt für den
+Projektprofil-Import/-Export der Windows-Desktop-App und die SDK-freie
+Profilprüfung. Das Schema bleibt absichtlich frei von Windows-spezifischen
+Geheimnissen und von einer bestimmten Client-Oberfläche.
+
+Ein früherer lokaler `web_companion/` wurde mit Commit `05705f9` entfernt. Das
+Repository liefert daher aktuell keinen Web-Companion; externe Werkzeuge können
+das dokumentierte JSON-Schema unabhängig davon verarbeiten.
 
 ## Ziel
 
@@ -72,9 +79,9 @@ Dieses JSON-Format ist der gemeinsame Kontrakt zwischen der Windows-Desktop-App 
 - Beim Import werden relative Pfade gegen `project_root` aufgelöst.
 - Falls `project_root` relativ ist, wird es relativ zum Speicherort der JSON-Datei interpretiert.
 
-## Companion-Workflow
+## Desktop-/Offline-Workflow
 
 1. Desktop-App: Profil exportieren
-2. Web-Companion: JSON lokal laden und weiter bearbeiten
-3. Web-Companion: JSON wieder exportieren
-4. Desktop-App: Profil importieren und Windows-spezifische Felder lokal ergänzen
+2. JSON optional mit einem externen, schema-kompatiblen Werkzeug bearbeiten oder
+   mit `unix_preflight.py` prüfen
+3. Desktop-App: Profil importieren und Windows-spezifische Felder lokal ergänzen

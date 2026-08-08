@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any
 
 PROFILE_FORMAT = "winstorepackager-project-v1"
 SCHEMA_VERSION = 1
+_WINDOWS_ABSOLUTE_RE = re.compile(r"^[A-Za-z]:[\\/]")
 
 
 def split_capabilities(value: str | list[str] | None) -> list[str]:
@@ -205,6 +207,13 @@ def _resolve_project_root(project_root: str, profile_dir: Path | None) -> Path |
     if not project_root:
         return profile_dir
 
+    # A profile exported on Windows may carry an absolute drive path while it
+    # is imported on Linux/macOS.  pathlib on POSIX treats ``C:/...`` as a
+    # relative filename, which would incorrectly produce ``<profile>/C:/...``.
+    # Use the profile directory as the portable base on non-Windows hosts.
+    if _is_windows_absolute(project_root) and os.name != "nt":
+        return profile_dir
+
     path = Path(project_root)
     if path.is_absolute():
         return path.resolve(strict=False)
@@ -219,10 +228,17 @@ def _resolve_path(raw_value: Any, project_root: Path | None, profile_dir: Path |
         return ""
 
     path = Path(value)
-    if path.is_absolute():
-        return str(path)
+    if path.is_absolute() or _is_windows_absolute(value):
+        # Keep a foreign-drive path opaque on POSIX; it is still a valid
+        # exported Windows path and must not be rebased below the JSON file.
+        return str(path) if path.is_absolute() else value.replace("\\", "/")
 
     base_dir = project_root or profile_dir
     if base_dir is None:
         return value
     return str((base_dir / path).resolve(strict=False))
+
+
+def _is_windows_absolute(value: str) -> bool:
+    """Return whether *value* is a Windows drive/UNC absolute path."""
+    return bool(_WINDOWS_ABSOLUTE_RE.match(value)) or value.startswith(("\\\\", "//"))

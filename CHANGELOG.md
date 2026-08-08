@@ -42,6 +42,18 @@ im CLI-Zwilling `_STORE/store_packager.py` auftraten.
 - Discoverability, README-Design & SEO Check (Pfad B): Ecosystem (`file-bricks`) & Umbrella (`open-bricks`) Shields.io-Badges in `README.md` ergänzt.
 - `llms.txt` Header auf `Last-checked: 2026-08-01` aktualisiert.
 - Repository Hygiene Zeitstempel in `README.md` auf 2026-08-01 nachgeführt.
+### TASKSOLVER verification (2026-08-08)
+- Der Profilvertrag wird jetzt mit einem vollständigen
+  `write -> read -> serialize`-Roundtrip getestet. Windows-Laufwerkspfade aus
+  exportierten Profilen bleiben beim Import auf POSIX-Systemen opaque, statt
+  fälschlich unter dem Profilverzeichnis rebased zu werden.
+- `unix_preflight.py` ist nativ und in WSL Ubuntu mit dem Self-Dogfood-Profil
+  fehler- und warnungsfrei gelaufen; der Linux-Kompatibilitätswrapper meldet
+  ebenfalls `ok: true`. Der WSL-Compile-Check war erfolgreich.
+- Der lokale Pytest-Lauf bestand mit 59 Tests; 7 Tests wurden wegen fehlender
+  lokaler Store-/MSIX-/WACK-/Tk-Artefakte übersprungen. Der frühere
+  `web_companion/` ist seit `05705f9` entfernt; die Profildokumentation macht
+  diesen aktuellen Desktop-/Offline-Scope nun ausdrücklich sichtbar.
 
 ### Maintainer verification (2026-08-02)
 - Der lokale Pytest-Lauf bestand mit 59 Tests und übersprang 4 Tests wegen
