@@ -5,6 +5,36 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Behoben / Fixed (2026-08-10)
+
+Vier Fehler in der MSIX-Erzeugung, die allesamt **still** defekte Pakete
+erzeugten — sie fallen erst beim Store-Upload oder beim Endnutzer auf. Gefunden
+bei der Store-Einreichung von ProfiPrompt und PromptBoard, wo dieselben Muster
+im CLI-Zwilling `_STORE/store_packager.py` auftraten.
+
+- **Ordner-Builds verloren ihre Laufzeit.** Kopiert wurde nur die gewählte
+  Datei. Bei PyInstaller-`--onedir` liegen Python-Laufzeit und Bibliotheken
+  daneben in `_internal/`; ohne sie installiert sich die App, startet aber
+  nicht. Neue Methode `stage_payload()` nimmt in diesem Fall den ganzen Ordner.
+- **Dem Manifest fehlte die `<Resources>`-Sektion.** Ohne deklarierte Sprache
+  löst der Store `DisplayName`, `PublisherDisplayName` und die Logos nicht auf
+  und meldet sie als leer bzw. „not found" — obwohl sie im Manifest stehen. Das
+  erzeugt mehrere irreführende Folgefehler. Sprache über `DEFAULT_LANGUAGES`
+  (Vorgabe `en-us`) bzw. eine optionale `languages`-Variable.
+- **Eingeschränkte Fähigkeiten standen im falschen Namensraum.** `runFullTrust`
+  als schlichtes `<Capability>` lässt `makeappx` das gesamte Manifest ablehnen.
+  Fähigkeiten werden jetzt nach Namensraum getrennt (`Capability`,
+  `uap:Capability`, `rescap:Capability`).
+- **Das Paket packte sich selbst ein.** Das MSIX entsteht in dem Verzeichnis,
+  das verpackt wird; beim zweiten Build wanderte das Paket des Vorlaufs hinein
+  und die Größe verdoppelte sich (im CLI-Zwilling gemessen: 46 → 92 MB). Eine
+  vorhandene gleichnamige Datei wird jetzt vor dem Packen entfernt.
+
+### Hinzugefügt / Added (2026-08-10)
+- Vier Regressionstests in `tests/test_bugsweep_resweep_20260622.py` zu den
+  obigen Punkten (Sprach-Ressourcen, `rescap`-Namensraum, Ordner- und
+  Einzeldatei-Staging).
+
 ### Geändert / Changed (2026-08-03)
 - UX-/Accessibility-Review: Der Changelog-Formatierungsfluss im Store-Tab nutzt jetzt echte deutsche Umlaute (`Format für Store`, `für Store-Listing`) statt der Umschreibung `fuer`.
 

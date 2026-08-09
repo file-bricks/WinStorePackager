@@ -121,6 +121,22 @@ WIDE_ICON_SIZE = (310, 150)  # Wide tile
 DEFAULT_VERSION = "1.0.0.0"
 KEYRING_SERVICE = "WindowsStorePackager"
 
+# Sprachen fuer die <Resources>-Sektion des Manifests. Ohne sie loest der Store
+# keine sprachabhaengigen Werte auf (Anzeigename, Herausgeber, Logos).
+DEFAULT_LANGUAGES = "en-us"
+
+# Faehigkeiten nach Namensraum. Alles, was hier nicht steht, gilt als
+# eingeschraenkt und wird als <rescap:Capability> geschrieben.
+GENERAL_CAPABILITIES = {
+    "internetClient", "internetClientServer",
+    "privateNetworkClientServer", "allJoyn", "codeGeneration",
+}
+UAP_CAPABILITIES = {
+    "documentsLibrary", "picturesLibrary", "videosLibrary", "musicLibrary",
+    "removableStorage", "appointments", "contacts", "userAccountInformation",
+    "sharedUserCertificates", "enterpriseAuthentication",
+}
+
 MANIFEST_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
          xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
@@ -141,6 +157,9 @@ MANIFEST_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
   </Dependencies>
+
+  <Resources>
+{{RESOURCES}}  </Resources>
 
   <Capabilities>
 {{CAPABILITIES}}
@@ -1318,11 +1337,11 @@ def patch_widgets(translator):
 
             src = self.source_path.get().strip()
             if src and os.path.exists(src):
-                shutil.copy(src, os.path.join(outdir, os.path.basename(src)))
+                self.stage_payload(src, outdir)
 
             installer = self.installer_path.get().strip()
             if installer and os.path.exists(installer):
-                shutil.copy(installer, os.path.join(outdir, os.path.basename(installer)))
+                self.stage_payload(installer, outdir)
 
             if self.enable_i18n.get() and staged_script:
                 ok, info = self.integrate_i18n(outdir, script_to_patch=staged_script)
@@ -1387,6 +1406,11 @@ def patch_widgets(translator):
         def build_thread():
             try:
                 progress.update_status("Erstelle MSIX-Paket...")
+                # Das Paket entsteht IM Verzeichnis, das gepackt wird. Bleibt das
+                # MSIX des letzten Laufs liegen, wandert es in das neue hinein und
+                # die Paketgroesse verdoppelt sich bei jedem Build.
+                if os.path.exists(msix_path):
+                    os.remove(msix_path)
                 cmd_pack = [makeappx, "pack", "/d", outdir, "/p", msix_path, "/o"]
                 # Bugsweep 25 BUG-msix (KRITISCH): timeout, sonst kann makeappx/signtool haengen und
                 # die App friert dauerhaft ein (signtool wartet ggf. auf Timestamp-Server uebers Netz).
@@ -1434,6 +1458,22 @@ def patch_widgets(translator):
         thread = threading.Thread(target=build_thread, daemon=True)
         thread.start()
 
+    # ---------- Staging ----------
+    def stage_payload(self, path, outdir):
+        """Kopiert eine Datei ins Staging - bei onedir-Builds den ganzen Ordner.
+
+        PyInstaller kennt zwei Bauformen: bei --onefile genuegt die EXE, bei
+        --onedir liegen Laufzeit und Bibliotheken daneben in _internal/. Kopiert
+        man dort nur die EXE, laesst sich das MSIX zwar installieren, die App
+        startet aber nicht. Rueckgabe: Anzahl kopierter Dateien.
+        """
+        app_dir = os.path.dirname(os.path.abspath(path))
+        if path.lower().endswith(".exe") and os.path.isdir(os.path.join(app_dir, "_internal")):
+            shutil.copytree(app_dir, outdir, dirs_exist_ok=True)
+            return sum(len(files) for _, _, files in os.walk(app_dir))
+        shutil.copy(path, os.path.join(outdir, os.path.basename(path)))
+        return 1
+
     # ---------- Manifest ----------
     def generate_manifest(self, outdir, executable_name):
         desc = self.desc_box.get("1.0", tk.END).strip()
@@ -1458,14 +1498,41 @@ def patch_widgets(translator):
         manifest = manifest.replace("{{EXECUTABLE}}",
             html.escape(executable_name or "MyApp.exe"))
         
+        # Faehigkeiten liegen je nach Art in verschiedenen Namensraeumen. Schreibt
+        # man alle als <Capability>, weist makeappx das GANZE Manifest ab, sobald
+        # eine eingeschraenkte Faehigkeit wie runFullTrust dabei ist
+        # ("verstoesst gegen enumeration-Einschraenkung").
         caps = ""
         if self.capabilities.get().strip():
             from xml.sax.saxutils import escape
             for c in self.capabilities.get().split(","):
                 c = c.strip()
-                if c:
-                    caps += f'    <Capability Name="{escape(c)}"/>\n'
+                if not c:
+                    continue
+                if c in GENERAL_CAPABILITIES:
+                    tag = "Capability"
+                elif c in UAP_CAPABILITIES:
+                    tag = "uap:Capability"
+                else:
+                    # runFullTrust, broadFileSystemAccess & Co. sind eingeschraenkt.
+                    tag = "rescap:Capability"
+                caps += f'    <{tag} Name="{escape(c)}"/>\n'
         manifest = manifest.replace("{{CAPABILITIES}}", caps)
+
+        # Ohne <Resources> kennt das Paket keine Sprache. Der Store kann dann
+        # DisplayName, PublisherDisplayName und die Logos nicht aufloesen und
+        # meldet sie als leer bzw. "not found" - obwohl sie im Manifest stehen.
+        # Zugriff ueber __dict__, nicht ueber hasattr/getattr: Tk delegiert
+        # unbekannte Attribute an self.tk weiter und laeuft dabei in eine
+        # Endlosschleife, wenn das Objekt ohne __init__ erzeugt wurde.
+        languages_var = self.__dict__.get("languages")
+        languages = (languages_var.get().strip() if languages_var else "") or DEFAULT_LANGUAGES
+        res = ""
+        for lang in languages.split(","):
+            lang = lang.strip()
+            if lang:
+                res += f'    <Resource Language="{lang}"/>\n'
+        manifest = manifest.replace("{{RESOURCES}}", res)
         
         with open(os.path.join(outdir, "AppxManifest.xml"), "w", encoding="utf-8") as f:
             f.write(manifest)
