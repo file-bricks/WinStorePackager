@@ -42,6 +42,17 @@ im CLI-Zwilling `_STORE/store_packager.py` auftraten.
 - Discoverability, README-Design & SEO Check (Pfad B): Ecosystem (`file-bricks`) & Umbrella (`open-bricks`) Shields.io-Badges in `README.md` ergänzt.
 - `llms.txt` Header auf `Last-checked: 2026-08-01` aktualisiert.
 - Repository Hygiene Zeitstempel in `README.md` auf 2026-08-01 nachgeführt.
+### TASKSOLVER verification (2026-08-10 20:39)
+- Frischer Readback von Task 1431: Der fokussierte Profil-/Preflight-/Source-Smoke-/
+  Release-Contract-Lauf besteht mit 22 Tests; ein optionaler WACK-Test bleibt wegen
+  des absichtlich nicht versionierten lokalen Protokolls übersprungen. Der SDK-freie
+  Preflight meldet bei 12 geprüften Artefakten „Keine Befunde“, `compileall` ist
+  erfolgreich.
+- Die Vollsuite besteht aktuell mit 62 Tests und 4 erwartbaren lokalen Skips (MSIX-,
+  Store-Dogfood- und WACK-Artefakte). `web_companion/` ist nicht vorhanden; Commit
+  `05705f9` hat ihn entfernt und es gibt keinen autorisierten Web-Client. Es wurde
+  kein Ersatz-Client angelegt; Task 1431 bleibt offen.
+
 ### TASKSOLVER verification (2026-08-10 18:51)
 - Readback für Task 1431 gegen den aktuellen lokalen Checkout: Der fokussierte
   Profil-/Preflight-/Source-Smoke-/Release-Contract-Lauf besteht mit 22 Tests;
