@@ -42,6 +42,18 @@ im CLI-Zwilling `_STORE/store_packager.py` auftraten.
 - Discoverability, README-Design & SEO Check (Pfad B): Ecosystem (`file-bricks`) & Umbrella (`open-bricks`) Shields.io-Badges in `README.md` ergänzt.
 - `llms.txt` Header auf `Last-checked: 2026-08-01` aktualisiert.
 - Repository Hygiene Zeitstempel in `README.md` auf 2026-08-01 nachgeführt.
+### TASKSOLVER verification (2026-08-10)
+- Der aktuelle Projektprofilvertrag wurde erneut gegen den Desktop-/SDK-freien Pfad
+  gelesen: 19 fokussierte Profil-/Preflight-/Source-Smoke-Tests bestanden, ein
+  optionaler WACK-Test mangels lokalem Protokoll übersprungen.
+- Der vollständige lokale Lauf besteht mit 60 Tests; sechs Tests bleiben wegen
+  bewusst lokaler Store-/WACK-Artefakte bzw. fehlendem Tk-Display übersprungen.
+  `python unix_preflight.py --project-root . --profile-path
+  winstorepackager-project-v1.json` meldet „Keine Befunde“ und 12 geprüfte Artefakte.
+- Der direkte Desktop↔Web-Import/Export-Test bleibt offen: `web_companion/` wurde
+  in Commit `05705f9` entfernt und im aktuellen Checkout existiert kein autorisierter
+  Web-Client. Es wurde kein Ersatz-Client erfunden oder angelegt; Task 1431 bleibt offen.
+
 ### TASKSOLVER verification (2026-08-08)
 - Der Profilvertrag wird jetzt mit einem vollständigen
   `write -> read -> serialize`-Roundtrip getestet. Windows-Laufwerkspfade aus
