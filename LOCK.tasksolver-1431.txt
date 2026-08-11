@@ -1,0 +1,4 @@
+owner=tasksolver-codex
+task=1431
+purpose=profile import/export schema verification readback
+created=2026-08-11
