@@ -5,6 +5,16 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt / Added (2026-08-14)
+
+- **Dogfooding-Testsuite gegen alle 4 Live Store-Apps (`tests/test_dogfood_real_apps.py`).**
+  Verifiziert die korrekte MSIX- und AppxManifest-Erzeugung gegen die real im
+  Microsoft Store eingereichten Anwendungen (MethodenAnalyser 9PD6GNMCZBLF,
+  SQLite Viewer Pro 9P6H501XB8JT, CleanMarkdown 9MW9QN49WQG2, PromptBoard 9N1FNJL2FHLC).
+  Prüft Identity, Publisher, PublisherDisplayName, Version, Namensraum-Zuweisung
+  von Capabilities (`Capability` vs `rescap:Capability`), Generierung aller
+  Store-Tile-Icons (44x44, 50x50, 150x150, 310x310, 310x150) und Payload-Staging.
+
 ### Behoben / Fixed (2026-08-14)
 
 - **`Application/@Id` konnte schema-ungültig werden.** Die Id entstand als
@@ -20,6 +30,11 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
   ausdrücklich davon abrät, die Id nach der Veröffentlichung zu ändern.
   Gefunden beim Dogfooding gegen die real eingereichten Store-Pakete;
   Regressionstest `tests/test_application_id_schema.py`.
+- **Subprozess-Cleanup in `run_screenshots()` vor UI-Fehlerdialog vorgezogen.**
+  Behebt eine Race Condition im Fehlerpfad, indem `proc.terminate()` und
+  `proc.wait()` vollständig ausgeführt werden, bevor `self.after()` den
+  Fehlerdialog aufruft.
+
 
 ### Behoben / Fixed (2026-08-10)
 

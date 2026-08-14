@@ -1624,14 +1624,14 @@ def patch_widgets(translator):
                 self.after(0, lambda m=info_msg: messagebox.showinfo("Screenshots", m))
 
             except Exception as e:
-                err_msg = f"Screenshots fehlgeschlagen:\n{e}"
-                self.after(0, lambda err=err_msg: messagebox.showerror("Fehler", err))
                 if proc is not None:
                     try:
                         proc.terminate()
                         proc.wait(timeout=3)
                     except Exception:
                         pass
+                err_msg = f"Screenshots fehlgeschlagen:\n{e}"
+                self.after(0, lambda err=err_msg: messagebox.showerror("Fehler", err))
 
         t = threading.Thread(target=_do_screenshots, daemon=True)
         t.start()
