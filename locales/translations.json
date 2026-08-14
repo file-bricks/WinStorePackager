@@ -1,54 +1,406 @@
 {
-  "Ausgabeordner öffnen": {
-    "de": "Ausgabeordner öffnen",
-    "en": "Open Output Folder"
+  "Sprache / Language": {
+    "de": "Sprache / Language",
+    "en": "Language / Sprache"
+  },
+  "Deutsch": {
+    "de": "Deutsch",
+    "en": "German"
+  },
+  "English": {
+    "de": "Englisch",
+    "en": "English"
+  },
+  "Sprache gewechselt": {
+    "de": "Sprache gewechselt",
+    "en": "Language changed"
+  },
+  "Die Sprache wurde auf Deutsch umgestellt.": {
+    "de": "Die Sprache wurde auf Deutsch umgestellt.",
+    "en": "Language was switched to English."
+  },
+  "Windows Store Packager — MSIX Creator": {
+    "de": "Windows Store Packager — MSIX Creator",
+    "en": "Windows Store Packager — MSIX Creator"
+  },
+  "Metadaten": {
+    "de": "Metadaten",
+    "en": "Metadata"
   },
   "Build-Einstellungen": {
     "de": "Build-Einstellungen",
     "en": "Build Settings"
   },
-  "Datei +": {
-    "de": "Datei +",
-    "en": "File +"
+  "Store-Informationen": {
+    "de": "Store-Informationen",
+    "en": "Store Information"
   },
-  "Datei laden": {
-    "de": "Datei laden",
-    "en": "Load File"
+  "Aktionen": {
+    "de": "Aktionen",
+    "en": "Actions"
   },
-  "Einstellungen speichern": {
-    "de": "Einstellungen speichern",
-    "en": "Save Settings"
+  "App-Name:": {
+    "de": "App-Name:",
+    "en": "App Name:"
   },
-  "Lizenz (Text/Dateien):": {
-    "de": "Lizenz (Text/Dateien):",
-    "en": "License (Text/Files):"
+  "Publisher (CN=... aus Partner Center):": {
+    "de": "Publisher (CN=... aus Partner Center):",
+    "en": "Publisher (CN=... from Partner Center):"
   },
-  "Python Umgebung (für Builds)": {
-    "de": "Python Umgebung (für Builds)",
-    "en": "Python Environment (for Builds)"
+  "Publisher Display Name:": {
+    "de": "Publisher Display Name:",
+    "en": "Publisher Display Name:"
+  },
+  "Identity Name:": {
+    "de": "Identity Name:",
+    "en": "Identity Name:"
+  },
+  "Version (z.B. 1.0.0.0):": {
+    "de": "Version (z.B. 1.0.0.0):",
+    "en": "Version (e.g. 1.0.0.0):"
+  },
+  "Haupt-Skript (.py):": {
+    "de": "Haupt-Skript (.py):",
+    "en": "Main Script (.py):"
+  },
+  "Skript wählen": {
+    "de": "Skript wählen",
+    "en": "Select Script"
+  },
+  "Icon (PNG, mind. 310x310):": {
+    "de": "Icon (PNG, mind. 310x310):",
+    "en": "Icon (PNG, min. 310x310):"
+  },
+  "Icon wählen": {
+    "de": "Icon wählen",
+    "en": "Select Icon"
+  },
+  "Quelltext (ZIP oder Datei):": {
+    "de": "Quelltext (ZIP oder Datei):",
+    "en": "Source Code (ZIP or File):"
+  },
+  "Quelle wählen": {
+    "de": "Quelle wählen",
+    "en": "Select Source"
+  },
+  "Installer (EXE oder MSIX):": {
+    "de": "Installer (EXE oder MSIX):",
+    "en": "Installer (EXE or MSIX):"
+  },
+  "Installer wählen": {
+    "de": "Installer wählen",
+    "en": "Select Installer"
+  },
+  "Ausgabeordner:": {
+    "de": "Ausgabeordner:",
+    "en": "Output Folder:"
+  },
+  "EXE-Name (z.B. MyApp.exe):": {
+    "de": "EXE-Name (z.B. MyApp.exe):",
+    "en": "EXE Name (e.g. MyApp.exe):"
   },
   "README (Text oder Datei):": {
     "de": "README (Text oder Datei):",
     "en": "README (Text or File):"
   },
-  "WACK-Test starten": {
-    "de": "WACK-Test starten",
-    "en": "Run WACK Test"
+  "README laden": {
+    "de": "README laden",
+    "en": "Load README"
   },
-  "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.": {
-    "de": "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.",
-    "en": "Important when this tool runs as EXE. Must have 'pip install pyinstaller'."
+  "Lizenz (Text/Dateien):": {
+    "de": "Lizenz (Text/Dateien):",
+    "en": "License (Text/Files):"
+  },
+  "Datei +": {
+    "de": "Datei +",
+    "en": "File +"
+  },
+  "Text +": {
+    "de": "Text +",
+    "en": "Text +"
+  },
+  "Beschreibung:": {
+    "de": "Beschreibung:",
+    "en": "Description:"
+  },
+  "Beschreibung laden": {
+    "de": "Beschreibung laden",
+    "en": "Load Description"
   },
   "Wählen": {
     "de": "Wählen",
     "en": "Select"
   },
-  "Zeigt erstellte Dateien": {
-    "de": "Zeigt erstellte Dateien",
-    "en": "Shows created files"
+  "Datei laden": {
+    "de": "Datei laden",
+    "en": "Load File"
+  },
+  "Python Umgebung (für Builds)": {
+    "de": "Python Umgebung (für Builds)",
+    "en": "Python Environment (for Builds)"
+  },
+  "Python.exe Pfad:": {
+    "de": "Python.exe Pfad:",
+    "en": "Python.exe Path:"
+  },
+  "Python wählen": {
+    "de": "Python wählen",
+    "en": "Select Python"
+  },
+  "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.": {
+    "de": "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.",
+    "en": "Important when this tool runs as EXE. Must have 'pip install pyinstaller'."
+  },
+  "Windows SDK Tools": {
+    "de": "Windows SDK Tools",
+    "en": "Windows SDK Tools"
+  },
+  "MakeAppx.exe:": {
+    "de": "MakeAppx.exe:",
+    "en": "MakeAppx.exe:"
+  },
+  "MakeAppx wählen": {
+    "de": "MakeAppx wählen",
+    "en": "Select MakeAppx"
+  },
+  "SignTool.exe:": {
+    "de": "SignTool.exe:",
+    "en": "SignTool.exe:"
+  },
+  "SignTool wählen": {
+    "de": "SignTool wählen",
+    "en": "Select SignTool"
+  },
+  "AppCert.exe (WACK):": {
+    "de": "AppCert.exe (WACK):",
+    "en": "AppCert.exe (WACK):"
+  },
+  "AppCert wählen": {
+    "de": "AppCert wählen",
+    "en": "Select AppCert"
+  },
+  "Zertifikat & Signierung": {
+    "de": "Zertifikat & Signierung",
+    "en": "Certificate & Signing"
+  },
+  "Zertifikat (.pfx):": {
+    "de": "Zertifikat (.pfx):",
+    "en": "Certificate (.pfx):"
+  },
+  "Zertifikat wählen": {
+    "de": "Zertifikat wählen",
+    "en": "Select Certificate"
+  },
+  "PFX Passwort:": {
+    "de": "PFX Passwort:",
+    "en": "PFX Password:"
+  },
+  "Timestamp URL:": {
+    "de": "Timestamp URL:",
+    "en": "Timestamp URL:"
+  },
+  "MSIX Name:": {
+    "de": "MSIX Name:",
+    "en": "MSIX Name:"
+  },
+  "✓ Passwort wird sicher im Keyring gespeichert": {
+    "de": "✓ Passwort wird sicher im Keyring gespeichert",
+    "en": "✓ Password is stored securely in Keyring"
+  },
+  "Sprachmodul automatisch integrieren (i18n)": {
+    "de": "Sprachmodul automatisch integrieren (i18n)",
+    "en": "Automatically integrate language module (i18n)"
+  },
+  "Store-Pflichtfelder": {
+    "de": "Store-Pflichtfelder",
+    "en": "Mandatory Store Fields"
+  },
+  "Privacy Policy URL:": {
+    "de": "Privacy Policy URL:",
+    "en": "Privacy Policy URL:"
+  },
+  "Support URL:": {
+    "de": "Support URL:",
+    "en": "Support URL:"
+  },
+  "Capabilities (Komma-getrennt):": {
+    "de": "Capabilities (Komma-getrennt):",
+    "en": "Capabilities (comma-separated):"
+  },
+  "Beispiele: internetClient, microphone, webcam, location": {
+    "de": "Beispiele: internetClient, microphone, webcam, location",
+    "en": "Examples: internetClient, microphone, webcam, location"
+  },
+  "Kategorie:": {
+    "de": "Kategorie:",
+    "en": "Category:"
+  },
+  "Altersfreigabe:": {
+    "de": "Altersfreigabe:",
+    "en": "Age Rating:"
+  },
+  "Changelog (Store-Listing)": {
+    "de": "Changelog (Store-Listing)",
+    "en": "Changelog (Store Listing)"
+  },
+  "Changelog-Text:": {
+    "de": "Changelog-Text:",
+    "en": "Changelog Text:"
+  },
+  "Format für Store": {
+    "de": "Format für Store",
+    "en": "Format for Store"
+  },
+  "In Zwischenablage": {
+    "de": "In Zwischenablage",
+    "en": "To Clipboard"
+  },
+  "Build-Aktionen": {
+    "de": "Build-Aktionen",
+    "en": "Build Actions"
+  },
+  "1. Preflight-Check": {
+    "de": "1. Preflight-Check",
+    "en": "1. Preflight Check"
+  },
+  "Validiert alle Pflichtfelder": {
+    "de": "Validiert alle Pflichtfelder",
+    "en": "Validates all mandatory fields"
+  },
+  "2. Paket erzeugen": {
+    "de": "2. Paket erzeugen",
+    "en": "2. Create Package"
+  },
+  "Erstellt Ausgabeordner mit allen Assets": {
+    "de": "Erstellt Ausgabeordner mit allen Assets",
+    "en": "Creates output folder with all assets"
+  },
+  "3. EXE bauen": {
+    "de": "3. EXE bauen",
+    "en": "3. Build EXE"
+  },
+  "PyInstaller-Build mit i18n": {
+    "de": "PyInstaller-Build mit i18n",
+    "en": "PyInstaller build with i18n"
+  },
+  "4. MSIX bauen & signieren": {
+    "de": "4. MSIX bauen & signieren",
+    "en": "4. Build & Sign MSIX"
+  },
+  "Erstellt signiertes Store-Paket": {
+    "de": "Erstellt signiertes Store-Paket",
+    "en": "Creates signed Store package"
   },
   "Zusätzliche Aktionen": {
     "de": "Zusätzliche Aktionen",
     "en": "Additional Actions"
+  },
+  "Screenshots erzeugen": {
+    "de": "Screenshots erzeugen",
+    "en": "Generate Screenshots"
+  },
+  "Automatische Store-Screenshots": {
+    "de": "Automatische Store-Screenshots",
+    "en": "Automated Store Screenshots"
+  },
+  "WACK-Test starten": {
+    "de": "WACK-Test starten",
+    "en": "Run WACK Test"
+  },
+  "Windows App Certification Kit": {
+    "de": "Windows App Certification Kit",
+    "en": "Windows App Certification Kit"
+  },
+  "Ausgabeordner öffnen": {
+    "de": "Ausgabeordner öffnen",
+    "en": "Open Output Folder"
+  },
+  "Zeigt erstellte Dateien": {
+    "de": "Zeigt erstellte Dateien",
+    "en": "Shows created files"
+  },
+  "Projektprofil exportieren": {
+    "de": "Projektprofil exportieren",
+    "en": "Export Project Profile"
+  },
+  "Export ohne Publisher- und Zertifikatsgeheimnisse": {
+    "de": "Export ohne Publisher- und Zertifikatsgeheimnisse",
+    "en": "Export without publisher and certificate secrets"
+  },
+  "Projektprofil importieren": {
+    "de": "Projektprofil importieren",
+    "en": "Import Project Profile"
+  },
+  "Lädt Web-/Desktop-Vorarbeit aus JSON": {
+    "de": "Lädt Web-/Desktop-Vorarbeit aus JSON",
+    "en": "Loads web/desktop pre-work from JSON"
+  },
+  "Einstellungen speichern": {
+    "de": "Einstellungen speichern",
+    "en": "Save Settings"
+  },
+  "Beenden": {
+    "de": "Beenden",
+    "en": "Exit"
+  },
+  "Erfolg": {
+    "de": "Erfolg",
+    "en": "Success"
+  },
+  "Erfolgreich": {
+    "de": "Erfolgreich",
+    "en": "Successful"
+  },
+  "Fehler": {
+    "de": "Fehler",
+    "en": "Error"
+  },
+  "Warnung": {
+    "de": "Warnung",
+    "en": "Warning"
+  },
+  "Hinweis": {
+    "de": "Hinweis",
+    "en": "Note"
+  },
+  "Preflight-Fehler": {
+    "de": "Preflight-Fehler",
+    "en": "Preflight Error"
+  },
+  "Preflight erfolgreich!": {
+    "de": "Preflight erfolgreich!",
+    "en": "Preflight Successful!"
+  },
+  "Alle Pflichtfelder ausgefüllt.": {
+    "de": "Alle Pflichtfelder ausgefüllt.",
+    "en": "All mandatory fields filled."
+  },
+  "Paket erstellt": {
+    "de": "Paket erstellt",
+    "en": "Package Created"
+  },
+  "Build erfolgreich": {
+    "de": "Build erfolgreich",
+    "en": "Build Successful"
+  },
+  "Einstellungen gespeichert!": {
+    "de": "Einstellungen gespeichert!",
+    "en": "Settings saved!"
+  },
+  "Projektprofil exportiert": {
+    "de": "Projektprofil exportiert",
+    "en": "Project Profile Exported"
+  },
+  "Projektprofil importiert": {
+    "de": "Projektprofil importiert",
+    "en": "Project Profile Imported"
+  },
+  "Projektprofil wurde geladen.\n\nBitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen.": {
+    "de": "Projektprofil wurde geladen.\n\nBitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen.",
+    "en": "Project profile was loaded.\n\nPlease add Publisher ID, SDK paths, and certificate locally."
+  },
+  "Möchten Sie die Einstellungen vor dem Beenden speichern?": {
+    "de": "Möchten Sie die Einstellungen vor dem Beenden speichern?",
+    "en": "Do you want to save settings before exiting?"
   }
 }

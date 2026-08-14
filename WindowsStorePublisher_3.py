@@ -86,6 +86,32 @@ from runtime_paths import (
     migrate_legacy_settings,
     write_json_atomic,
 )
+try:
+    from translator import TranslationSystem, detect_system_language
+except ImportError:
+    TranslationSystem = None
+    def detect_system_language():
+        return "de"
+
+SUPPORTED_LANGUAGES = ("de", "en")
+DEFAULT_LANGUAGE = "de"
+
+_GLOBAL_TRANSLATOR = None
+
+
+def get_translator(default_lang: str = None):
+    global _GLOBAL_TRANSLATOR
+    if _GLOBAL_TRANSLATOR is None and TranslationSystem is not None:
+        lang = default_lang or detect_system_language()
+        _GLOBAL_TRANSLATOR = TranslationSystem(default_lang=lang, app_dir=Path(__file__).parent)
+    return _GLOBAL_TRANSLATOR
+
+
+def _t(key: str) -> str:
+    tr = get_translator()
+    if tr is not None:
+        return tr.t(key)
+    return key
 
 # ------------------------------------------------------------
 # 2. Tkinter Sicherheits-Import
@@ -380,6 +406,11 @@ class StorePackagerApp(tk.Tk):
         # i18n toggle
         self.enable_i18n = tk.BooleanVar(value=True)
 
+        # Language & i18n
+        self.language = tk.StringVar(value=detect_system_language())
+        self._translatable_items = []
+        self.lang_menu = None
+
         # Text widgets
         self.readme_box = None
         self.license_box = None
@@ -433,6 +464,13 @@ class StorePackagerApp(tk.Tk):
                 self.category.set(data.get("category", "Productivity"))
                 self.age_rating.set(data.get("age_rating", "3+"))
                 
+                saved_lang = data.get("language")
+                if saved_lang in SUPPORTED_LANGUAGES:
+                    self.language.set(saved_lang)
+                    tr = get_translator()
+                    if tr is not None:
+                        tr.set_language(saved_lang)
+
                 # Kein Try/Except mehr nötig, da keyring oben installiert wurde
                 pwd = keyring.get_password(KEYRING_SERVICE, "pfx_password")
                 if pwd:
@@ -475,7 +513,8 @@ class StorePackagerApp(tk.Tk):
             "privacy_url": self.privacy_url.get(),
             "support_url": self.support_url.get(),
             "category": self.category.get(),
-            "age_rating": self.age_rating.get()
+            "age_rating": self.age_rating.get(),
+            "language": self.language.get()
         }
             
         try:
@@ -598,26 +637,77 @@ class StorePackagerApp(tk.Tk):
         except Exception as e:
             messagebox.showerror("Fehler", f"Projektprofil konnte nicht importiert werden:\n{e}")
 
+    def _register_translatable(self, widget, prop, key):
+        if not hasattr(self, "_translatable_items") or self._translatable_items is None:
+            self._translatable_items = []
+        self._translatable_items.append((widget, prop, key))
+
+    def apply_language(self, lang: str):
+        """Wechselt die Sprache live, aktualisiert alle UI-Texte und speichert die Konfiguration."""
+        if lang not in SUPPORTED_LANGUAGES:
+            return
+        self.language.set(lang)
+        tr = get_translator()
+        if tr is not None:
+            tr.set_language(lang)
+        self.refresh_ui_language()
+        try:
+            self.save_settings()
+        except Exception:
+            pass
+        msg = "Die Sprache wurde auf Deutsch umgestellt." if lang == "de" else "Language was switched to English."
+        messagebox.showinfo(_t("Sprache gewechselt"), _t(msg))
+
+    def refresh_ui_language(self):
+        """Aktualisiert dynamisch alle registrierten UI-Elemente und Reiter."""
+        if hasattr(self, "notebook") and self.notebook:
+            try:
+                self.notebook.tab(0, text=_t("Metadaten"))
+                self.notebook.tab(1, text=_t("Build-Einstellungen"))
+                self.notebook.tab(2, text=_t("Store-Informationen"))
+                self.notebook.tab(3, text=_t("Aktionen"))
+            except Exception:
+                pass
+
+        for widget, prop, key in getattr(self, "_translatable_items", []):
+            try:
+                widget.configure(**{prop: _t(key)})
+            except Exception:
+                pass
+
     # ---------- GUI ----------
     def build_gui(self):
-        notebook = ttk.Notebook(self)
-        notebook.pack(fill="both", expand=True, padx=10, pady=10)
+        menubar = tk.Menu(self)
+        self.lang_menu = tk.Menu(menubar, tearoff=0)
+        self.lang_menu.add_radiobutton(
+            label="Deutsch", value="de", variable=self.language,
+            command=lambda: self.apply_language("de")
+        )
+        self.lang_menu.add_radiobutton(
+            label="English", value="en", variable=self.language,
+            command=lambda: self.apply_language("en")
+        )
+        menubar.add_cascade(label=_t("Sprache / Language"), menu=self.lang_menu)
+        self.config(menu=menubar)
+
+        self.notebook = ttk.Notebook(self)
+        self.notebook.pack(fill="both", expand=True, padx=10, pady=10)
         
-        tab1 = ttk.Frame(notebook)
-        notebook.add(tab1, text="Metadaten")
-        self.build_metadata_tab(tab1)
+        self.tab1 = ttk.Frame(self.notebook)
+        self.notebook.add(self.tab1, text=_t("Metadaten"))
+        self.build_metadata_tab(self.tab1)
         
-        tab2 = ttk.Frame(notebook)
-        notebook.add(tab2, text="Build-Einstellungen")
-        self.build_build_tab(tab2)
+        self.tab2 = ttk.Frame(self.notebook)
+        self.notebook.add(self.tab2, text=_t("Build-Einstellungen"))
+        self.build_build_tab(self.tab2)
         
-        tab3 = ttk.Frame(notebook)
-        notebook.add(tab3, text="Store-Informationen")
-        self.build_store_tab(tab3)
+        self.tab3 = ttk.Frame(self.notebook)
+        self.notebook.add(self.tab3, text=_t("Store-Informationen"))
+        self.build_store_tab(self.tab3)
         
-        tab4 = ttk.Frame(notebook)
-        notebook.add(tab4, text="Aktionen")
-        self.build_actions_tab(tab4)
+        self.tab4 = ttk.Frame(self.notebook)
+        self.notebook.add(self.tab4, text=_t("Aktionen"))
+        self.build_actions_tab(self.tab4)
 
     def build_metadata_tab(self, parent):
         frm = ttk.Frame(parent)
@@ -626,11 +716,16 @@ class StorePackagerApp(tk.Tk):
 
         def add_row(label, var, browse_cmd=None, browse_label="Wählen", width=60):
             nonlocal row
-            ttk.Label(frm, text=label).grid(row=row, column=0, sticky="w", pady=3)
+            lbl = ttk.Label(frm, text=_t(label))
+            lbl.grid(row=row, column=0, sticky="w", pady=3)
+            self._register_translatable(lbl, "text", label)
+
             ent = ttk.Entry(frm, textvariable=var, width=width)
             ent.grid(row=row, column=1, sticky="we", pady=3, padx=5)
             if browse_cmd:
-                ttk.Button(frm, text=browse_label, command=browse_cmd).grid(row=row, column=2, sticky="w")
+                btn = ttk.Button(frm, text=_t(browse_label), command=browse_cmd)
+                btn.grid(row=row, column=2, sticky="w")
+                self._register_translatable(btn, "text", browse_label)
             row += 1
 
         add_row("App-Name:", self.app_name)
@@ -652,31 +747,52 @@ class StorePackagerApp(tk.Tk):
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
 
-        ttk.Label(frm, text="README (Text oder Datei):").grid(row=row, column=0, sticky="nw", pady=5)
+        lbl_rm = ttk.Label(frm, text=_t("README (Text oder Datei):"))
+        lbl_rm.grid(row=row, column=0, sticky="nw", pady=5)
+        self._register_translatable(lbl_rm, "text", "README (Text oder Datei):")
+
         readme_frame = ttk.Frame(frm)
         readme_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.readme_box = scrolledtext.ScrolledText(readme_frame, width=70, height=5)
         self.readme_box.pack(fill="both", expand=True)
-        ttk.Button(frm, text="README laden", command=self.load_readme_file).grid(row=row, column=2, sticky="nw")
+
+        btn_rm = ttk.Button(frm, text=_t("README laden"), command=self.load_readme_file)
+        btn_rm.grid(row=row, column=2, sticky="nw")
+        self._register_translatable(btn_rm, "text", "README laden")
         row += 1
 
-        ttk.Label(frm, text="Lizenz (Text/Dateien):").grid(row=row, column=0, sticky="nw", pady=5)
+        lbl_lic = ttk.Label(frm, text=_t("Lizenz (Text/Dateien):"))
+        lbl_lic.grid(row=row, column=0, sticky="nw", pady=5)
+        self._register_translatable(lbl_lic, "text", "Lizenz (Text/Dateien):")
+
         license_frame = ttk.Frame(frm)
         license_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.license_box = scrolledtext.ScrolledText(license_frame, width=70, height=5)
         self.license_box.pack(fill="both", expand=True)
         lic_btns = ttk.Frame(frm)
         lic_btns.grid(row=row, column=2, sticky="nw")
-        ttk.Button(lic_btns, text="Datei +", command=self.add_license_file).pack(anchor="w", pady=2)
-        ttk.Button(lic_btns, text="Text +", command=self.add_license_text_entry).pack(anchor="w", pady=2)
+        
+        btn_l1 = ttk.Button(lic_btns, text=_t("Datei +"), command=self.add_license_file)
+        btn_l1.pack(anchor="w", pady=2)
+        self._register_translatable(btn_l1, "text", "Datei +")
+
+        btn_l2 = ttk.Button(lic_btns, text=_t("Text +"), command=self.add_license_text_entry)
+        btn_l2.pack(anchor="w", pady=2)
+        self._register_translatable(btn_l2, "text", "Text +")
         row += 1
 
-        ttk.Label(frm, text="Beschreibung:").grid(row=row, column=0, sticky="nw", pady=5)
+        lbl_desc = ttk.Label(frm, text=_t("Beschreibung:"))
+        lbl_desc.grid(row=row, column=0, sticky="nw", pady=5)
+        self._register_translatable(lbl_desc, "text", "Beschreibung:")
+
         desc_frame = ttk.Frame(frm)
         desc_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.desc_box = scrolledtext.ScrolledText(desc_frame, width=70, height=5)
         self.desc_box.pack(fill="both", expand=True)
-        ttk.Button(frm, text="Beschreibung laden", command=self.load_desc_file).grid(row=row, column=2, sticky="nw")
+
+        btn_desc = ttk.Button(frm, text=_t("Beschreibung laden"), command=self.load_desc_file)
+        btn_desc.grid(row=row, column=2, sticky="nw")
+        self._register_translatable(btn_desc, "text", "Beschreibung laden")
         row += 1
 
         frm.columnconfigure(1, weight=1)
@@ -688,25 +804,36 @@ class StorePackagerApp(tk.Tk):
 
         def add_row(label, var, browse_cmd=None, browse_label="Wählen", width=60, show=None):
             nonlocal row
-            ttk.Label(frm, text=label).grid(row=row, column=0, sticky="w", pady=3)
+            lbl = ttk.Label(frm, text=_t(label))
+            lbl.grid(row=row, column=0, sticky="w", pady=3)
+            self._register_translatable(lbl, "text", label)
+
             ent = ttk.Entry(frm, textvariable=var, width=width, show=show)
             ent.grid(row=row, column=1, sticky="we", pady=3, padx=5)
             if browse_cmd:
-                ttk.Button(frm, text=browse_label, command=browse_cmd).grid(row=row, column=2, sticky="w")
+                btn = ttk.Button(frm, text=_t(browse_label), command=browse_cmd)
+                btn.grid(row=row, column=2, sticky="w")
+                self._register_translatable(btn, "text", browse_label)
             row += 1
 
         # NEU: Python Environment für externe Builds
-        ttk.Label(frm, text="Python Umgebung (für Builds)", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
+        lbl_hdr1 = ttk.Label(frm, text=_t("Python Umgebung (für Builds)"), font=("Arial", 10, "bold"))
+        lbl_hdr1.grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
+        self._register_translatable(lbl_hdr1, "text", "Python Umgebung (für Builds)")
         row += 1
         
         add_row("Python.exe Pfad:", self.python_path, self.choose_python_exe, browse_label="Python wählen")
-        ttk.Label(frm, text="Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.", foreground="gray").grid(row=row, column=1, sticky="w")
+        lbl_hint = ttk.Label(frm, text=_t("Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben."), foreground="gray")
+        lbl_hint.grid(row=row, column=1, sticky="w")
+        self._register_translatable(lbl_hint, "text", "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.")
         row += 1
         
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
 
-        ttk.Label(frm, text="Windows SDK Tools", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
+        lbl_hdr2 = ttk.Label(frm, text=_t("Windows SDK Tools"), font=("Arial", 10, "bold"))
+        lbl_hdr2.grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
+        self._register_translatable(lbl_hdr2, "text", "Windows SDK Tools")
         row += 1
 
         add_row("MakeAppx.exe:", self.makeappx_path, self.choose_makeappx, browse_label="MakeAppx wählen")
@@ -716,7 +843,9 @@ class StorePackagerApp(tk.Tk):
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
         
-        ttk.Label(frm, text="Zertifikat & Signierung", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
+        lbl_hdr3 = ttk.Label(frm, text=_t("Zertifikat & Signierung"), font=("Arial", 10, "bold"))
+        lbl_hdr3.grid(row=row, column=0, columnspan=3, sticky="w", pady=(5,10))
+        self._register_translatable(lbl_hdr3, "text", "Zertifikat & Signierung")
         row += 1
 
         add_row("Zertifikat (.pfx):", self.pfx_path, self.choose_pfx, browse_label="Zertifikat wählen")
@@ -724,14 +853,17 @@ class StorePackagerApp(tk.Tk):
         add_row("Timestamp URL:", self.timestamp_url)
         add_row("MSIX Name:", self.msix_name)
         
-        ttk.Label(frm, text="✓ Passwort wird sicher im Keyring gespeichert", foreground="green").grid(row=row, column=1, sticky="w", pady=3)
+        lbl_keyring = ttk.Label(frm, text=_t("✓ Passwort wird sicher im Keyring gespeichert"), foreground="green")
+        lbl_keyring.grid(row=row, column=1, sticky="w", pady=3)
+        self._register_translatable(lbl_keyring, "text", "✓ Passwort wird sicher im Keyring gespeichert")
         row += 1
         
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
 
-        ttk.Checkbutton(frm, text="Sprachmodul automatisch integrieren (i18n)", variable=self.enable_i18n)\
-            .grid(row=row, column=0, columnspan=3, sticky="w", pady=8)
+        chk_i18n = ttk.Checkbutton(frm, text=_t("Sprachmodul automatisch integrieren (i18n)"), variable=self.enable_i18n)
+        chk_i18n.grid(row=row, column=0, columnspan=3, sticky="w", pady=8)
+        self._register_translatable(chk_i18n, "text", "Sprachmodul automatisch integrieren (i18n)")
         row += 1
 
         frm.columnconfigure(1, weight=1)
@@ -743,30 +875,43 @@ class StorePackagerApp(tk.Tk):
 
         def add_row(label, var, width=60):
             nonlocal row
-            ttk.Label(frm, text=label).grid(row=row, column=0, sticky="w", pady=3)
+            lbl = ttk.Label(frm, text=_t(label))
+            lbl.grid(row=row, column=0, sticky="w", pady=3)
+            self._register_translatable(lbl, "text", label)
+
             ent = ttk.Entry(frm, textvariable=var, width=width)
             ent.grid(row=row, column=1, sticky="we", pady=3, padx=5)
             row += 1
 
-        ttk.Label(frm, text="Store-Pflichtfelder", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=2, sticky="w", pady=(5,10))
+        lbl_hdr = ttk.Label(frm, text=_t("Store-Pflichtfelder"), font=("Arial", 10, "bold"))
+        lbl_hdr.grid(row=row, column=0, columnspan=2, sticky="w", pady=(5,10))
+        self._register_translatable(lbl_hdr, "text", "Store-Pflichtfelder")
         row += 1
 
         add_row("Privacy Policy URL:", self.privacy_url)
         add_row("Support URL:", self.support_url)
         add_row("Capabilities (Komma-getrennt):", self.capabilities)
         
-        ttk.Label(frm, text="Beispiele: internetClient, microphone, webcam, location").grid(row=row, column=1, sticky="w", pady=2)
+        lbl_cap = ttk.Label(frm, text=_t("Beispiele: internetClient, microphone, webcam, location"))
+        lbl_cap.grid(row=row, column=1, sticky="w", pady=2)
+        self._register_translatable(lbl_cap, "text", "Beispiele: internetClient, microphone, webcam, location")
         row += 1
 
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=2, sticky='ew', pady=10)
         row += 1
 
-        ttk.Label(frm, text="Kategorie:").grid(row=row, column=0, sticky="w", pady=3)
+        lbl_cat = ttk.Label(frm, text=_t("Kategorie:"))
+        lbl_cat.grid(row=row, column=0, sticky="w", pady=3)
+        self._register_translatable(lbl_cat, "text", "Kategorie:")
+
         cat_combo = ttk.Combobox(frm, textvariable=self.category, values=CATEGORIES, state="readonly", width=57)
         cat_combo.grid(row=row, column=1, sticky="w", pady=3, padx=5)
         row += 1
 
-        ttk.Label(frm, text="Altersfreigabe:").grid(row=row, column=0, sticky="w", pady=3)
+        lbl_age = ttk.Label(frm, text=_t("Altersfreigabe:"))
+        lbl_age.grid(row=row, column=0, sticky="w", pady=3)
+        self._register_translatable(lbl_age, "text", "Altersfreigabe:")
+
         age_combo = ttk.Combobox(frm, textvariable=self.age_rating, values=AGE_RATINGS, state="readonly", width=57)
         age_combo.grid(row=row, column=1, sticky="w", pady=3, padx=5)
         row += 1
@@ -775,10 +920,15 @@ class StorePackagerApp(tk.Tk):
         row += 1
 
         # Changelog-Generator
-        ttk.Label(frm, text="Changelog (Store-Listing)", font=("Arial", 10, "bold")).grid(row=row, column=0, columnspan=2, sticky="w", pady=(5,10))
+        lbl_chdr = ttk.Label(frm, text=_t("Changelog (Store-Listing)"), font=("Arial", 10, "bold"))
+        lbl_chdr.grid(row=row, column=0, columnspan=2, sticky="w", pady=(5,10))
+        self._register_translatable(lbl_chdr, "text", "Changelog (Store-Listing)")
         row += 1
 
-        ttk.Label(frm, text="Changelog-Text:").grid(row=row, column=0, sticky="nw", pady=5)
+        lbl_ctxt = ttk.Label(frm, text=_t("Changelog-Text:"))
+        lbl_ctxt.grid(row=row, column=0, sticky="nw", pady=5)
+        self._register_translatable(lbl_ctxt, "text", "Changelog-Text:")
+
         changelog_frame = ttk.Frame(frm)
         changelog_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.changelog_box = scrolledtext.ScrolledText(changelog_frame, width=60, height=6)
@@ -788,8 +938,14 @@ class StorePackagerApp(tk.Tk):
 
         btn_frame = ttk.Frame(frm)
         btn_frame.grid(row=row, column=1, sticky="w", pady=5, padx=5)
-        ttk.Button(btn_frame, text="Format für Store", command=self.format_changelog).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="In Zwischenablage", command=self.copy_changelog).pack(side="left", padx=2)
+
+        btn_cf = ttk.Button(btn_frame, text=_t("Format für Store"), command=self.format_changelog)
+        btn_cf.pack(side="left", padx=2)
+        self._register_translatable(btn_cf, "text", "Format für Store")
+
+        btn_cc = ttk.Button(btn_frame, text=_t("In Zwischenablage"), command=self.copy_changelog)
+        btn_cc.pack(side="left", padx=2)
+        self._register_translatable(btn_cc, "text", "In Zwischenablage")
         row += 1
 
         frm.columnconfigure(1, weight=1)
@@ -798,63 +954,106 @@ class StorePackagerApp(tk.Tk):
         frm = ttk.Frame(parent)
         frm.pack(fill="both", expand=True, padx=12, pady=12)
 
-        ttk.Label(frm, text="Build-Aktionen", font=("Arial", 12, "bold")).pack(anchor="w", pady=(5,15))
+        lbl_hdr1 = ttk.Label(frm, text=_t("Build-Aktionen"), font=("Arial", 12, "bold"))
+        lbl_hdr1.pack(anchor="w", pady=(5,15))
+        self._register_translatable(lbl_hdr1, "text", "Build-Aktionen")
 
         actions_frame = ttk.Frame(frm)
         actions_frame.pack(fill="x", pady=5)
 
-        ttk.Button(actions_frame, text="1. Preflight-Check", command=self.preflight_check, width=25)\
-            .grid(row=0, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(actions_frame, text="Validiert alle Pflichtfelder").grid(row=0, column=1, sticky="w", padx=10)
+        btn_a1 = ttk.Button(actions_frame, text=_t("1. Preflight-Check"), command=self.preflight_check, width=25)
+        btn_a1.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_a1, "text", "1. Preflight-Check")
 
-        ttk.Button(actions_frame, text="2. Paket erzeugen", command=self.build_package, width=25)\
-            .grid(row=1, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(actions_frame, text="Erstellt Ausgabeordner mit allen Assets").grid(row=1, column=1, sticky="w", padx=10)
+        lbl_a1 = ttk.Label(actions_frame, text=_t("Validiert alle Pflichtfelder"))
+        lbl_a1.grid(row=0, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_a1, "text", "Validiert alle Pflichtfelder")
 
-        ttk.Button(actions_frame, text="3. EXE bauen", command=self.build_exe, width=25)\
-            .grid(row=2, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(actions_frame, text="PyInstaller-Build mit i18n").grid(row=2, column=1, sticky="w", padx=10)
+        btn_a2 = ttk.Button(actions_frame, text=_t("2. Paket erzeugen"), command=self.build_package, width=25)
+        btn_a2.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_a2, "text", "2. Paket erzeugen")
 
-        ttk.Button(actions_frame, text="4. MSIX bauen & signieren", command=self.build_and_sign_msix, width=25)\
-            .grid(row=3, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(actions_frame, text="Erstellt signiertes Store-Paket").grid(row=3, column=1, sticky="w", padx=10)
+        lbl_a2 = ttk.Label(actions_frame, text=_t("Erstellt Ausgabeordner mit allen Assets"))
+        lbl_a2.grid(row=1, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_a2, "text", "Erstellt Ausgabeordner mit allen Assets")
+
+        btn_a3 = ttk.Button(actions_frame, text=_t("3. EXE bauen"), command=self.build_exe, width=25)
+        btn_a3.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_a3, "text", "3. EXE bauen")
+
+        lbl_a3 = ttk.Label(actions_frame, text=_t("PyInstaller-Build mit i18n"))
+        lbl_a3.grid(row=2, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_a3, "text", "PyInstaller-Build mit i18n")
+
+        btn_a4 = ttk.Button(actions_frame, text=_t("4. MSIX bauen & signieren"), command=self.build_and_sign_msix, width=25)
+        btn_a4.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_a4, "text", "4. MSIX bauen & signieren")
+
+        lbl_a4 = ttk.Label(actions_frame, text=_t("Erstellt signiertes Store-Paket"))
+        lbl_a4.grid(row=3, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_a4, "text", "Erstellt signiertes Store-Paket")
 
         ttk.Separator(frm, orient='horizontal').pack(fill='x', pady=15)
 
-        ttk.Label(frm, text="Zusätzliche Aktionen", font=("Arial", 12, "bold")).pack(anchor="w", pady=(5,15))
+        lbl_hdr2 = ttk.Label(frm, text=_t("Zusätzliche Aktionen"), font=("Arial", 12, "bold"))
+        lbl_hdr2.pack(anchor="w", pady=(5,15))
+        self._register_translatable(lbl_hdr2, "text", "Zusätzliche Aktionen")
 
         extras_frame = ttk.Frame(frm)
         extras_frame.pack(fill="x", pady=5)
 
-        ttk.Button(extras_frame, text="Screenshots erzeugen", command=self.run_screenshots, width=25)\
-            .grid(row=0, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(extras_frame, text="Automatische Store-Screenshots").grid(row=0, column=1, sticky="w", padx=10)
+        btn_e1 = ttk.Button(extras_frame, text=_t("Screenshots erzeugen"), command=self.run_screenshots, width=25)
+        btn_e1.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_e1, "text", "Screenshots erzeugen")
 
-        ttk.Button(extras_frame, text="WACK-Test starten", command=self.run_wack_test, width=25)\
-            .grid(row=1, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(extras_frame, text="Windows App Certification Kit").grid(row=1, column=1, sticky="w", padx=10)
+        lbl_e1 = ttk.Label(extras_frame, text=_t("Automatische Store-Screenshots"))
+        lbl_e1.grid(row=0, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_e1, "text", "Automatische Store-Screenshots")
 
-        ttk.Button(extras_frame, text="Ausgabeordner öffnen", command=self.open_output_folder, width=25)\
-            .grid(row=2, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(extras_frame, text="Zeigt erstellte Dateien").grid(row=2, column=1, sticky="w", padx=10)
+        btn_e2 = ttk.Button(extras_frame, text=_t("WACK-Test starten"), command=self.run_wack_test, width=25)
+        btn_e2.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_e2, "text", "WACK-Test starten")
 
-        ttk.Button(extras_frame, text="Projektprofil exportieren", command=self.export_project_profile, width=25)\
-            .grid(row=3, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(extras_frame, text="Export ohne Publisher- und Zertifikatsgeheimnisse").grid(row=3, column=1, sticky="w", padx=10)
+        lbl_e2 = ttk.Label(extras_frame, text=_t("Windows App Certification Kit"))
+        lbl_e2.grid(row=1, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_e2, "text", "Windows App Certification Kit")
 
-        ttk.Button(extras_frame, text="Projektprofil importieren", command=self.import_project_profile, width=25)\
-            .grid(row=4, column=0, padx=5, pady=5, sticky="ew")
-        ttk.Label(extras_frame, text="Lädt Web-/Desktop-Vorarbeit aus JSON").grid(row=4, column=1, sticky="w", padx=10)
+        btn_e3 = ttk.Button(extras_frame, text=_t("Ausgabeordner öffnen"), command=self.open_output_folder, width=25)
+        btn_e3.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_e3, "text", "Ausgabeordner öffnen")
+
+        lbl_e3 = ttk.Label(extras_frame, text=_t("Zeigt erstellte Dateien"))
+        lbl_e3.grid(row=2, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_e3, "text", "Zeigt erstellte Dateien")
+
+        btn_e4 = ttk.Button(extras_frame, text=_t("Projektprofil exportieren"), command=self.export_project_profile, width=25)
+        btn_e4.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_e4, "text", "Projektprofil exportieren")
+
+        lbl_e4 = ttk.Label(extras_frame, text=_t("Export ohne Publisher- und Zertifikatsgeheimnisse"))
+        lbl_e4.grid(row=3, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_e4, "text", "Export ohne Publisher- und Zertifikatsgeheimnisse")
+
+        btn_e5 = ttk.Button(extras_frame, text=_t("Projektprofil importieren"), command=self.import_project_profile, width=25)
+        btn_e5.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
+        self._register_translatable(btn_e5, "text", "Projektprofil importieren")
+
+        lbl_e5 = ttk.Label(extras_frame, text=_t("Lädt Web-/Desktop-Vorarbeit aus JSON"))
+        lbl_e5.grid(row=4, column=1, sticky="w", padx=10)
+        self._register_translatable(lbl_e5, "text", "Lädt Web-/Desktop-Vorarbeit aus JSON")
 
         ttk.Separator(frm, orient='horizontal').pack(fill='x', pady=15)
 
         bottom_frame = ttk.Frame(frm)
         bottom_frame.pack(fill="x", pady=5)
 
-        ttk.Button(bottom_frame, text="Einstellungen speichern", command=self.save_settings)\
-            .pack(side="left", padx=5)
-        ttk.Button(bottom_frame, text="Beenden", command=self.on_quit)\
-            .pack(side="right", padx=5)
+        btn_b1 = ttk.Button(bottom_frame, text=_t("Einstellungen speichern"), command=self.save_settings)
+        btn_b1.pack(side="left", padx=5)
+        self._register_translatable(btn_b1, "text", "Einstellungen speichern")
+
+        btn_b2 = ttk.Button(bottom_frame, text=_t("Beenden"), command=self.on_quit)
+        btn_b2.pack(side="right", padx=5)
+        self._register_translatable(btn_b2, "text", "Beenden")
 
     # ---------- SDK autodetect ----------
     def autodetect_sdk_tools(self):
@@ -1806,7 +2005,7 @@ def patch_widgets(translator):
 
     # ---------- Exit ----------
     def on_quit(self):
-        if messagebox.askyesno("Beenden", "Einstellungen vor dem Beenden speichern?"):
+        if messagebox.askyesno(_t("Beenden"), _t("Möchten Sie die Einstellungen vor dem Beenden speichern?")):
             self.save_settings()
         self.destroy()
 

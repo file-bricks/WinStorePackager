@@ -7,6 +7,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ### Hinzugefügt / Added (2026-08-14)
 
+- **Vollständige zweisprachige GUI-Lokalisierung (Deutsch / English):**
+  - Integration von `TranslationSystem` in `WindowsStorePublisher_3.py` mit `_t()`-Hilfsfunktion und dynamischer Widget-Registrierung (`_register_translatable()`).
+  - Neues Menü „Sprache / Language“ zur Laufzeit-Umschaltung zwischen Deutsch und Englisch.
+  - Automatische Systemsprachenerkennung via `detect_system_language()` (Windows UI-Locale & System-Locale) mit Fallback auf Deutsch.
+  - Persistierung der Sprachpräferenz in den Anwendungseinstellungen (`SETTINGS_FILE`).
+  - Neues Testmodul `tests/test_i18n.py` mit Unit- und Integrations-Tests für Umschaltung und UI-Aktualisierung.
+  - Härtung von `translator.py` mit `auto_register=False` Standardmodus zur Vermeidung von Translation-File-Verschmutzung bei unvollständigen Lookups.
 - **Dogfooding-Testsuite gegen alle 4 Live Store-Apps (`tests/test_dogfood_real_apps.py`).**
   Verifiziert die korrekte MSIX- und AppxManifest-Erzeugung gegen die real im
   Microsoft Store eingereichten Anwendungen (MethodenAnalyser 9PD6GNMCZBLF,

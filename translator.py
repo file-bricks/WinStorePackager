@@ -19,21 +19,50 @@ from pathlib import Path
 from typing import Dict, List, Set
 
 
+def detect_system_language() -> str:
+    """
+    Erkennt die Systemsprache (Windows UI Language oder Locale) mit Fallback 'de'.
+
+    Returns:
+        'de' oder 'en'
+    """
+    import sys
+    try:
+        if sys.platform.startswith("win"):
+            import ctypes
+            lang_id = ctypes.windll.kernel32.GetUserDefaultUILanguage() & 0xFF
+            if lang_id == 0x07:  # German (de-DE, de-AT, de-CH)
+                return "de"
+            return "en"
+    except Exception:
+        pass
+    try:
+        import locale
+        loc = locale.getdefaultlocale()[0] or ""
+        if loc.lower().startswith("de"):
+            return "de"
+    except Exception:
+        pass
+    return "de"
+
+
 class TranslationSystem:
     """Multi-Language Support System v1.0"""
 
-    def __init__(self, default_lang: str = 'de', app_dir: Path = None):
+    def __init__(self, default_lang: str = 'de', app_dir: Path = None, auto_register: bool = False):
         """
         Initialisiert Translation-System.
 
         Args:
             default_lang: Standard-Sprache ('de' oder 'en')
-            app_dir: Verzeichnis der Anwendung (default: aktuelles Verzeichnis)
+            app_dir: Verzeichnis der Anwendung (default: Verzeichnis dieser Datei)
+            auto_register: Ob unbekannte deutsche Keys automatisch in translations.json eingetragen werden sollen.
         """
         self.current_lang = default_lang
+        self.auto_register = auto_register
 
         if app_dir is None:
-            app_dir = Path.cwd()
+            app_dir = Path(__file__).parent.resolve()
         self.app_dir = Path(app_dir)
 
         self.translations_file = self.app_dir / "locales" / "translations.json"
@@ -84,9 +113,15 @@ class TranslationSystem:
             Uebersetzter Text oder Key als Fallback
         """
         if key in self.translations:
-            return self.translations[key].get(self.current_lang, key)
+            val = self.translations[key].get(self.current_lang)
+            if val:
+                return val
+            fallback = self.translations[key].get("de")
+            if fallback:
+                return fallback
+            return key
 
-        if self._is_german(key):
+        if self.auto_register and self._is_german(key):
             self.translations[key] = {"de": key, "en": ""}
             self._save_translations()
 
