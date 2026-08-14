@@ -137,6 +137,26 @@ UAP_CAPABILITIES = {
     "sharedUserCertificates", "enterpriseAuthentication",
 }
 
+
+def sanitize_application_id(app_name):
+    """Leitet aus dem App-Namen eine schema-gueltige Application/@Id ab.
+
+    Das AppX-Schema laesst fuer Application/@Id (ST_ApplicationId ueber
+    ST_AsciiWindowsId) nur ([A-Za-z][A-Za-z0-9]*)(\\.[A-Za-z][A-Za-z0-9]*)*
+    zu, maximal 64 Zeichen. Ein Leerzeichen oder Bindestrich im App-Namen
+    ergab bisher Ids wie "SQLite Viewer ProApp" - makeappx weist das Manifest
+    dann ab, was erst beim Paketbau auffiel. Punkte bleiben als Trenner
+    erhalten, alles andere faellt weg; Segmente muessen mit einem Buchstaben
+    beginnen.
+    """
+    cleaned = re.sub(r"[^A-Za-z0-9.]", "", app_name or "")
+    segments = []
+    for segment in cleaned.split("."):
+        segment = re.sub(r"^[0-9]+", "", segment)
+        if segment:
+            segments.append(segment)
+    return ".".join(segments)[:64].rstrip(".") or "App"
+
 MANIFEST_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
          xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
@@ -166,7 +186,7 @@ MANIFEST_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
   </Capabilities>
 
   <Applications>
-    <Application Id="{{APPNAME}}App"
+    <Application Id="{{APPID}}"
                  Executable="{{EXECUTABLE}}"
                  EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements DisplayName="{{APPNAME}}"
@@ -1489,6 +1509,12 @@ def patch_widgets(translator):
             html.escape(self.publisher.get().strip() or "CN=YourPublisher"))
         manifest = manifest.replace("{{APPNAME}}",
             html.escape(self.app_name.get().strip() or "MyApp"))
+        # Die Id ist NICHT der Anzeigename: sie muss dem AppX-Schema genuegen
+        # (keine Leerzeichen/Bindestriche). Bereits veroeffentlichte Pakete
+        # nutzen den bereinigten Namen ohne Suffix - dieselbe Ableitung, damit
+        # ein Neupacken die Id einer publizierten App nicht veraendert.
+        manifest = manifest.replace("{{APPID}}",
+            html.escape(sanitize_application_id(self.app_name.get().strip() or "MyApp")))
         manifest = manifest.replace("{{PUBLISHER_DISPLAY}}",
             html.escape(self.publisher_display.get().strip() or self.publisher.get().strip().replace("CN=", "") or "YourPublisher"))
         manifest = manifest.replace("{{DESCRIPTION}}",

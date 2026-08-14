@@ -5,6 +5,22 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Behoben / Fixed (2026-08-14)
+
+- **`Application/@Id` konnte schema-ungültig werden.** Die Id entstand als
+  `{{APPNAME}}App`, also direkt aus dem Anzeigenamen. Enthielt der ein
+  Leerzeichen oder einen Bindestrich, ergab das Ids wie
+  `SQLite Viewer ProApp`. `ST_ApplicationId` (über `ST_AsciiWindowsId`) lässt
+  nur `([A-Za-z][A-Za-z0-9]*)(\.[A-Za-z][A-Za-z0-9]*)*` mit höchstens 64
+  Zeichen zu — `makeappx` weist ein solches Manifest ab, was erst beim
+  Paketbau auffiel. Neue Funktion `sanitize_application_id()` leitet die Id
+  regelkonform ab. Das `App`-Suffix entfällt dabei, weil die bereits
+  eingereichten Pakete (MethodenAnalyser, SQLite Viewer Pro, PromptBoard)
+  durchgängig den bereinigten Namen ohne Suffix als Id führen und Microsoft
+  ausdrücklich davon abrät, die Id nach der Veröffentlichung zu ändern.
+  Gefunden beim Dogfooding gegen die real eingereichten Store-Pakete;
+  Regressionstest `tests/test_application_id_schema.py`.
+
 ### Behoben / Fixed (2026-08-10)
 
 Vier Fehler in der MSIX-Erzeugung, die allesamt **still** defekte Pakete
