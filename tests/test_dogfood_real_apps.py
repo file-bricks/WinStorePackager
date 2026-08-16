@@ -179,7 +179,7 @@ class TestDogfoodRealApps(unittest.TestCase):
                 self.app.publisher_display.set(meta.get("publisher_display", "Geiger"))
                 self.app.identity_name.set(meta["identity_name"])
                 self.app.version.set(meta["version"])
-                
+
                 caps = meta.get("capabilities", "")
                 if isinstance(caps, list):
                     caps = ",".join(caps)

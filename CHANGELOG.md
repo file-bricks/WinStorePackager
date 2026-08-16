@@ -5,6 +5,15 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Gewartet / Maintenance (2026-08-16)
+
+- **Technische Hygiene & Linter-Standardisierung (Pfad A).**
+  `[tool.ruff]` und `[tool.ruff.lint]`-Konfiguration in `pyproject.toml` integriert (`line-length = 120`, `target-version = "py310"`, E402/E501 ignore).
+  Ungenutzte Imports in `linux_preflight.py`, `tests/test_bug_regressions.py` und `tests/test_wack_and_signing.py` bereinigt.
+  Whitespace in eingebetteter Translator-Klasse in `WindowsStorePublisher_3.py` behoben.
+  `ruff check .` und `python -m compileall .` passieren zu 100% fehlerfrei.
+  Test-Badges in `README.md` und `README_de.md` sowie Verifikationsangaben in `llms.txt` auf aktuellen Stand synchronisiert (85 Tests: 81 passed, 4 skipped).
+
 ### Hinzugefügt / Added (2026-08-14)
 
 - **Vollständige zweisprachige GUI-Lokalisierung (Deutsch / English):**

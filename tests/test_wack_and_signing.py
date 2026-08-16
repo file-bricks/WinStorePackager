@@ -6,7 +6,6 @@ Tests for WACK report parsing and signing credentials validation in WinStorePack
 
 import os
 import tempfile
-import pytest
 
 from WindowsStorePublisher_3 import (
     parse_wack_report,

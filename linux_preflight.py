@@ -5,7 +5,7 @@ import warnings
 from pathlib import Path
 from typing import Any
 
-from unix_preflight import run_unix_preflight, format_report, main
+from unix_preflight import run_unix_preflight, main
 
 
 def run_linux_preflight(

@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Umbrella-open--bricks-orange?style=for-the-badge" alt="Umbrella">
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge" alt="Python">
-  <img src="https://img.shields.io/badge/Tests-59%20passed%20%7C%204%20skipped-yellow?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-81%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge" alt="Windows">
   <img src="https://img.shields.io/badge/Privacy-Local--First-purple?style=for-the-badge" alt="Local First">

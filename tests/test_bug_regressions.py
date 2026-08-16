@@ -7,7 +7,6 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-import WindowsStorePublisher_3 as _wsp
 import manage_translations as mt
 
 
