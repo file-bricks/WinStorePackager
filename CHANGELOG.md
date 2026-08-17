@@ -3,6 +3,18 @@
 Alle wesentlichen Änderungen an diesem Projekt werden hier dokumentiert.
 Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
+> **Versions-Hinweis (2026-08-17, T-20260816-296785081):** `pyproject.toml`
+> steht auf `3.1.0`, das für die Store-Submission maßgebliche
+> `store_package.json` weiterhin auf `2.3.0.0` — das ist der Stand, mit dem
+> die App im Partner Center freigegeben wurde (Store-ID `9NT273Z50BJR`, siehe
+> `Desktop/STORE-RESUBMIT/MORGENBERICHT_2026-08-14.md`). Alle Einträge unten
+> unter „Unreleased" liegen NACH dieser Freigabe und sind damit noch nicht
+> Teil eines Store-Releases. Vor einer neuen Einreichung auf `3.1.0.0`:
+> `store_package.json`-Version anheben, frisches MSIX bauen, WACK laufen
+> lassen (siehe offener Punkt „Erhöhter WACK-Paketlauf" in
+> `WINDOWS_STORE_PIPELINE.md`) — beides bewusst NICHT in diesem Durchgang
+> gemacht, da das eine reale Store-Submission vorbereiten würde.
+
 ## [Unreleased]
 
 ### Gewartet / Maintenance (2026-08-16)
@@ -233,7 +245,11 @@ im CLI-Zwilling `_STORE/store_packager.py` auftraten.
 - `source-platform-smoke` setzt jetzt `PYTHONPATH` auf das Repo-Root, damit die Root-Module `linux_preflight.py` und `project_profile.py` auf Ubuntu- und macOS-Runnern importierbar sind.
 - `source-platform-smoke` Workflow ergänzt: führt `test_unix_preflight.py` und `test_project_profile.py` (8 Tests, stdlib-only) auf `ubuntu-latest` und `macos-latest` mit Python 3.11 aus und validiert so die SDK-freie Unix-Projektstruktur und Profil-Roundtrips.
 
-## [1.0.0] - YYYY-MM-DD
+## [1.0.0] - 2026-02-18
+
+> Datum rekonstruiert aus dem lokalen Plan-D-Klon (`git log --reverse`,
+> Commit „Initial release v1.0.0", 2026-08-17) — der frühere Eintrag trug den
+> unausgefüllten Platzhalter `YYYY-MM-DD`.
 
 ### Hinzugefügt / Added
 - Erstveröffentlichung / Initial release
