@@ -1,7 +1,8 @@
 """
-manage_translations.py - Auto-Scanner fuer deutsche GUI-Strings
-================================================================
+manage_translations.py - Auto-Scanner für GUI-Strings (DE, EN, ES, ZH, JA, RU)
+================================================================================
 Findet deutsche Strings in .py-Dateien und pflegt locales/translations.json.
+Standardisiert gemäß P-006 / Tier-2-Mehrsprachigkeit.
 
 Verwendung:
     python manage_translations.py [--dir PROJEKTVERZEICHNIS]
@@ -13,6 +14,7 @@ import os
 import sys
 
 TRANSLATION_FILE = "locales/translations.json"
+SUPPORTED_LANGUAGES = ("de", "en", "es", "zh", "ja", "ru")
 
 STRING_PATTERNS = [
     re.compile(r'text\s*=\s*"([^"]+)"'),
@@ -26,12 +28,12 @@ GERMAN_HINTS = [
     "datei", "filter", "fehler", "laden", "speichern",
     "ansicht", "optionen", "zurueck", "anzeigen", "export",
     "import", "einstellungen", "abbrechen", "hilfe", "bearbeiten",
-    "oeffnen", "schliessen", "start", "aktualisieren",
+    "oeffnen", "schliessen", "start", "aktualisieren", "wählen",
 ]
 
 
 def is_german(text):
-    if any(ch in text for ch in "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df"):
+    if any(ch in text for ch in "äöüÄÖÜß"):
         return True
     text_lower = text.lower()
     return any(w in text_lower for w in GERMAN_HINTS)
@@ -75,7 +77,7 @@ def manage_translations(source_dir="."):
     added = []
     for s in sorted(found):
         if s not in translations:
-            translations[s] = {"de": s, "en": ""}
+            translations[s] = {lang: (s if lang == "de" else "") for lang in SUPPORTED_LANGUAGES}
             added.append(s)
 
     os.makedirs(os.path.dirname(trans_file), exist_ok=True)
@@ -83,7 +85,7 @@ def manage_translations(source_dir="."):
         json.dump(translations, f, indent=2, ensure_ascii=False)
 
     if added:
-        print(f"[+] {len(added)} neue Eintraege hinzugefuegt:")
+        print(f"[+] {len(added)} neue Einträge hinzugefügt:")
         for s in added[:20]:
             print(f"    - {s}")
         if len(added) > 20:
@@ -91,11 +93,11 @@ def manage_translations(source_dir="."):
     else:
         print("[i] Keine neuen deutschen Strings gefunden.")
 
-    missing = [k for k, v in translations.items() if not v.get("en")]
-    if missing:
-        print(f"\n[!] {len(missing)} fehlende englische Uebersetzungen")
-    else:
-        print("\n[ok] Alle Strings haben englische Uebersetzungen.")
+    print("\n[i] Übersetzungsstatus:")
+    for lang in [lang_code for lang_code in SUPPORTED_LANGUAGES if lang_code != "de"]:
+        missing = [k for k, v in translations.items() if not v.get(lang)]
+        status = f"[!] {len(missing)} fehlende Übersetzungen" if missing else "[ok] Vollständig (0 fehlend)"
+        print(f"  - {lang.upper()}: {status}")
 
     print(f"\n[i] Gesamt: {len(translations)} Strings in {trans_file}")
 
@@ -103,3 +105,4 @@ def manage_translations(source_dir="."):
 if __name__ == "__main__":
     target = sys.argv[1] if len(sys.argv) > 1 else "."
     manage_translations(target)
+

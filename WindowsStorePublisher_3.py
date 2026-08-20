@@ -93,7 +93,7 @@ except ImportError:
     def detect_system_language():
         return "de"
 
-SUPPORTED_LANGUAGES = ("de", "en")
+SUPPORTED_LANGUAGES = ("de", "en", "es", "zh", "ja", "ru")
 DEFAULT_LANGUAGE = "de"
 
 _GLOBAL_TRANSLATOR = None
@@ -655,7 +655,15 @@ class StorePackagerApp(tk.Tk):
             self.save_settings()
         except Exception:
             pass
-        msg = "Die Sprache wurde auf Deutsch umgestellt." if lang == "de" else "Language was switched to English."
+        msg_map = {
+            "de": "Die Sprache wurde auf Deutsch umgestellt.",
+            "en": "Language was switched to English.",
+            "es": "El idioma se cambió a español.",
+            "zh": "语言已切换为中文。",
+            "ja": "言語が日本語に切り替わりました。",
+            "ru": "Язык переключен на русский.",
+        }
+        msg = msg_map.get(lang, "Die Sprache wurde auf Deutsch umgestellt.")
         messagebox.showinfo(_t("Sprache gewechselt"), _t(msg))
 
     def refresh_ui_language(self):
@@ -678,14 +686,19 @@ class StorePackagerApp(tk.Tk):
     def build_gui(self):
         menubar = tk.Menu(self)
         self.lang_menu = tk.Menu(menubar, tearoff=0)
-        self.lang_menu.add_radiobutton(
-            label="Deutsch", value="de", variable=self.language,
-            command=lambda: self.apply_language("de")
-        )
-        self.lang_menu.add_radiobutton(
-            label="English", value="en", variable=self.language,
-            command=lambda: self.apply_language("en")
-        )
+        lang_options = [
+            ("Deutsch", "de"),
+            ("English", "en"),
+            ("Español", "es"),
+            ("简体中文", "zh"),
+            ("日本語", "ja"),
+            ("Русский", "ru"),
+        ]
+        for label, code in lang_options:
+            self.lang_menu.add_radiobutton(
+                label=label, value=code, variable=self.language,
+                command=lambda c=code: self.apply_language(c)
+            )
         menubar.add_cascade(label=_t("Sprache / Language"), menu=self.lang_menu)
         self.config(menu=menubar)
 
@@ -1245,7 +1258,7 @@ class Translator:
         entry = self.translations.get(key)
         if not entry:
             return key
-        return entry.get(self.lang, entry.get("de", key))
+        return entry.get(self.lang, entry.get("en", entry.get("de", key)))
 '''
             with open(os.path.join(i18n_dir, "translator.py"), "w", encoding="utf-8") as f:
                 f.write(translator_code)
@@ -1274,18 +1287,18 @@ def patch_widgets(translator):
 
             # translations.json
             translations = {
-                "Sprache": {"de": "Sprache", "en": "Language"},
-                "Deutsch": {"de": "Deutsch", "en": "German"},
-                "English": {"de": "Englisch", "en": "English"},
-                "Wählen": {"de": "Wählen", "en": "Choose"},
-                "Beenden": {"de": "Beenden", "en": "Quit"},
-                "Öffnen": {"de": "Öffnen", "en": "Open"},
-                "Speichern": {"de": "Speichern", "en": "Save"},
-                "Abbrechen": {"de": "Abbrechen", "en": "Cancel"},
-                "OK": {"de": "OK", "en": "OK"},
-                "Fehler": {"de": "Fehler", "en": "Error"},
-                "Warnung": {"de": "Warnung", "en": "Warning"},
-                "Info": {"de": "Info", "en": "Info"}
+                "Sprache": {"de": "Sprache", "en": "Language", "es": "Idioma", "zh": "语言", "ja": "言語", "ru": "Язык"},
+                "Deutsch": {"de": "Deutsch", "en": "German", "es": "Alemán", "zh": "德语", "ja": "ドイツ語", "ru": "Немецкий"},
+                "English": {"de": "Englisch", "en": "English", "es": "Inglés", "zh": "英语", "ja": "英語", "ru": "Английский"},
+                "Wählen": {"de": "Wählen", "en": "Choose", "es": "Elegir", "zh": "选择", "ja": "選択", "ru": "Выбрать"},
+                "Beenden": {"de": "Beenden", "en": "Quit", "es": "Salir", "zh": "退出", "ja": "終了", "ru": "Выход"},
+                "Öffnen": {"de": "Öffnen", "en": "Open", "es": "Abrir", "zh": "打开", "ja": "開く", "ru": "Открыть"},
+                "Speichern": {"de": "Speichern", "en": "Save", "es": "Guardar", "zh": "保存", "ja": "保存", "ru": "Сохранить"},
+                "Abbrechen": {"de": "Abbrechen", "en": "Cancel", "es": "Cancelar", "zh": "取消", "ja": "キャンセル", "ru": "Отмена"},
+                "OK": {"de": "OK", "en": "OK", "es": "Aceptar", "zh": "确定", "ja": "OK", "ru": "ОК"},
+                "Fehler": {"de": "Fehler", "en": "Error", "es": "Error", "zh": "错误", "ja": "エラー", "ru": "Ошибка"},
+                "Warnung": {"de": "Warnung", "en": "Warning", "es": "Advertencia", "zh": "警告", "ja": "警告", "ru": "Предупреждение"},
+                "Info": {"de": "Info", "en": "Info", "es": "Información", "zh": "信息", "ja": "情報", "ru": "Информация"}
             }
             with open(os.path.join(i18n_dir, "locales", "translations.json"), "w", encoding="utf-8") as f:
                 json.dump(translations, f, indent=2, ensure_ascii=False)

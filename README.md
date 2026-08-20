@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Umbrella-open--bricks-orange?style=for-the-badge" alt="Umbrella">
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge" alt="Python">
-  <img src="https://img.shields.io/badge/Tests-81%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-82%20passed%20%7C%205%20skipped-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge" alt="Windows">
   <img src="https://img.shields.io/badge/Privacy-Local--First-purple?style=for-the-badge" alt="Local First">
@@ -41,6 +41,7 @@ WinStorePackager is built for solo developers and small teams that need a practi
 |---------|-------------|
 | **Manifest Generator** | Automatically creates `AppxManifest.xml` from form inputs |
 | **Icon Generator** | All required Store sizes: 44×44, 50×50, 150×150, 310×310, 310×150 (Wide) |
+| **6-Language GUI (i18n)** | Full localization support (Tier 2 / P-006: DE, EN, ES, ZH, JA, RU) |
 | **Keyring Integration** | Secure storage of certificate passwords (no plaintext) |
 | **Screenshot Assistant** | Captures app screenshots directly via `pygetwindow` |
 | **11 Store Categories** | Predefined (Games, Productivity, Developer Tools, ...) |

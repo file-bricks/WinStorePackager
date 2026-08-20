@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge" alt="Python">
-  <img src="https://img.shields.io/badge/Tests-81%20bestanden%20%7C%204%20%C3%BCbersprungen-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-82%20bestanden%20%7C%205%20%C3%BCbersprungen-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/Lizenz-MIT-green?style=for-the-badge" alt="Lizenz">
   <img src="https://img.shields.io/badge/Plattform-Windows-0078D6?style=for-the-badge" alt="Windows">
   <img src="https://img.shields.io/badge/Datenschutz-Local--First-purple?style=for-the-badge" alt="Local First">

@@ -17,6 +17,16 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt / Added (2026-08-20)
+
+- **Erweiterung der Lokalisierung auf 6 Sprachen (Tier-2 / P-006: DE, EN, ES, ZH, JA, RU):**
+  - `locales/translations.json`: Vollständiger Ausbau aller 105 UI- und Dialogschlüssel auf Deutsch, Englisch, Spanisch, Chinesisch (vereinfacht), Japanisch und Russisch mit 100% Abdeckung (0 fehlende Übersetzungen).
+  - `translator.py`: Upgrade auf Version 2.0.0 mit Unterstützung für 6 Sprachen, erweiterter Systemsprachenerkennung via Windows UI-Language ID (0x07, 0x09, 0x0A, 0x04, 0x11, 0x19) und robuster 4-stufiger Fallback-Kette (`aktuelle Sprache -> en -> de -> key`).
+  - `WindowsStorePublisher_3.py`: Menü „Sprache / Language“ um Radiobuttons für Deutsch, English, Español, 简体中文, 日本語 und Русский erweitert; Live-UI-Umschaltung und lokalisierte Bestätigungsdialoge.
+  - Staging & i18n Injection Template: Generiertes `translator.py` und Basiskatalog für paketierte Apps auf Tier-2-Mehrsprachigkeit und Fallback-Kette harmonisiert.
+  - `manage_translations.py`: CLI-Scanner aktualisiert zur Validierung aller 6 Zielsprachen.
+  - `tests/test_i18n.py`: Testsuite erweitert auf 6-Sprachen-Parität, Fallback-Ketten und dynamische Menüumschaltung (82 passed, 5 skipped, 100% grün).
+
 ### Gewartet / Maintenance (2026-08-16)
 
 - **Technische Hygiene & Linter-Standardisierung (Pfad A).**

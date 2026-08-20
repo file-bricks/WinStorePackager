@@ -1,406 +1,842 @@
 {
   "Sprache / Language": {
     "de": "Sprache / Language",
-    "en": "Language / Sprache"
+    "en": "Language / Sprache",
+    "es": "Idioma / Language",
+    "zh": "语言 / Language",
+    "ja": "言語 / Language",
+    "ru": "Язык / Language"
   },
   "Deutsch": {
     "de": "Deutsch",
-    "en": "German"
+    "en": "German",
+    "es": "Alemán",
+    "zh": "德语",
+    "ja": "ドイツ語",
+    "ru": "Немецкий"
   },
   "English": {
     "de": "Englisch",
-    "en": "English"
+    "en": "English",
+    "es": "Inglés",
+    "zh": "英语",
+    "ja": "英語",
+    "ru": "Английский"
+  },
+  "Español": {
+    "de": "Spanisch",
+    "en": "Spanish",
+    "es": "Español",
+    "zh": "西班牙语",
+    "ja": "スペイン語",
+    "ru": "Испанский"
+  },
+  "简体中文": {
+    "de": "Chinesisch (vereinfacht)",
+    "en": "Chinese (Simplified)",
+    "es": "Chino (simplificado)",
+    "zh": "简体中文",
+    "ja": "中国語（簡体字）",
+    "ru": "Китайский (упрощенный)"
+  },
+  "日本語": {
+    "de": "Japanisch",
+    "en": "Japanese",
+    "es": "Japonés",
+    "zh": "日语",
+    "ja": "日本語",
+    "ru": "Японский"
+  },
+  "Русский": {
+    "de": "Russisch",
+    "en": "Russian",
+    "es": "Ruso",
+    "zh": "俄语",
+    "ja": "ロシア語",
+    "ru": "Русский"
   },
   "Sprache gewechselt": {
     "de": "Sprache gewechselt",
-    "en": "Language changed"
+    "en": "Language changed",
+    "es": "Idioma cambiado",
+    "zh": "语言已更改",
+    "ja": "言語が変更されました",
+    "ru": "Язык изменен"
   },
   "Die Sprache wurde auf Deutsch umgestellt.": {
     "de": "Die Sprache wurde auf Deutsch umgestellt.",
-    "en": "Language was switched to English."
+    "en": "Language was switched to English.",
+    "es": "El idioma se cambió a español.",
+    "zh": "语言已切换为中文。",
+    "ja": "言語が日本語に切り替わりました。",
+    "ru": "Язык переключен на русский."
   },
   "Windows Store Packager — MSIX Creator": {
     "de": "Windows Store Packager — MSIX Creator",
-    "en": "Windows Store Packager — MSIX Creator"
+    "en": "Windows Store Packager — MSIX Creator",
+    "es": "Windows Store Packager — Creador de MSIX",
+    "zh": "Windows Store Packager — MSIX 创建器",
+    "ja": "Windows Store Packager — MSIX クリエーター",
+    "ru": "Windows Store Packager — Создатель MSIX"
   },
   "Metadaten": {
     "de": "Metadaten",
-    "en": "Metadata"
+    "en": "Metadata",
+    "es": "Metadatos",
+    "zh": "元数据",
+    "ja": "メタデータ",
+    "ru": "Метаданные"
   },
   "Build-Einstellungen": {
     "de": "Build-Einstellungen",
-    "en": "Build Settings"
+    "en": "Build Settings",
+    "es": "Ajustes de compilación",
+    "zh": "构建设置",
+    "ja": "ビルド設定",
+    "ru": "Настройки сборки"
   },
   "Store-Informationen": {
     "de": "Store-Informationen",
-    "en": "Store Information"
+    "en": "Store Information",
+    "es": "Información de la tienda",
+    "zh": "商店信息",
+    "ja": "ストア情報",
+    "ru": "Информация о магазине"
   },
   "Aktionen": {
     "de": "Aktionen",
-    "en": "Actions"
+    "en": "Actions",
+    "es": "Acciones",
+    "zh": "操作",
+    "ja": "アクション",
+    "ru": "Действия"
   },
   "App-Name:": {
     "de": "App-Name:",
-    "en": "App Name:"
+    "en": "App Name:",
+    "es": "Nombre de la aplicación:",
+    "zh": "应用名称:",
+    "ja": "アプリ名:",
+    "ru": "Название приложения:"
   },
   "Publisher (CN=... aus Partner Center):": {
     "de": "Publisher (CN=... aus Partner Center):",
-    "en": "Publisher (CN=... from Partner Center):"
+    "en": "Publisher (CN=... from Partner Center):",
+    "es": "Editor (CN=... del Centro de partners):",
+    "zh": "发布者 (来自合作伙伴中心的 CN=...):",
+    "ja": "発行元 (パートナーセンターの CN=...):",
+    "ru": "Издатель (CN=... из Partner Center):"
   },
   "Publisher Display Name:": {
     "de": "Publisher Display Name:",
-    "en": "Publisher Display Name:"
+    "en": "Publisher Display Name:",
+    "es": "Nombre visible del editor:",
+    "zh": "发布者显示名称:",
+    "ja": "発行元表示名:",
+    "ru": "Отображаемое имя издателя:"
   },
   "Identity Name:": {
     "de": "Identity Name:",
-    "en": "Identity Name:"
+    "en": "Identity Name:",
+    "es": "Nombre de identidad:",
+    "zh": "标识名称:",
+    "ja": "ID 名:",
+    "ru": "Имя идентификатора:"
   },
   "Version (z.B. 1.0.0.0):": {
     "de": "Version (z.B. 1.0.0.0):",
-    "en": "Version (e.g. 1.0.0.0):"
+    "en": "Version (e.g. 1.0.0.0):",
+    "es": "Versión (p. ej., 1.0.0.0):",
+    "zh": "版本 (例如 1.0.0.0):",
+    "ja": "バージョン (例: 1.0.0.0):",
+    "ru": "Версия (например, 1.0.0.0):"
   },
   "Haupt-Skript (.py):": {
     "de": "Haupt-Skript (.py):",
-    "en": "Main Script (.py):"
+    "en": "Main Script (.py):",
+    "es": "Script principal (.py):",
+    "zh": "主脚本 (.py):",
+    "ja": "メインスクリプト (.py):",
+    "ru": "Основной скрипт (.py):"
   },
   "Skript wählen": {
     "de": "Skript wählen",
-    "en": "Select Script"
+    "en": "Select Script",
+    "es": "Seleccionar script",
+    "zh": "选择脚本",
+    "ja": "スクリプトを選択",
+    "ru": "Выбрать скрипт"
   },
   "Icon (PNG, mind. 310x310):": {
     "de": "Icon (PNG, mind. 310x310):",
-    "en": "Icon (PNG, min. 310x310):"
+    "en": "Icon (PNG, min. 310x310):",
+    "es": "Icono (PNG, mín. 310x310):",
+    "zh": "图标 (PNG, 至少 310x310):",
+    "ja": "アイコン (PNG, 最小 310x310):",
+    "ru": "Значок (PNG, мин. 310x310):"
   },
   "Icon wählen": {
     "de": "Icon wählen",
-    "en": "Select Icon"
+    "en": "Select Icon",
+    "es": "Seleccionar icono",
+    "zh": "选择图标",
+    "ja": "アイコンを選択",
+    "ru": "Выбрать значок"
   },
   "Quelltext (ZIP oder Datei):": {
     "de": "Quelltext (ZIP oder Datei):",
-    "en": "Source Code (ZIP or File):"
+    "en": "Source Code (ZIP or File):",
+    "es": "Código fuente (ZIP o archivo):",
+    "zh": "源代码 (ZIP 或文件):",
+    "ja": "ソースコード (ZIP またはファイル):",
+    "ru": "Исходный код (ZIP или файл):"
   },
   "Quelle wählen": {
     "de": "Quelle wählen",
-    "en": "Select Source"
+    "en": "Select Source",
+    "es": "Seleccionar fuente",
+    "zh": "选择源码",
+    "ja": "ソースを選択",
+    "ru": "Выбрать источник"
   },
   "Installer (EXE oder MSIX):": {
     "de": "Installer (EXE oder MSIX):",
-    "en": "Installer (EXE or MSIX):"
+    "en": "Installer (EXE or MSIX):",
+    "es": "Instalador (EXE o MSIX):",
+    "zh": "安装程序 (EXE 或 MSIX):",
+    "ja": "インストーラー (EXE または MSIX):",
+    "ru": "Установщик (EXE или MSIX):"
   },
   "Installer wählen": {
     "de": "Installer wählen",
-    "en": "Select Installer"
+    "en": "Select Installer",
+    "es": "Seleccionar instalador",
+    "zh": "选择安装程序",
+    "ja": "インストーラーを選択",
+    "ru": "Выбрать установщик"
   },
   "Ausgabeordner:": {
     "de": "Ausgabeordner:",
-    "en": "Output Folder:"
+    "en": "Output Folder:",
+    "es": "Carpeta de salida:",
+    "zh": "输出文件夹:",
+    "ja": "出力フォルダー:",
+    "ru": "Папка вывода:"
   },
   "EXE-Name (z.B. MyApp.exe):": {
     "de": "EXE-Name (z.B. MyApp.exe):",
-    "en": "EXE Name (e.g. MyApp.exe):"
+    "en": "EXE Name (e.g. MyApp.exe):",
+    "es": "Nombre del EXE (p. ej., MyApp.exe):",
+    "zh": "EXE 名称 (例如 MyApp.exe):",
+    "ja": "EXE 名 (例: MyApp.exe):",
+    "ru": "Имя EXE (например, MyApp.exe):"
   },
   "README (Text oder Datei):": {
     "de": "README (Text oder Datei):",
-    "en": "README (Text or File):"
+    "en": "README (Text or File):",
+    "es": "README (texto o archivo):",
+    "zh": "README (文本或文件):",
+    "ja": "README (テキストまたはファイル):",
+    "ru": "README (текст или файл):"
   },
   "README laden": {
     "de": "README laden",
-    "en": "Load README"
+    "en": "Load README",
+    "es": "Cargar README",
+    "zh": "加载 README",
+    "ja": "README を読み込む",
+    "ru": "Загрузить README"
   },
   "Lizenz (Text/Dateien):": {
     "de": "Lizenz (Text/Dateien):",
-    "en": "License (Text/Files):"
+    "en": "License (Text/Files):",
+    "es": "Licencia (texto/archivos):",
+    "zh": "许可证 (文本/文件):",
+    "ja": "ライセンス (テキスト/ファイル):",
+    "ru": "Лицензия (текст/файлы):"
   },
   "Datei +": {
     "de": "Datei +",
-    "en": "File +"
+    "en": "File +",
+    "es": "Archivo +",
+    "zh": "文件 +",
+    "ja": "ファイル +",
+    "ru": "Файл +"
   },
   "Text +": {
     "de": "Text +",
-    "en": "Text +"
+    "en": "Text +",
+    "es": "Texto +",
+    "zh": "文本 +",
+    "ja": "テキスト +",
+    "ru": "Текст +"
   },
   "Beschreibung:": {
     "de": "Beschreibung:",
-    "en": "Description:"
+    "en": "Description:",
+    "es": "Descripción:",
+    "zh": "描述:",
+    "ja": "説明:",
+    "ru": "Описание:"
   },
   "Beschreibung laden": {
     "de": "Beschreibung laden",
-    "en": "Load Description"
+    "en": "Load Description",
+    "es": "Cargar descripción",
+    "zh": "加载描述",
+    "ja": "説明を読み込む",
+    "ru": "Загрузить описание"
   },
   "Wählen": {
     "de": "Wählen",
-    "en": "Select"
+    "en": "Select",
+    "es": "Seleccionar",
+    "zh": "选择",
+    "ja": "選択",
+    "ru": "Выбрать"
   },
   "Datei laden": {
     "de": "Datei laden",
-    "en": "Load File"
+    "en": "Load File",
+    "es": "Cargar archivo",
+    "zh": "加载文件",
+    "ja": "ファイルを読み込む",
+    "ru": "Загрузить файл"
   },
   "Python Umgebung (für Builds)": {
     "de": "Python Umgebung (für Builds)",
-    "en": "Python Environment (for Builds)"
+    "en": "Python Environment (for Builds)",
+    "es": "Entorno de Python (para compilaciones)",
+    "zh": "Python 环境 (用于构建)",
+    "ja": "Python 環境 (ビルド用)",
+    "ru": "Окружение Python (для сборок)"
   },
   "Python.exe Pfad:": {
     "de": "Python.exe Pfad:",
-    "en": "Python.exe Path:"
+    "en": "Python.exe Path:",
+    "es": "Ruta de Python.exe:",
+    "zh": "Python.exe 路径:",
+    "ja": "Python.exe パス:",
+    "ru": "Путь к Python.exe:"
   },
   "Python wählen": {
     "de": "Python wählen",
-    "en": "Select Python"
+    "en": "Select Python",
+    "es": "Seleccionar Python",
+    "zh": "选择 Python",
+    "ja": "Python を選択",
+    "ru": "Выбрать Python"
   },
   "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.": {
     "de": "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.",
-    "en": "Important when this tool runs as EXE. Must have 'pip install pyinstaller'."
+    "en": "Important when this tool runs as EXE. Must have 'pip install pyinstaller'.",
+    "es": "Importante si esta herramienta se ejecuta como EXE. Debe tener 'pip install pyinstaller'.",
+    "zh": "当此工具作为 EXE 运行时非常重要。必须包含 'pip install pyinstaller'。",
+    "ja": "このツールを EXE として実行する場合に重要です。'pip install pyinstaller' が必要です。",
+    "ru": "Важно при запуске инструмента в виде EXE. Требуется 'pip install pyinstaller'."
   },
   "Windows SDK Tools": {
     "de": "Windows SDK Tools",
-    "en": "Windows SDK Tools"
+    "en": "Windows SDK Tools",
+    "es": "Herramientas de Windows SDK",
+    "zh": "Windows SDK 工具",
+    "ja": "Windows SDK ツール",
+    "ru": "Инструменты Windows SDK"
   },
   "MakeAppx.exe:": {
     "de": "MakeAppx.exe:",
-    "en": "MakeAppx.exe:"
+    "en": "MakeAppx.exe:",
+    "es": "MakeAppx.exe:",
+    "zh": "MakeAppx.exe:",
+    "ja": "MakeAppx.exe:",
+    "ru": "MakeAppx.exe:"
   },
   "MakeAppx wählen": {
     "de": "MakeAppx wählen",
-    "en": "Select MakeAppx"
+    "en": "Select MakeAppx",
+    "es": "Seleccionar MakeAppx",
+    "zh": "选择 MakeAppx",
+    "ja": "MakeAppx を選択",
+    "ru": "Выбрать MakeAppx"
   },
   "SignTool.exe:": {
     "de": "SignTool.exe:",
-    "en": "SignTool.exe:"
+    "en": "SignTool.exe:",
+    "es": "SignTool.exe:",
+    "zh": "SignTool.exe:",
+    "ja": "SignTool.exe:",
+    "ru": "SignTool.exe:"
   },
   "SignTool wählen": {
     "de": "SignTool wählen",
-    "en": "Select SignTool"
+    "en": "Select SignTool",
+    "es": "Seleccionar SignTool",
+    "zh": "选择 SignTool",
+    "ja": "SignTool を選択",
+    "ru": "Выбрать SignTool"
   },
   "AppCert.exe (WACK):": {
     "de": "AppCert.exe (WACK):",
-    "en": "AppCert.exe (WACK):"
+    "en": "AppCert.exe (WACK):",
+    "es": "AppCert.exe (WACK):",
+    "zh": "AppCert.exe (WACK):",
+    "ja": "AppCert.exe (WACK):",
+    "ru": "AppCert.exe (WACK):"
   },
   "AppCert wählen": {
     "de": "AppCert wählen",
-    "en": "Select AppCert"
+    "en": "Select AppCert",
+    "es": "Seleccionar AppCert",
+    "zh": "选择 AppCert",
+    "ja": "AppCert を選択",
+    "ru": "Выбрать AppCert"
   },
   "Zertifikat & Signierung": {
     "de": "Zertifikat & Signierung",
-    "en": "Certificate & Signing"
+    "en": "Certificate & Signing",
+    "es": "Certificado y firma",
+    "zh": "证书与签名",
+    "ja": "証明書と署名",
+    "ru": "Сертификат и подпись"
   },
   "Zertifikat (.pfx):": {
     "de": "Zertifikat (.pfx):",
-    "en": "Certificate (.pfx):"
+    "en": "Certificate (.pfx):",
+    "es": "Certificado (.pfx):",
+    "zh": "证书 (.pfx):",
+    "ja": "証明書 (.pfx):",
+    "ru": "Сертификат (.pfx):"
   },
   "Zertifikat wählen": {
     "de": "Zertifikat wählen",
-    "en": "Select Certificate"
+    "en": "Select Certificate",
+    "es": "Seleccionar certificado",
+    "zh": "选择证书",
+    "ja": "証明書を選択",
+    "ru": "Выбрать сертификат"
   },
   "PFX Passwort:": {
     "de": "PFX Passwort:",
-    "en": "PFX Password:"
+    "en": "PFX Password:",
+    "es": "Contraseña PFX:",
+    "zh": "PFX 密码:",
+    "ja": "PFX パスワード:",
+    "ru": "Пароль PFX:"
   },
   "Timestamp URL:": {
     "de": "Timestamp URL:",
-    "en": "Timestamp URL:"
+    "en": "Timestamp URL:",
+    "es": "URL de marca de tiempo:",
+    "zh": "时间戳 URL:",
+    "ja": "タイムスタンプ URL:",
+    "ru": "URL метки времени:"
   },
   "MSIX Name:": {
     "de": "MSIX Name:",
-    "en": "MSIX Name:"
+    "en": "MSIX Name:",
+    "es": "Nombre de MSIX:",
+    "zh": "MSIX 名称:",
+    "ja": "MSIX 名:",
+    "ru": "Имя MSIX:"
   },
   "✓ Passwort wird sicher im Keyring gespeichert": {
     "de": "✓ Passwort wird sicher im Keyring gespeichert",
-    "en": "✓ Password is stored securely in Keyring"
+    "en": "✓ Password is stored securely in Keyring",
+    "es": "✓ La contraseña se almacena de forma segura en Keyring",
+    "zh": "✓ 密码已安全存储在 Keyring 中",
+    "ja": "✓ パスワードは Keyring に安全に保存されます",
+    "ru": "✓ Пароль безопасно сохранен в Keyring"
   },
   "Sprachmodul automatisch integrieren (i18n)": {
     "de": "Sprachmodul automatisch integrieren (i18n)",
-    "en": "Automatically integrate language module (i18n)"
+    "en": "Automatically integrate language module (i18n)",
+    "es": "Integrar automáticamente módulo de idioma (i18n)",
+    "zh": "自动集成语言模块 (i18n)",
+    "ja": "言語モジュールを自動統合 (i18n)",
+    "ru": "Автоматически интегрировать языковой модуль (i18n)"
   },
   "Store-Pflichtfelder": {
     "de": "Store-Pflichtfelder",
-    "en": "Mandatory Store Fields"
+    "en": "Mandatory Store Fields",
+    "es": "Campos obligatorios de la tienda",
+    "zh": "商店必填字段",
+    "ja": "ストア必須フィールド",
+    "ru": "Обязательные поля магазина"
   },
   "Privacy Policy URL:": {
     "de": "Privacy Policy URL:",
-    "en": "Privacy Policy URL:"
+    "en": "Privacy Policy URL:",
+    "es": "URL de política de privacidad:",
+    "zh": "隐私政策 URL:",
+    "ja": "プライバシーポリシー URL:",
+    "ru": "URL политики конфиденциальности:"
   },
   "Support URL:": {
     "de": "Support URL:",
-    "en": "Support URL:"
+    "en": "Support URL:",
+    "es": "URL de soporte:",
+    "zh": "支持 URL:",
+    "ja": "サポート URL:",
+    "ru": "URL поддержки:"
   },
   "Capabilities (Komma-getrennt):": {
     "de": "Capabilities (Komma-getrennt):",
-    "en": "Capabilities (comma-separated):"
+    "en": "Capabilities (comma-separated):",
+    "es": "Capacidades (separadas por comas):",
+    "zh": "功能权限 (逗号分隔):",
+    "ja": "機能 (カンマ区切り):",
+    "ru": "Возможности (через запятую):"
   },
   "Beispiele: internetClient, microphone, webcam, location": {
     "de": "Beispiele: internetClient, microphone, webcam, location",
-    "en": "Examples: internetClient, microphone, webcam, location"
+    "en": "Examples: internetClient, microphone, webcam, location",
+    "es": "Ejemplos: internetClient, microphone, webcam, location",
+    "zh": "示例: internetClient, microphone, webcam, location",
+    "ja": "例: internetClient, microphone, webcam, location",
+    "ru": "Примеры: internetClient, microphone, webcam, location"
   },
   "Kategorie:": {
     "de": "Kategorie:",
-    "en": "Category:"
+    "en": "Category:",
+    "es": "Categoría:",
+    "zh": "类别:",
+    "ja": "カテゴリー:",
+    "ru": "Категория:"
   },
   "Altersfreigabe:": {
     "de": "Altersfreigabe:",
-    "en": "Age Rating:"
+    "en": "Age Rating:",
+    "es": "Clasificación por edad:",
+    "zh": "年龄分级:",
+    "ja": "年齢評価:",
+    "ru": "Возрастной рейтинг:"
   },
   "Changelog (Store-Listing)": {
     "de": "Changelog (Store-Listing)",
-    "en": "Changelog (Store Listing)"
+    "en": "Changelog (Store Listing)",
+    "es": "Registro de cambios (listado de la tienda)",
+    "zh": "更新日志 (商店详情)",
+    "ja": "変更履歴 (ストアリスト)",
+    "ru": "Журнал изменений (список магазина)"
   },
   "Changelog-Text:": {
     "de": "Changelog-Text:",
-    "en": "Changelog Text:"
+    "en": "Changelog Text:",
+    "es": "Texto de cambios:",
+    "zh": "变更说明文本:",
+    "ja": "変更履歴テキスト:",
+    "ru": "Текст изменений:"
   },
   "Format für Store": {
     "de": "Format für Store",
-    "en": "Format for Store"
+    "en": "Format for Store",
+    "es": "Formato para la tienda",
+    "zh": "适合商店的格式",
+    "ja": "ストア用フォーマット",
+    "ru": "Формат для магазина"
   },
   "In Zwischenablage": {
     "de": "In Zwischenablage",
-    "en": "To Clipboard"
+    "en": "To Clipboard",
+    "es": "Al portapapeles",
+    "zh": "复制到剪贴板",
+    "ja": "クリップボードへ",
+    "ru": "В буфер обмена"
   },
   "Build-Aktionen": {
     "de": "Build-Aktionen",
-    "en": "Build Actions"
+    "en": "Build Actions",
+    "es": "Acciones de compilación",
+    "zh": "构建操作",
+    "ja": "ビルド操作",
+    "ru": "Действия сборки"
   },
   "1. Preflight-Check": {
     "de": "1. Preflight-Check",
-    "en": "1. Preflight Check"
+    "en": "1. Preflight Check",
+    "es": "1. Verificación previa",
+    "zh": "1. 预检检查",
+    "ja": "1. プリフライトチェック",
+    "ru": "1. Предварительная проверка"
   },
   "Validiert alle Pflichtfelder": {
     "de": "Validiert alle Pflichtfelder",
-    "en": "Validates all mandatory fields"
+    "en": "Validates all mandatory fields",
+    "es": "Valida todos los campos obligatorios",
+    "zh": "验证所有必填字段",
+    "ja": "すべての必須フィールドを検証",
+    "ru": "Проверяет все обязательные поля"
   },
   "2. Paket erzeugen": {
     "de": "2. Paket erzeugen",
-    "en": "2. Create Package"
+    "en": "2. Create Package",
+    "es": "2. Crear paquete",
+    "zh": "2. 创建包",
+    "ja": "2. パッケージの作成",
+    "ru": "2. Создать пакет"
   },
   "Erstellt Ausgabeordner mit allen Assets": {
     "de": "Erstellt Ausgabeordner mit allen Assets",
-    "en": "Creates output folder with all assets"
+    "en": "Creates output folder with all assets",
+    "es": "Crea la carpeta de salida con todos los recursos",
+    "zh": "创建包含所有资源的输出文件夹",
+    "ja": "すべてのアセットを含む出力フォルダーを作成",
+    "ru": "Создает папку вывода со всеми ресурсами"
   },
   "3. EXE bauen": {
     "de": "3. EXE bauen",
-    "en": "3. Build EXE"
+    "en": "3. Build EXE",
+    "es": "3. Compilar EXE",
+    "zh": "3. 构建 EXE",
+    "ja": "3. EXE をビルド",
+    "ru": "3. Собрать EXE"
   },
   "PyInstaller-Build mit i18n": {
     "de": "PyInstaller-Build mit i18n",
-    "en": "PyInstaller build with i18n"
+    "en": "PyInstaller build with i18n",
+    "es": "Compilación PyInstaller con i18n",
+    "zh": "支持 i18n 的 PyInstaller 构建",
+    "ja": "i18n 対応 PyInstaller ビルド",
+    "ru": "Сборка PyInstaller с i18n"
   },
   "4. MSIX bauen & signieren": {
     "de": "4. MSIX bauen & signieren",
-    "en": "4. Build & Sign MSIX"
+    "en": "4. Build & Sign MSIX",
+    "es": "4. Compilar y firmar MSIX",
+    "zh": "4. 构建并签名 MSIX",
+    "ja": "4. MSIX のビルドと署名",
+    "ru": "4. Собрать и подписать MSIX"
   },
   "Erstellt signiertes Store-Paket": {
     "de": "Erstellt signiertes Store-Paket",
-    "en": "Creates signed Store package"
+    "en": "Creates signed Store package",
+    "es": "Crea el paquete firmado para la tienda",
+    "zh": "创建已签名的商店包",
+    "ja": "署名済みストアパッケージを作成",
+    "ru": "Создает подписанный пакет магазина"
   },
   "Zusätzliche Aktionen": {
     "de": "Zusätzliche Aktionen",
-    "en": "Additional Actions"
+    "en": "Additional Actions",
+    "es": "Acciones adicionales",
+    "zh": "其他操作",
+    "ja": "追加のアクション",
+    "ru": "Дополнительные действия"
   },
   "Screenshots erzeugen": {
     "de": "Screenshots erzeugen",
-    "en": "Generate Screenshots"
+    "en": "Generate Screenshots",
+    "es": "Generar capturas de pantalla",
+    "zh": "生成屏幕截图",
+    "ja": "スクリーンショットを生成",
+    "ru": "Создать снимки экрана"
   },
   "Automatische Store-Screenshots": {
     "de": "Automatische Store-Screenshots",
-    "en": "Automated Store Screenshots"
+    "en": "Automated Store Screenshots",
+    "es": "Capturas automáticas para la tienda",
+    "zh": "自动化商店屏幕截图",
+    "ja": "自動ストアスクリーンショット",
+    "ru": "Автоматические снимки для магазина"
   },
   "WACK-Test starten": {
     "de": "WACK-Test starten",
-    "en": "Run WACK Test"
+    "en": "Run WACK Test",
+    "es": "Iniciar prueba WACK",
+    "zh": "启动 WACK 测试",
+    "ja": "WACK テストを開始",
+    "ru": "Запустить тест WACK"
   },
   "Windows App Certification Kit": {
     "de": "Windows App Certification Kit",
-    "en": "Windows App Certification Kit"
+    "en": "Windows App Certification Kit",
+    "es": "Windows App Certification Kit",
+    "zh": "Windows App 认证套件",
+    "ja": "Windows アプリ認定キット",
+    "ru": "Windows App Certification Kit"
   },
   "Ausgabeordner öffnen": {
     "de": "Ausgabeordner öffnen",
-    "en": "Open Output Folder"
+    "en": "Open Output Folder",
+    "es": "Abrir carpeta de salida",
+    "zh": "打开输出文件夹",
+    "ja": "出力フォルダーを開く",
+    "ru": "Открыть папку вывода"
   },
   "Zeigt erstellte Dateien": {
     "de": "Zeigt erstellte Dateien",
-    "en": "Shows created files"
+    "en": "Shows created files",
+    "es": "Muestra los archivos creados",
+    "zh": "显示生成的文件",
+    "ja": "作成されたファイルを表示",
+    "ru": "Показывает созданные файлы"
   },
   "Projektprofil exportieren": {
     "de": "Projektprofil exportieren",
-    "en": "Export Project Profile"
+    "en": "Export Project Profile",
+    "es": "Exportar perfil de proyecto",
+    "zh": "导出项目配置文件",
+    "ja": "プロジェクトプロファイルをエクスポート",
+    "ru": "Экспортировать профиль проекта"
   },
   "Export ohne Publisher- und Zertifikatsgeheimnisse": {
     "de": "Export ohne Publisher- und Zertifikatsgeheimnisse",
-    "en": "Export without publisher and certificate secrets"
+    "en": "Export without publisher and certificate secrets",
+    "es": "Exportación sin secretos de editor y certificado",
+    "zh": "不含发布者与证书机密的导出",
+    "ja": "発行元および証明書の機密を含まないエクスポート",
+    "ru": "Экспорт без секретов издателя и сертификатов"
   },
   "Projektprofil importieren": {
     "de": "Projektprofil importieren",
-    "en": "Import Project Profile"
+    "en": "Import Project Profile",
+    "es": "Importar perfil de proyecto",
+    "zh": "导入项目配置文件",
+    "ja": "プロジェクトプロファイルをインポート",
+    "ru": "Импортировать профиль проекта"
   },
   "Lädt Web-/Desktop-Vorarbeit aus JSON": {
     "de": "Lädt Web-/Desktop-Vorarbeit aus JSON",
-    "en": "Loads web/desktop pre-work from JSON"
+    "en": "Loads web/desktop pre-work from JSON",
+    "es": "Carga el trabajo previo de web/escritorio desde JSON",
+    "zh": "从 JSON 加载 Web/桌面预处理数据",
+    "ja": "JSON から Web/デスクトップの作業データを読み込む",
+    "ru": "Загружает предварительные данные веб/ПК из JSON"
   },
   "Einstellungen speichern": {
     "de": "Einstellungen speichern",
-    "en": "Save Settings"
+    "en": "Save Settings",
+    "es": "Guardar ajustes",
+    "zh": "保存设置",
+    "ja": "設定を保存",
+    "ru": "Сохранить настройки"
   },
   "Beenden": {
     "de": "Beenden",
-    "en": "Exit"
+    "en": "Exit",
+    "es": "Salir",
+    "zh": "退出",
+    "ja": "終了",
+    "ru": "Выход"
   },
   "Erfolg": {
     "de": "Erfolg",
-    "en": "Success"
+    "en": "Success",
+    "es": "Éxito",
+    "zh": "成功",
+    "ja": "成功",
+    "ru": "Успех"
   },
   "Erfolgreich": {
     "de": "Erfolgreich",
-    "en": "Successful"
+    "en": "Successful",
+    "es": "Exitoso",
+    "zh": "成功完成",
+    "ja": "成功しました",
+    "ru": "Успешно"
   },
   "Fehler": {
     "de": "Fehler",
-    "en": "Error"
+    "en": "Error",
+    "es": "Error",
+    "zh": "错误",
+    "ja": "エラー",
+    "ru": "Ошибка"
   },
   "Warnung": {
     "de": "Warnung",
-    "en": "Warning"
+    "en": "Warning",
+    "es": "Advertencia",
+    "zh": "警告",
+    "ja": "警告",
+    "ru": "Предупреждение"
   },
   "Hinweis": {
     "de": "Hinweis",
-    "en": "Note"
+    "en": "Note",
+    "es": "Nota",
+    "zh": "提示",
+    "ja": "ヒント",
+    "ru": "Примечание"
   },
   "Preflight-Fehler": {
     "de": "Preflight-Fehler",
-    "en": "Preflight Error"
+    "en": "Preflight Error",
+    "es": "Error de verificación previa",
+    "zh": "预检错误",
+    "ja": "プリフライトエラー",
+    "ru": "Ошибка предварительной проверки"
   },
   "Preflight erfolgreich!": {
     "de": "Preflight erfolgreich!",
-    "en": "Preflight Successful!"
+    "en": "Preflight Successful!",
+    "es": "¡Verificación previa exitosa!",
+    "zh": "预检成功！",
+    "ja": "プリフライト成功！",
+    "ru": "Предварительная проверка успешна!"
   },
   "Alle Pflichtfelder ausgefüllt.": {
     "de": "Alle Pflichtfelder ausgefüllt.",
-    "en": "All mandatory fields filled."
+    "en": "All mandatory fields filled.",
+    "es": "Todos los campos obligatorios completados.",
+    "zh": "所有必填字段已填写。",
+    "ja": "すべての必須フィールドが入力されました。",
+    "ru": "Все обязательные поля заполнены."
   },
   "Paket erstellt": {
     "de": "Paket erstellt",
-    "en": "Package Created"
+    "en": "Package Created",
+    "es": "Paquete creado",
+    "zh": "包已创建",
+    "ja": "パッケージ作成完了",
+    "ru": "Пакет создан"
   },
   "Build erfolgreich": {
     "de": "Build erfolgreich",
-    "en": "Build Successful"
+    "en": "Build Successful",
+    "es": "Compilación exitosa",
+    "zh": "构建成功",
+    "ja": "ビルド成功",
+    "ru": "Сборка успешна"
   },
   "Einstellungen gespeichert!": {
     "de": "Einstellungen gespeichert!",
-    "en": "Settings saved!"
+    "en": "Settings saved!",
+    "es": "¡Ajustes guardados!",
+    "zh": "设置已保存！",
+    "ja": "設定が保存されました！",
+    "ru": "Настройки сохранены!"
   },
   "Projektprofil exportiert": {
     "de": "Projektprofil exportiert",
-    "en": "Project Profile Exported"
+    "en": "Project Profile Exported",
+    "es": "Perfil de proyecto exportado",
+    "zh": "项目配置文件已导出",
+    "ja": "プロジェクトプロファイルがエクスポートされました",
+    "ru": "Профиль проекта экспортирован"
   },
   "Projektprofil importiert": {
     "de": "Projektprofil importiert",
-    "en": "Project Profile Imported"
+    "en": "Project Profile Imported",
+    "es": "Perfil de proyecto importado",
+    "zh": "项目配置文件已导入",
+    "ja": "プロジェクトプロファイルがインポートされました",
+    "ru": "Профиль проекта импортирован"
   },
   "Projektprofil wurde geladen.\n\nBitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen.": {
     "de": "Projektprofil wurde geladen.\n\nBitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen.",
-    "en": "Project profile was loaded.\n\nPlease add Publisher ID, SDK paths, and certificate locally."
+    "en": "Project profile was loaded.\n\nPlease add Publisher ID, SDK paths, and certificate locally.",
+    "es": "Se cargó el perfil del proyecto.\n\nComplete el ID del editor, las rutas de SDK y el certificado localmente.",
+    "zh": "项目配置文件已加载。\n\n请在本地补充发布者 ID、SDK 路径和证书。",
+    "ja": "プロジェクトプロファイルが読み込まれました。\n\nローカルで発行元 ID、SDK パス、証明書を補完してください。",
+    "ru": "Профиль проекта загружен.\n\nПожалуйста, укажите локально идентификатор издателя, пути SDK и сертификат."
   },
   "Möchten Sie die Einstellungen vor dem Beenden speichern?": {
     "de": "Möchten Sie die Einstellungen vor dem Beenden speichern?",
-    "en": "Do you want to save settings before exiting?"
+    "en": "Do you want to save settings before exiting?",
+    "es": "¿Desea guardar los ajustes antes de salir?",
+    "zh": "退出前是否要保存设置？",
+    "ja": "終了する前に設定を保存しますか？",
+    "ru": "Сохранить настройки перед выходом?"
   }
 }

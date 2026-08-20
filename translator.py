@@ -1,63 +1,96 @@
 """
-TranslationSystem - Multi-Language Support fuer Anwendungen
+TranslationSystem - Multi-Language Support für Anwendungen
 ============================================================
-Version: 1.0.0 (isoliert aus _LANG)
-Quelle: ARC_EntwicklungsschleifeAdvanced/TranslationSystem.py v2.4
+Version: 2.0.0 (Standardisiert gemäß P-006 / Tier-2-Mehrsprachigkeit)
+Unterstützte Sprachen: DE, EN, ES, ZH (Vereinfacht), JA, RU
 
 Verwendung:
 -----------
-from translator import TranslationSystem
+from translator import TranslationSystem, detect_system_language, SUPPORTED_LANGUAGES
 
 translator = TranslationSystem('de')
-label.setText(translator.t('Datei oeffnen'))
+label.setText(translator.t('Datei öffnen'))
 translator.set_language('en')
 """
 
 import json
 import re
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Optional
+
+SUPPORTED_LANGUAGES = ("de", "en", "es", "zh", "ja", "ru")
+DEFAULT_LANGUAGE = "de"
+
+LANGUAGE_NAMES = {
+    "de": "Deutsch",
+    "en": "English",
+    "es": "Español",
+    "zh": "简体中文",
+    "ja": "日本語",
+    "ru": "Русский",
+}
 
 
 def detect_system_language() -> str:
     """
     Erkennt die Systemsprache (Windows UI Language oder Locale) mit Fallback 'de'.
+    Unterstützt Standard-Sprachen: 'de', 'en', 'es', 'zh', 'ja', 'ru'.
 
     Returns:
-        'de' oder 'en'
+        Sprachcode ('de', 'en', 'es', 'zh', 'ja', 'ru')
     """
     import sys
     try:
         if sys.platform.startswith("win"):
             import ctypes
             lang_id = ctypes.windll.kernel32.GetUserDefaultUILanguage() & 0xFF
-            if lang_id == 0x07:  # German (de-DE, de-AT, de-CH)
-                return "de"
+            lang_map = {
+                0x07: "de",  # German
+                0x09: "en",  # English
+                0x0A: "es",  # Spanish
+                0x04: "zh",  # Chinese
+                0x11: "ja",  # Japanese
+                0x19: "ru",  # Russian
+            }
+            if lang_id in lang_map:
+                return lang_map[lang_id]
             return "en"
     except Exception:
         pass
     try:
         import locale
-        loc = locale.getdefaultlocale()[0] or ""
-        if loc.lower().startswith("de"):
+        loc = (locale.getdefaultlocale()[0] or "").lower()
+        if loc.startswith("de"):
             return "de"
+        if loc.startswith("es"):
+            return "es"
+        if loc.startswith("zh"):
+            return "zh"
+        if loc.startswith("ja"):
+            return "ja"
+        if loc.startswith("ru"):
+            return "ru"
+        if loc.startswith("en"):
+            return "en"
     except Exception:
         pass
     return "de"
 
 
 class TranslationSystem:
-    """Multi-Language Support System v1.0"""
+    """Multi-Language Support System v2.0 (DE, EN, ES, ZH, JA, RU)"""
 
-    def __init__(self, default_lang: str = 'de', app_dir: Path = None, auto_register: bool = False):
+    def __init__(self, default_lang: str = 'de', app_dir: Optional[Path] = None, auto_register: bool = False):
         """
-        Initialisiert Translation-System.
+        Initialisiert das Translation-System.
 
         Args:
-            default_lang: Standard-Sprache ('de' oder 'en')
+            default_lang: Standard-Sprache ('de', 'en', 'es', 'zh', 'ja', 'ru')
             app_dir: Verzeichnis der Anwendung (default: Verzeichnis dieser Datei)
             auto_register: Ob unbekannte deutsche Keys automatisch in translations.json eingetragen werden sollen.
         """
+        if default_lang not in SUPPORTED_LANGUAGES:
+            default_lang = DEFAULT_LANGUAGE
         self.current_lang = default_lang
         self.auto_register = auto_register
 
@@ -82,9 +115,10 @@ class TranslationSystem:
             "schliessen", "einstellungen", "abbrechen", "ok", "ja", "nein",
             "start", "stop", "pause", "fortsetzen", "laden", "aktualisieren",
             "filter", "fehler", "export", "import", "optionen", "anzeigen",
+            "wählen", "erfolgreich", "hinweis", "warnung", "ausgabeordner",
         ]
 
-        self.translations = {}
+        self.translations: Dict[str, Dict[str, str]] = {}
         self._load_translations()
 
     def _load_translations(self):
@@ -102,43 +136,75 @@ class TranslationSystem:
         with open(self.translations_file, 'w', encoding='utf-8') as f:
             json.dump(self.translations, f, indent=2, ensure_ascii=False)
 
-    def t(self, key: str) -> str:
+    def t(self, key: str, **kwargs) -> str:
         """
-        Uebersetzt einen Key in die aktuelle Sprache.
+        Übersetzt einen Key in die aktuelle Sprache mit einer 4-stufigen Fallback-Kette:
+        1. Aktuelle Sprache (z.B. es, zh, ja, ru)
+        2. Englisch ('en')
+        3. Deutsch ('de')
+        4. Original Key
 
         Args:
             key: Translation-Key (oft der deutsche Originaltext)
+            **kwargs: Optionale Formatierungsargumente
 
         Returns:
-            Uebersetzter Text oder Key als Fallback
+            Übersetzter Text oder Key als Fallback
         """
+        res = key
         if key in self.translations:
-            val = self.translations[key].get(self.current_lang)
+            entry = self.translations[key]
+            val = entry.get(self.current_lang)
             if val:
-                return val
-            fallback = self.translations[key].get("de")
-            if fallback:
-                return fallback
-            return key
-
-        if self.auto_register and self._is_german(key):
-            self.translations[key] = {"de": key, "en": ""}
+                res = val
+            elif entry.get("en"):
+                res = entry["en"]
+            elif entry.get("de"):
+                res = entry["de"]
+            else:
+                res = key
+        elif self.auto_register and self._is_german(key):
+            self.translations[key] = {lang: (key if lang == "de" else "") for lang in SUPPORTED_LANGUAGES}
             self._save_translations()
+            res = key
 
-        return key
+        if kwargs:
+            try:
+                return res.format(**kwargs)
+            except Exception:
+                return res
+        return res
 
     def set_language(self, lang: str):
-        if lang in ['de', 'en']:
+        """Setzt die aktive Sprache, wenn sie in SUPPORTED_LANGUAGES enthalten ist."""
+        if lang in SUPPORTED_LANGUAGES:
             self.current_lang = lang
 
     def get_language(self) -> str:
+        """Gibt die aktuell aktive Sprache zurück."""
         return self.current_lang
 
-    def add_translation(self, key: str, de: str, en: str):
-        self.translations[key] = {"de": de, "en": en}
+    def get_supported_languages(self) -> List[str]:
+        """Gibt die Liste aller unterstützten Sprachcodes zurück."""
+        return list(SUPPORTED_LANGUAGES)
+
+    def add_translation(self, key: str, de: str = "", en: str = "", es: str = "", zh: str = "", ja: str = "", ru: str = "", **kwargs):
+        """Fügt einen Übersetzungseintrag hinzu oder aktualisiert ihn."""
+        entry = {
+            "de": de or key,
+            "en": en,
+            "es": es,
+            "zh": zh,
+            "ja": ja,
+            "ru": ru,
+        }
+        for k, v in kwargs.items():
+            if k in SUPPORTED_LANGUAGES:
+                entry[k] = v
+        self.translations[key] = entry
         self._save_translations()
 
-    def scan_and_update(self, project_dir: Path = None) -> Dict:
+    def scan_and_update(self, project_dir: Optional[Path] = None) -> Dict:
         """Scannt Projekt-Dateien nach deutschen Strings und aktualisiert translations.json."""
         if project_dir is None:
             project_dir = self.app_dir
@@ -148,15 +214,22 @@ class TranslationSystem:
         added = []
         for string in sorted(found_strings):
             if string not in self.translations:
-                self.translations[string] = {"de": string, "en": ""}
+                self.translations[string] = {lang: (string if lang == "de" else "") for lang in SUPPORTED_LANGUAGES}
                 added.append(string)
 
         if added:
             self._save_translations()
 
-        missing = [k for k, v in self.translations.items() if not v.get("en")]
+        missing = {
+            lang: [k for k, v in self.translations.items() if not v.get(lang)]
+            for lang in SUPPORTED_LANGUAGES if lang != "de"
+        }
 
-        return {'added': added, 'missing': missing, 'total': len(self.translations)}
+        return {
+            'added': added,
+            'missing': missing,
+            'total': len(self.translations)
+        }
 
     def _find_german_strings(self, directory: Path) -> Set[str]:
         german_strings = set()
@@ -179,17 +252,20 @@ class TranslationSystem:
         return german_strings
 
     def _is_german(self, text: str) -> bool:
-        if any(ch in text for ch in "aeoeueAeOeUess"):
+        if any(ch in text for ch in "äöüÄÖÜßaeoeueAeOeUess"):
             return True
         text_lower = text.lower()
         return any(hint in text_lower for hint in self.german_hints)
 
-    def get_missing_translations(self) -> List[str]:
-        return [k for k, v in self.translations.items() if not v.get("en")]
+    def get_missing_translations(self, lang: str = "en") -> List[str]:
+        """Liefert alle Keys, für die in der angegebenen Sprache keine Übersetzung existiert."""
+        return [k for k, v in self.translations.items() if not v.get(lang)]
 
 
 if __name__ == "__main__":
     tr = TranslationSystem('de')
-    print(f"Sprache: {tr.get_language()}")
+    print(f"Aktive Sprache: {tr.get_language()}")
+    print(f"Unterstützte Sprachen: {tr.get_supported_languages()}")
     result = tr.scan_and_update()
-    print(f"Scan: {result['total']} Strings, {len(result['added'])} neu, {len(result['missing'])} ohne EN")
+    print(f"Scan: {result['total']} Strings, {len(result['added'])} neu")
+
