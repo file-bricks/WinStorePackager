@@ -151,8 +151,11 @@ KEYRING_SERVICE = "WindowsStorePackager"
 # keine sprachabhaengigen Werte auf (Anzeigename, Herausgeber, Logos).
 DEFAULT_LANGUAGES = "en-us"
 
-# Faehigkeiten nach Namensraum. Alles, was hier nicht steht, gilt als
-# eingeschraenkt und wird als <rescap:Capability> geschrieben.
+# Faehigkeiten nach Namensraum.
+# Allgemein: <Capability>
+# UAP: <uap:Capability>
+# Geraete: <DeviceCapability>
+# Alles andere gilt als eingeschraenkt und wird als <rescap:Capability> geschrieben.
 GENERAL_CAPABILITIES = {
     "internetClient", "internetClientServer",
     "privateNetworkClientServer", "allJoyn", "codeGeneration",
@@ -161,6 +164,12 @@ UAP_CAPABILITIES = {
     "documentsLibrary", "picturesLibrary", "videosLibrary", "musicLibrary",
     "removableStorage", "appointments", "contacts", "userAccountInformation",
     "sharedUserCertificates", "enterpriseAuthentication",
+}
+DEVICE_CAPABILITIES = {
+    "webcam", "microphone", "location", "radios", "bluetooth",
+    "serialcommunication", "usb", "lowLevelDevices", "proximity",
+    "pointOfService", "gazeInput", "humaninterfacedevice", "custom",
+    "wiFiControl", "optical",
 }
 
 
@@ -251,10 +260,13 @@ def find_windows_sdk_tools():
 
 def validate_publisher_cn(publisher):
     """Validate Publisher CN format"""
-    if not publisher.strip():
+    if not publisher or not str(publisher).strip():
         return False, "Publisher darf nicht leer sein"
-    if not publisher.startswith("CN="):
+    pub_str = str(publisher).strip()
+    if not pub_str.startswith("CN="):
         return False, "Publisher muss mit 'CN=' beginnen"
+    if not pub_str[3:].strip():
+        return False, "Publisher darf nach 'CN=' nicht leer sein"
     return True, ""
 
 def validate_signing_credentials(pfx_path, pfx_pw, publisher_cn, timestamp_url):
@@ -1714,8 +1726,9 @@ def patch_widgets(translator):
         # APPNAME. Ein '&', '<' oder '"' in Publisher/Description/Identity/Executable brach sonst das
         # AppxManifest.xml -> ungueltiges MSIX. (Der Cert-DN in {{PUBLISHER}} ist nach XML-Parse
         # semantisch identisch -> Cert-Matching bleibt korrekt.)
+        sanitized_app_id = sanitize_application_id(self.app_name.get().strip() or "MyApp")
         manifest = manifest.replace("{{IDENTITY_NAME}}",
-            html.escape(self.identity_name.get().strip() or f"YourCompany.{self.app_name.get().strip()}"))
+            html.escape(self.identity_name.get().strip() or f"YourCompany.{sanitized_app_id}"))
         manifest = manifest.replace("{{PUBLISHER}}",
             html.escape(self.publisher.get().strip() or "CN=YourPublisher"))
         manifest = manifest.replace("{{APPNAME}}",
@@ -1725,7 +1738,7 @@ def patch_widgets(translator):
         # nutzen den bereinigten Namen ohne Suffix - dieselbe Ableitung, damit
         # ein Neupacken die Id einer publizierten App nicht veraendert.
         manifest = manifest.replace("{{APPID}}",
-            html.escape(sanitize_application_id(self.app_name.get().strip() or "MyApp")))
+            html.escape(sanitized_app_id))
         manifest = manifest.replace("{{PUBLISHER_DISPLAY}}",
             html.escape(self.publisher_display.get().strip() or self.publisher.get().strip().replace("CN=", "") or "YourPublisher"))
         manifest = manifest.replace("{{DESCRIPTION}}",
@@ -1739,9 +1752,9 @@ def patch_widgets(translator):
         # man alle als <Capability>, weist makeappx das GANZE Manifest ab, sobald
         # eine eingeschraenkte Faehigkeit wie runFullTrust dabei ist
         # ("verstoesst gegen enumeration-Einschraenkung").
+        # Geraetefaehigkeiten (webcam, microphone, etc.) gehoeren zu <DeviceCapability>.
         caps = ""
         if self.capabilities.get().strip():
-            from xml.sax.saxutils import escape
             for c in self.capabilities.get().split(","):
                 c = c.strip()
                 if not c:
@@ -1750,10 +1763,12 @@ def patch_widgets(translator):
                     tag = "Capability"
                 elif c in UAP_CAPABILITIES:
                     tag = "uap:Capability"
+                elif c in DEVICE_CAPABILITIES:
+                    tag = "DeviceCapability"
                 else:
                     # runFullTrust, broadFileSystemAccess & Co. sind eingeschraenkt.
                     tag = "rescap:Capability"
-                caps += f'    <{tag} Name="{escape(c)}"/>\n'
+                caps += f'    <{tag} Name="{html.escape(c)}"/>\n'
         manifest = manifest.replace("{{CAPABILITIES}}", caps)
 
         # Ohne <Resources> kennt das Paket keine Sprache. Der Store kann dann
@@ -1768,7 +1783,7 @@ def patch_widgets(translator):
         for lang in languages.split(","):
             lang = lang.strip()
             if lang:
-                res += f'    <Resource Language="{lang}"/>\n'
+                res += f'    <Resource Language="{html.escape(lang)}"/>\n'
         manifest = manifest.replace("{{RESOURCES}}", res)
 
         with open(os.path.join(outdir, "AppxManifest.xml"), "w", encoding="utf-8") as f:

@@ -21,9 +21,11 @@ def split_capabilities(value: str | list[str] | None) -> list[str]:
     return [item.strip() for item in items if item and item.strip()]
 
 
-def join_capabilities(values: list[str] | None) -> str:
+def join_capabilities(values: list[str] | str | None) -> str:
     if not values:
         return ""
+    if isinstance(values, str):
+        values = split_capabilities(values)
     return ", ".join(item.strip() for item in values if item and item.strip())
 
 
@@ -162,12 +164,12 @@ def deserialize_project_profile(
         "readme": _clean_text(documents.get("readme")),
         "license_files": [
             _resolve_path(path_value, project_root, profile_dir)
-            for path_value in documents.get("license_files", [])
+            for path_value in (documents.get("license_files") or [])
             if str(path_value or "").strip()
         ],
         "license_text_entries": [
             _clean_text(text_entry)
-            for text_entry in documents.get("license_text_entries", [])
+            for text_entry in (documents.get("license_text_entries") or [])
             if _clean_text(text_entry)
         ],
         "enable_i18n": bool(settings.get("enable_i18n", True)),
