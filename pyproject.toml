@@ -27,18 +27,27 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Environment :: Win32 (MS Windows)",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Build Tools",
+    "Topic :: Desktop Environment",
 ]
 
 [project.urls]
 Homepage = "https://github.com/file-bricks/WinStorePackager"
 Repository = "https://github.com/file-bricks/WinStorePackager"
 Documentation = "https://github.com/file-bricks/WinStorePackager#readme"
+Issues = "https://github.com/file-bricks/WinStorePackager/issues"
+Changelog = "https://github.com/file-bricks/WinStorePackager/blob/master/CHANGELOG.md"
+Security = "https://github.com/file-bricks/WinStorePackager/blob/master/SECURITY.md"
+Umbrella = "https://github.com/open-bricks"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

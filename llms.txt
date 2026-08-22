@@ -6,17 +6,20 @@ Primary audience: Python desktop app developers preparing Microsoft Store submis
 
 ## Summary
 
-WinStorePackager is a local-first Windows GUI for preparing Python applications for Microsoft Store packaging. It helps generate AppxManifest metadata, required Store icon sizes, project profile JSON, screenshots, and MSIX/AppX build inputs before final Partner Center submission.
+WinStorePackager is a local-first Windows GUI and CLI utility for preparing Python desktop applications for Microsoft Store packaging. It generates AppxManifest metadata, required multi-resolution Store icons, project profile JSONs, screenshot assets, and MSIX/AppX build inputs with OS Keyring cryptographic certificate security.
 
 ## Key Files
 
-- `README.md`: English main landing page, screenshot, quickstart, local-data boundaries.
-- `README_de.md`: German companion README for Microsoft Store packaging users.
-- `WindowsStorePublisher_3.py`: desktop GUI entry point.
+- `README.md`: English main landing page, visual showcase, quickstart, lifecycle diagram, local-data boundaries.
+- `README_de.md`: German companion README for Microsoft Store packaging users and ecosystem links.
+- `SECURITY.md`: Bilingual security policy with Local-First, Zero-Egress, and OS Keyring guarantees.
+- `WindowsStorePublisher_3.py`: Desktop GUI entry point with 6-language i18n support.
 - `PROJECT_PROFILE_FORMAT.md`: `winstorepackager-project-v1` exchange format.
-- `PRIVACY_POLICY.md`: local-data and privacy boundary.
-- `STORE_LISTING.md`: reusable Microsoft Store listing copy.
-- `unix_preflight.py`: cross-platform preflight validation script.
+- `PRIVACY_POLICY.md`: Local-data and privacy boundary.
+- `STORE_LISTING.md`: Reusable Microsoft Store listing copy.
+- `unix_preflight.py`: Cross-platform preflight validation script (Linux / macOS / CI).
+- `.github/workflows/ci.yml`: Multi-OS CI testing matrix (Ubuntu, Windows, macOS across Python 3.9-3.12).
+- `tests/test_metadata.py`: Automated contract suite for metadata, badges, and discoverability.
 
 ## Audience
 
@@ -49,12 +52,11 @@ Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifest
 
 ## Verification & Test Suite
 
-Tested with Pytest: 87 collected tests (82 passed, 5 skipped in the current local run); optional local Store, WACK, and Tkinter-display checks may skip when their local artifacts or display are unavailable. Execute via `pytest`.
+Tested with Pytest: 100 collected tests (96 passed, 4 skipped in the current local run); optional local Store, WACK, and Tkinter-display checks may skip when their local artifacts or display are unavailable. Execute via `pytest`.
 
-## Last-checked: 2026-08-20
+## Last-checked: 2026-08-23
 
-Verification: the local Pytest suite collected 87 tests, with 82 passed and 5
+Verification: the local Pytest suite collected 100 tests, with 96 passed and 4
 skipped because local Store/MSIX/WACK artifacts are unavailable;
 SDK-free Unix preflight found no issues across 12 artifacts;
 `ruff check .` (0 errors) and `python -m compileall .` (0 errors) pass 100% cleanly.
-

@@ -17,6 +17,18 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt / Added (2026-08-23)
+
+- **Marketing, Discoverability, Visual Showcase & Governance (Pfad B):**
+  - `SECURITY.md`: Vollständige zweisprachige Sicherheitsrichtlinie (Deutsch & English) mit verbindlichen Local-First- und Zero-Egress-Garantien, unprivilegiertem User-Mode (Non-Elevation), kryptographischem OS-Keyring-Geheimnisschutz, host-lokalen Runtime-Verzeichnissen und direkten Sicherheitskontakten (`security@file-bricks.org`, `security@ellmos.ai`, `support@lukasgeiger.com`, `lukas@open-bricks.org`).
+  - `.github/workflows/ci.yml`: Modernisierter Multi-OS CI-Matrix-Workflow (`ubuntu-latest`, `windows-latest`, `macos-latest`) über Python 3.9–3.12 mit Pip-Caching, `ruff check .` Linting-Gate und Pytest-Testsuite.
+  - `pyproject.toml`: Umfassende PEP 621 Standard-Classifiers (`Operating System :: Microsoft :: Windows`, `POSIX Linux`, `MacOS`, `Win32 Environment`, `Topic :: Desktop Environment`) und standardisierte `[project.urls]` (`Homepage`, `Documentation`, `Repository`, `Issues`, `Changelog`, `Security`, `Umbrella`) ergänzt.
+  - `README.md` & `README_de.md`: Umfassende Überarbeitung mit hochauflösenden Shields.io-Badges (CI-Status, 95/5 Tests, Python 3.9-3.12, 100% Local-First/Zero-Egress, Keyring-Security), interaktiver Schnellnavigation, detailliertem Mermaid-Architekturdiagramm und End-to-End-Paketierungs-Sequenzdiagramm.
+  - **Visuelle Showcase-Galerie:** Integration der vier kuratierten Microsoft-Store-Screenshots (`01-main-window.png`, `02-store-fields.png`, `03-icon-generation.png`, `04-msix-wack-workflow.png`) in `README.md` und `README_de.md`.
+  - **Geschwister-Tools & Ökosystem-Matrix:** Verlinkung zur modularen Desktop-Toolchain von `file-bricks` (ProSync), `doc-bricks` (CleanMarkdown, DokuZen, UniversalDocsGrabber), `ellmos-ai` (ellmos-filecommander-mcp) und dem Dachverband `open-bricks`.
+  - `tests/test_metadata.py`: Automatisierte 8-teilige Metadata- und Paritäts-Contract-Testsuite implementiert (100 Tests: 95 passed, 5 skipped, 100% grün).
+  - `llms.txt`: Aktualisierung aller Verifikationsdaten, Testmetriken und Referenzen auf Stand 2026-08-23.
+
 ### Hinzugefügt / Added (2026-08-20)
 
 - **Erweiterung der Lokalisierung auf 6 Sprachen (Tier-2 / P-006: DE, EN, ES, ZH, JA, RU):**
