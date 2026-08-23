@@ -193,10 +193,8 @@ def sanitize_application_id(app_name):
     return ".".join(segments)[:64].rstrip(".") or "App"
 
 MANIFEST_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-         xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-         IgnorableNamespaces="uap rescap">
+<Package {{NAMESPACES}}
+         IgnorableNamespaces="{{IGNORABLE}}">
 
   <Identity Name="{{IDENTITY_NAME}}"
             Publisher="{{PUBLISHER}}"
@@ -210,7 +208,7 @@ MANIFEST_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
   </Properties>
 
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="{{MINVERSION}}" MaxVersionTested="{{MAXVERSION}}" />
   </Dependencies>
 
   <Resources>
@@ -231,10 +229,148 @@ MANIFEST_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
                           BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="icons\\icon_310x150.png" />
       </uap:VisualElements>
-    </Application>
+{{EXTENSIONS}}    </Application>
   </Applications>
 </Package>
 """
+
+
+# TargetDeviceFamily-Standardwerte. MaxVersionTested steuert, welche
+# Manifest-Erweiterungen Windows akzeptiert; der fruehere Festwert
+# 10.0.19041.0 (Windows 10 2004) sperrte neuere Erweiterungen aus.
+DEFAULT_MIN_VERSION = "10.0.17763.0"
+DEFAULT_MAX_VERSION_TESTED = "10.0.22621.0"
+
+NS_BASE_URIS = {
+    "": "http://schemas.microsoft.com/appx/manifest/foundation/windows10",
+    "uap": "http://schemas.microsoft.com/appx/manifest/uap/windows10",
+    "rescap": "http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities",
+}
+NS_OPTIONAL_URIS = {
+    "uap3": "http://schemas.microsoft.com/appx/manifest/uap/windows10/3",
+    "desktop": "http://schemas.microsoft.com/appx/manifest/desktop/windows10",
+    "rescap3": "http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities/3",
+}
+
+
+def build_manifest_extensions(config, executable):
+    """Baut den <Extensions>-Block aus einer store_package.json-Konfiguration.
+
+    Ohne Konfigurationsfelder entsteht kein Block; das Manifest bleibt dann
+    identisch zu frueheren Versionen. Feldnamen sind bewusst dieselben wie in
+    ellmos-ai/store-packager (store_packager.py, _build_extensions), damit beide
+    Werkzeuge dieselbe Projektkonfiguration lesen.
+
+    Rueckgabe: (xml, set der benoetigten Namensraum-Praefixe)
+    """
+    from xml.sax.saxutils import escape as _esc
+
+    parts = []
+    ns = set()
+    if not isinstance(config, dict):
+        return "", ns
+
+    # windows.fileTypeAssociation
+    fts = config.get("file_types") or []
+    if isinstance(fts, dict):
+        fts = [fts]
+    for ft in fts:
+        exts = [e for e in (ft.get("extensions") or []) if str(e).strip()]
+        if not exts:
+            continue
+        name = re.sub(r"[^a-z0-9]", "", str(ft.get("name") or "files").lower()) or "files"
+        body = []
+        if ft.get("display_name"):
+            body.append("            <uap:DisplayName>%s</uap:DisplayName>" % _esc(str(ft["display_name"])))
+        body.append("            <uap:Logo>%s</uap:Logo>" % _esc(str(ft.get("logo") or "icons\\icon_44x44.png")))
+        if ft.get("info_tip"):
+            body.append("            <uap:InfoTip>%s</uap:InfoTip>" % _esc(str(ft["info_tip"])))
+        progids = ft.get("migration_progids") or []
+        if progids:
+            ns.add("rescap3")
+            body.append("            <rescap3:MigrationProgIds>")
+            for pid in progids:
+                body.append("              <rescap3:MigrationProgId>%s</rescap3:MigrationProgId>" % _esc(str(pid)))
+            body.append("            </rescap3:MigrationProgIds>")
+        body.append("            <uap:SupportedFileTypes>")
+        for e in exts:
+            e = str(e).strip()
+            if not e.startswith("."):
+                e = "." + e
+            body.append("              <uap:FileType>%s</uap:FileType>" % _esc(e))
+        body.append("            </uap:SupportedFileTypes>")
+        parts.append(
+            '        <uap:Extension Category="windows.fileTypeAssociation">\n'
+            '          <uap:FileTypeAssociation Name="%s">\n%s\n'
+            "          </uap:FileTypeAssociation>\n"
+            "        </uap:Extension>" % (name, "\n".join(body)))
+
+    # windows.appExecutionAlias
+    aliases = config.get("execution_alias") or []
+    if isinstance(aliases, str):
+        aliases = [aliases]
+    aliases = [str(a).strip() for a in aliases if str(a).strip()]
+    if aliases:
+        ns.update(("uap3", "desktop"))
+        inner = "\n".join('            <desktop:ExecutionAlias Alias="%s" />' % _esc(a) for a in aliases)
+        parts.append(
+            '        <uap3:Extension Category="windows.appExecutionAlias"\n'
+            '                        Executable="%s"\n'
+            '                        EntryPoint="Windows.FullTrustApplication">\n'
+            "          <uap3:AppExecutionAlias>\n%s\n          </uap3:AppExecutionAlias>\n"
+            "        </uap3:Extension>" % (_esc(str(executable)), inner))
+
+    # windows.protocol
+    protos = config.get("protocols") or []
+    if isinstance(protos, dict):
+        protos = [protos]
+    for pr in protos:
+        pname = pr.get("name")
+        if not pname:
+            continue
+        body = []
+        if pr.get("display_name"):
+            body.append("            <uap:DisplayName>%s</uap:DisplayName>" % _esc(str(pr["display_name"])))
+        if pr.get("logo"):
+            body.append("            <uap:Logo>%s</uap:Logo>" % _esc(str(pr["logo"])))
+        inner = ("\n" + "\n".join(body)) if body else ""
+        parts.append(
+            '        <uap:Extension Category="windows.protocol">\n'
+            '          <uap:Protocol Name="%s">%s\n'
+            "          </uap:Protocol>\n"
+            "        </uap:Extension>" % (_esc(str(pname)), inner))
+
+    # windows.startupTask
+    st = config.get("startup_task")
+    if st:
+        ns.add("desktop")
+        parts.append(
+            '        <desktop:Extension Category="windows.startupTask"\n'
+            '                           Executable="%s"\n'
+            '                           EntryPoint="Windows.FullTrustApplication">\n'
+            '          <desktop:StartupTask TaskId="%s" Enabled="%s" DisplayName="%s" />\n'
+            "        </desktop:Extension>" % (
+                _esc(str(st.get("executable") or executable)),
+                _esc(str(st.get("task_id") or "AppStartup")),
+                "true" if st.get("enabled") else "false",
+                _esc(str(st.get("display_name") or "App"))))
+
+    if not parts:
+        return "", ns
+    return "      <Extensions>\n%s\n      </Extensions>\n" % "\n".join(parts), ns
+
+
+def build_manifest_namespaces(extra_ns):
+    """Liefert (namespaces_attr, ignorable) fuer den <Package>-Kopf."""
+    pairs = [("", NS_BASE_URIS[""]), ("uap", NS_BASE_URIS["uap"])]
+    for prefix in ("uap3", "desktop", "rescap3"):
+        if prefix in extra_ns:
+            pairs.append((prefix, NS_OPTIONAL_URIS[prefix]))
+    pairs.append(("rescap", NS_BASE_URIS["rescap"]))
+    attrs = []
+    for prefix, uri in pairs:
+        attrs.append('%s="%s"' % ("xmlns" if not prefix else "xmlns:%s" % prefix, uri))
+    return ("\n" + " " * 9).join(attrs), " ".join(p for p, _ in pairs if p)
 
 CATEGORIES = [
     "Productivity", "Education", "Entertainment", "Games", "Photo & Video",
@@ -1785,6 +1921,40 @@ def patch_widgets(translator):
             if lang:
                 res += f'    <Resource Language="{html.escape(lang)}"/>\n'
         manifest = manifest.replace("{{RESOURCES}}", res)
+
+        # Erweiterungen (Dateizuordnung, Alias, Protokoll, Autostart) stammen aus
+        # der Projektkonfiguration store_package.json - dieselbe Quelle wie beim
+        # CLI-Werkzeug store-packager, damit kein zweiter Standard entsteht.
+        project_config = {}
+        try:
+            src = (self.source_path.get() or "").strip()
+            candidates = []
+            if src:
+                base = src if os.path.isdir(src) else os.path.dirname(src)
+                if base:
+                    candidates.append(os.path.join(base, "store_package.json"))
+            candidates.append(os.path.join(outdir, "store_package.json"))
+            for cfg_path in candidates:
+                if os.path.isfile(cfg_path):
+                    with open(cfg_path, encoding="utf-8-sig") as cf:
+                        project_config = json.load(cf)
+                    print("[i] Projektkonfiguration gelesen: %s" % cfg_path)
+                    break
+        except Exception as exc:  # Konfiguration darf den Build nie brechen
+            print("[!] store_package.json nicht lesbar: %s" % exc)
+
+        extensions, extra_ns = build_manifest_extensions(project_config, executable_name or "MyApp.exe")
+        if "rescap3" in extra_ns:
+            print("[!] Hinweis: MigrationProgIds nutzen die eingeschraenkte Faehigkeit "
+                  "rescap3. Der Microsoft Store verlangt dafuer eine vorherige Freigabe.")
+        ns_attr, ignorable = build_manifest_namespaces(extra_ns)
+        manifest = manifest.replace("{{EXTENSIONS}}", extensions)
+        manifest = manifest.replace("{{NAMESPACES}}", ns_attr)
+        manifest = manifest.replace("{{IGNORABLE}}", ignorable)
+        manifest = manifest.replace("{{MINVERSION}}",
+            str(project_config.get("min_version") or DEFAULT_MIN_VERSION))
+        manifest = manifest.replace("{{MAXVERSION}}",
+            str(project_config.get("max_version_tested") or DEFAULT_MAX_VERSION_TESTED))
 
         with open(os.path.join(outdir, "AppxManifest.xml"), "w", encoding="utf-8") as f:
             f.write(manifest)
