@@ -1,5 +1,6 @@
 import sys
 import tkinter as tk
+from tkinter import ttk
 import unittest
 from pathlib import Path
 
@@ -12,6 +13,10 @@ def _minimal_app() -> "_wsp.StorePackagerApp":
     app = _wsp.StorePackagerApp.__new__(_wsp.StorePackagerApp)
     tk.Tk.__init__(app)
     app.withdraw()
+
+    app.language = tk.StringVar(value="de")
+    app._translatable_items = []
+    app._tooltips = []
 
     app.app_name = tk.StringVar(value="TestApp")
     app.publisher = tk.StringVar(value="CN=Test")
@@ -66,7 +71,10 @@ class TestUiAccessibility(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.app.destroy()
+        try:
+            cls.app.destroy()
+        except Exception:
+            pass
 
     def test_metadata_tab_uses_contextual_button_labels(self):
         parent = tk.Frame(self.app)
@@ -110,6 +118,96 @@ class TestUiAccessibility(unittest.TestCase):
         self.assertIn("Format für Store", texts)
         self.assertNotIn("Format fuer Store", texts)
 
+    def test_tooltip_behavior_and_status_bar_updates(self):
+        test_btn = ttk.Button(self.app, text="Test")
+        tip = _wsp.ToolTip(
+            test_btn,
+            text="Hilfetext für Test",
+            app=self.app,
+            status_text="Statuszeile für Test"
+        )
+        self.assertEqual(tip.text, "Hilfetext für Test")
+        self.assertEqual(tip.status_text, "Statuszeile für Test")
+
+        # Test set_text
+        tip.set_text("Neuer Text", "Neuer Status")
+        self.assertEqual(tip.text, "Neuer Text")
+        self.assertEqual(tip.status_text, "Neuer Status")
+
+    def test_full_gui_structure_and_menubar(self):
+        full_app = _minimal_app()
+        try:
+            full_app.build_gui()
+
+            # Status bar exists
+            self.assertIsNotNone(full_app.status_bar)
+            self.assertIsNotNone(full_app.status_label)
+            self.assertEqual(full_app.status_label.cget("text"), "Status: Bereit")
+
+            # Notebook has 4 tabs
+            self.assertEqual(full_app.notebook.index("end"), 4)
+
+            # Tooltips registered
+            self.assertGreater(len(full_app._tooltips), 15)
+
+            # Menubar exists
+            menu = full_app.cget("menu")
+            self.assertTrue(menu != "" and menu is not None)
+
+            # Keyboard shortcut helper
+            self.assertTrue(hasattr(full_app, "show_shortcuts_help"))
+            self.assertTrue(hasattr(full_app, "show_about_dialog"))
+            self.assertTrue(hasattr(full_app, "select_tab"))
+        finally:
+            full_app.destroy()
+
+    def test_dynamic_language_switch_updates_tooltips(self):
+        full_app = _minimal_app()
+        try:
+            full_app.build_gui()
+
+            tr = _wsp.get_translator()
+            if tr is not None:
+                tr.set_language("en")
+            full_app.language.set("en")
+            full_app.refresh_ui_language()
+
+            # Tabs are translated
+            self.assertEqual(full_app.notebook.tab(0, "text"), "Metadata")
+            self.assertEqual(full_app.notebook.tab(1, "text"), "Build Settings")
+            self.assertEqual(full_app.notebook.tab(2, "text"), "Store Information")
+            self.assertEqual(full_app.notebook.tab(3, "text"), "Actions")
+
+            # Status bar is translated
+            self.assertEqual(full_app.status_label.cget("text"), "Status: Ready")
+
+            # Switch back to DE
+            if tr is not None:
+                tr.set_language("de")
+            full_app.language.set("de")
+            full_app.refresh_ui_language()
+            self.assertEqual(full_app.notebook.tab(0, "text"), "Metadaten")
+            self.assertEqual(full_app.status_label.cget("text"), "Status: Bereit")
+        finally:
+            tr = _wsp.get_translator()
+            if tr is not None:
+                tr.set_language("de")
+            full_app.destroy()
+
+    def test_german_end_user_texts_have_real_umlauts(self):
+        tr = _wsp.get_translator()
+        self.assertIsNotNone(tr)
+        translations = tr.translations
+        self.assertGreater(len(translations), 50)
+
+        # Check that German translation catalog contains entries with proper umlauts
+        self.assertIn("Tastaturkürzel & Barrierefreiheit", translations)
+        self.assertIn("Über WinStorePackager", translations)
+        self.assertIn("Format für Store", translations)
+
+        # Check that values for 'de' contain proper umlauts
+        de_text = translations["Tastaturkürzel & Barrierefreiheit"].get("de", "")
+        self.assertIn("ü", de_text)
 
 if __name__ == "__main__":
     unittest.main()

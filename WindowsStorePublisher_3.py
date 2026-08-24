@@ -76,6 +76,7 @@ import html
 import hashlib
 import logging
 from pathlib import Path
+from typing import Optional, Any
 
 from project_profile import read_project_profile, write_project_profile
 from release_contract import RUNTIME_DEPENDENCIES, install_command
@@ -500,6 +501,87 @@ class ProgressDialog(tk.Toplevel):
         self.grab_release()
         self.destroy()
 
+
+class ToolTip:
+    """
+    Barrierefreies, leichtgewichtiges Tooltip-Widget für Tkinter-Komponenten.
+    Unterstützt Maus-Hover (<Enter>/<Leave>) und Tastaturfokus (<FocusIn>/<FocusOut>).
+    """
+
+    def __init__(self, widget: tk.Widget, text: str = "", app: Optional[Any] = None, status_text: Optional[str] = None):
+        self.widget = widget
+        self.text = text
+        self.status_text = status_text or text
+        self.app = app
+        self.tip_window: Optional[tk.Toplevel] = None
+        self.widget.bind("<Enter>", self.show_tip, add="+")
+        self.widget.bind("<Leave>", self.hide_tip, add="+")
+        self.widget.bind("<FocusIn>", self._on_focus_in, add="+")
+        self.widget.bind("<FocusOut>", self._on_focus_out, add="+")
+        self.widget.bind("<ButtonPress>", self.hide_tip, add="+")
+
+    def set_text(self, text: str, status_text: Optional[str] = None) -> None:
+        self.text = text
+        if status_text is not None:
+            self.status_text = status_text
+        if self.tip_window and self.tip_window.winfo_exists():
+            for child in self.tip_window.winfo_children():
+                if isinstance(child, tk.Label):
+                    child.config(text=self.text)
+
+    def _on_focus_in(self, event: Optional[Any] = None) -> None:
+        if self.app and hasattr(self.app, "set_status") and self.status_text:
+            self.app.set_status(self.status_text)
+        self.show_tip(event)
+
+    def _on_focus_out(self, event: Optional[Any] = None) -> None:
+        if self.app and hasattr(self.app, "set_status"):
+            self.app.set_status("")
+        self.hide_tip(event)
+
+    def show_tip(self, event: Optional[Any] = None) -> None:
+        if self.tip_window or not self.text:
+            return
+        try:
+            x = self.widget.winfo_rootx() + 20
+            y = self.widget.winfo_rooty() + self.widget.winfo_height() + 5
+        except Exception:
+            return
+
+        try:
+            self.tip_window = tw = tk.Toplevel(self.widget)
+            tw.wm_overrideredirect(True)
+            tw.wm_geometry(f"+{x}+{y}")
+            try:
+                tw.attributes("-topmost", True)
+            except Exception:
+                pass
+
+            label = tk.Label(
+                tw,
+                text=self.text,
+                justify=tk.LEFT,
+                background="#2c3e50",
+                foreground="#ffffff",
+                relief=tk.SOLID,
+                borderwidth=1,
+                font=("Segoe UI" if os.name == "nt" else "Arial", 9),
+                padx=8,
+                pady=4,
+            )
+            label.pack(ipadx=1)
+        except Exception:
+            self.tip_window = None
+
+    def hide_tip(self, event: Optional[Any] = None) -> None:
+        if self.tip_window:
+            try:
+                self.tip_window.destroy()
+            except Exception:
+                pass
+            self.tip_window = None
+
+
 class StorePackagerApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -557,7 +639,10 @@ class StorePackagerApp(tk.Tk):
         # Language & i18n
         self.language = tk.StringVar(value=detect_system_language())
         self._translatable_items = []
+        self._tooltips = []
         self.lang_menu = None
+        self.status_bar = None
+        self.status_label = None
 
         # Text widgets
         self.readme_box = None
@@ -814,8 +899,71 @@ class StorePackagerApp(tk.Tk):
         msg = msg_map.get(lang, "Die Sprache wurde auf Deutsch umgestellt.")
         messagebox.showinfo(_t("Sprache gewechselt"), _t(msg))
 
+    def set_status(self, text: str = ""):
+        """Aktualisiert die barrierefreie Statusleiste am unteren Fensterrand."""
+        if hasattr(self, "status_label") and self.status_label:
+            try:
+                display_text = text if text else _t("Status: Bereit")
+                self.status_label.config(text=display_text)
+            except Exception:
+                pass
+
+    def select_tab(self, index: int):
+        """Wählt den angegebenen Notebook-Reiter über Tastaturkürzel an."""
+        if hasattr(self, "notebook") and self.notebook:
+            try:
+                self.notebook.select(index)
+            except Exception:
+                pass
+
+    def show_shortcuts_help(self):
+        """Zeigt ein modales Dialogfenster mit allen Tastaturkürzeln und Barrierefreiheitsfunktionen."""
+        help_text = (
+            "WinStorePackager — Tastaturkürzel & Barrierefreiheit\n\n"
+            "Globale Tastaturkürzel:\n"
+            "• Strg + S : Einstellungen dauerhaft speichern\n"
+            "• Strg + O : Projektprofil importieren\n"
+            "• Strg + E : Projektprofil exportieren\n"
+            "• F5       : 1. Preflight-Check starten\n"
+            "• Strg + 1 : Reiter 'Metadaten' aufrufen\n"
+            "• Strg + 2 : Reiter 'Build-Einstellungen' aufrufen\n"
+            "• Strg + 3 : Reiter 'Store-Informationen' aufrufen\n"
+            "• Strg + 4 : Reiter 'Aktionen' aufrufen\n"
+            "• F1       : Diese Hilfe anzeigen\n"
+            "• Strg + Q : Anwendung beenden\n\n"
+            "Tastaturnavigation & Screenreader:\n"
+            "• Tab / Umschalt+Tab : Vorwärts / Rückwärts durch alle Steuerelemente springen\n"
+            "• Leertaste / Eingabetaste : Fokussierte Schaltfläche aktivieren\n"
+            "• Pfeiltasten : Auswahl in Menüs und Kombinationsfeldern ändern\n"
+            "• Statusleiste : Zeigt beim Fokussieren kontextuelle Hilfetexte an\n"
+            "• Tooltips : Erscheinen sowohl beim Maus-Hover als auch bei Tastatur-Fokus"
+        )
+        messagebox.showinfo(_t("Tastaturkürzel & Barrierefreiheit"), help_text)
+
+    def show_about_dialog(self):
+        """Zeigt Informationen über WinStorePackager an."""
+        about_text = (
+            "Windows Store Packager — MSIX Creator\n"
+            "Version 2.3 (Auto-Setup & Safe Mode)\n\n"
+            "Vollständiges GUI-Tool für Microsoft Store Packaging & MSIX-Erstellung.\n"
+            "Unterstützt Python-Desktop-Apps, i18n-Mehrsprachigkeit (6 Sprachen),\n"
+            "WACK-Validierung und barrierefreie Tastaturbedienung.\n\n"
+            "Lizenz: MIT\n"
+            "Entwickelt für barrierefreie, sichere Softwarepakete."
+        )
+        messagebox.showinfo(_t("Über WinStorePackager"), about_text)
+
+    def _add_tooltip(self, widget: tk.Widget, text_key: str, status_key: Optional[str] = None):
+        """Erzeugt einen barrierefreien ToolTip und registriert ihn für dynamische Sprachaktualisierung."""
+        s_key = status_key or text_key
+        tip = ToolTip(widget, text=_t(text_key), app=self, status_text=_t(s_key))
+        if not hasattr(self, "_tooltips"):
+            self._tooltips = []
+        self._tooltips.append((tip, text_key, s_key))
+        return tip
+
     def refresh_ui_language(self):
-        """Aktualisiert dynamisch alle registrierten UI-Elemente und Reiter."""
+        """Aktualisiert dynamisch alle registrierten UI-Elemente, Reiter, Menüs und Tooltips."""
         if hasattr(self, "notebook") and self.notebook:
             try:
                 self.notebook.tab(0, text=_t("Metadaten"))
@@ -831,8 +979,54 @@ class StorePackagerApp(tk.Tk):
             except Exception:
                 pass
 
-    def build_gui(self):
+        for tip, text_key, status_key in getattr(self, "_tooltips", []):
+            try:
+                tip.set_text(_t(text_key), _t(status_key))
+            except Exception:
+                pass
+
+        if hasattr(self, "status_label") and self.status_label:
+            try:
+                self.status_label.config(text=_t("Status: Bereit"))
+            except Exception:
+                pass
+
+        self._rebuild_menubar()
+
+    def _rebuild_menubar(self):
+        """Erstellt die Menüleiste barrierefrei mit Tastaturkürzeln und Live-Sprachunterstützung neu."""
         menubar = tk.Menu(self)
+
+        # 1. Menü: Datei (File)
+        file_menu = tk.Menu(menubar, tearoff=0)
+        file_menu.add_command(label=f"{_t('Profil importieren...')}  (Ctrl+O)", command=self.import_project_profile)
+        file_menu.add_command(label=f"{_t('Profil exportieren...')}  (Ctrl+E)", command=self.export_project_profile)
+        file_menu.add_command(label=f"{_t('Einstellungen speichern')}  (Ctrl+S)", command=self.save_settings)
+        file_menu.add_separator()
+        file_menu.add_command(label=f"{_t('Beenden')}  (Ctrl+Q)", command=self.on_quit)
+        menubar.add_cascade(label=_t("Datei"), menu=file_menu)
+
+        # 2. Menü: Aktionen (Actions)
+        actions_menu = tk.Menu(menubar, tearoff=0)
+        actions_menu.add_command(label=f"{_t('1. Preflight-Check')}  (F5)", command=self.preflight_check)
+        actions_menu.add_command(label=_t("2. Paket erzeugen"), command=self.build_package)
+        actions_menu.add_command(label=_t("3. EXE bauen"), command=self.build_exe)
+        actions_menu.add_command(label=_t("4. MSIX bauen & signieren"), command=self.build_and_sign_msix)
+        actions_menu.add_separator()
+        actions_menu.add_command(label=_t("Screenshots erzeugen"), command=self.run_screenshots)
+        actions_menu.add_command(label=_t("WACK-Test starten"), command=self.run_wack_test)
+        actions_menu.add_command(label=_t("Ausgabeordner öffnen"), command=self.open_output_folder)
+        menubar.add_cascade(label=_t("Aktionen"), menu=actions_menu)
+
+        # 3. Menü: Ansicht (View)
+        view_menu = tk.Menu(menubar, tearoff=0)
+        view_menu.add_command(label=f"{_t('Metadaten')}  (Ctrl+1)", command=lambda: self.select_tab(0))
+        view_menu.add_command(label=f"{_t('Build-Einstellungen')}  (Ctrl+2)", command=lambda: self.select_tab(1))
+        view_menu.add_command(label=f"{_t('Store-Informationen')}  (Ctrl+3)", command=lambda: self.select_tab(2))
+        view_menu.add_command(label=f"{_t('Aktionen')}  (Ctrl+4)", command=lambda: self.select_tab(3))
+        menubar.add_cascade(label=_t("Ansicht"), menu=view_menu)
+
+        # 4. Menü: Sprache (Language)
         self.lang_menu = tk.Menu(menubar, tearoff=0)
         lang_options = [
             ("Deutsch", "de"),
@@ -848,10 +1042,46 @@ class StorePackagerApp(tk.Tk):
                 command=lambda c=code: self.apply_language(c)
             )
         menubar.add_cascade(label=_t("Sprache / Language"), menu=self.lang_menu)
+
+        # 5. Menü: Hilfe (Help)
+        help_menu = tk.Menu(menubar, tearoff=0)
+        help_menu.add_command(label=f"{_t('Tastaturkürzel & Barrierefreiheit')}  (F1)", command=self.show_shortcuts_help)
+        help_menu.add_command(label=_t("Über WinStorePackager"), command=self.show_about_dialog)
+        menubar.add_cascade(label=_t("Hilfe"), menu=help_menu)
+
         self.config(menu=menubar)
 
+    def build_gui(self):
+        self._rebuild_menubar()
+
+        # Keyboard shortcuts
+        self.bind_all("<Control-s>", lambda e: self.save_settings())
+        self.bind_all("<Control-S>", lambda e: self.save_settings())
+        self.bind_all("<Control-o>", lambda e: self.import_project_profile())
+        self.bind_all("<Control-O>", lambda e: self.import_project_profile())
+        self.bind_all("<Control-e>", lambda e: self.export_project_profile())
+        self.bind_all("<Control-E>", lambda e: self.export_project_profile())
+        self.bind_all("<Control-q>", lambda e: self.on_quit())
+        self.bind_all("<Control-Q>", lambda e: self.on_quit())
+        self.bind_all("<F5>", lambda e: self.preflight_check())
+        self.bind_all("<F1>", lambda e: self.show_shortcuts_help())
+        self.bind_all("<Control-Key-1>", lambda e: self.select_tab(0))
+        self.bind_all("<Control-Key-2>", lambda e: self.select_tab(1))
+        self.bind_all("<Control-Key-3>", lambda e: self.select_tab(2))
+        self.bind_all("<Control-Key-4>", lambda e: self.select_tab(3))
+
+        # Status Bar at bottom
+        self.status_bar = ttk.Frame(self, relief=tk.SUNKEN, padding=(6, 3))
+        self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
+        self.status_label = ttk.Label(
+            self.status_bar,
+            text=_t("Status: Bereit"),
+            font=("Segoe UI" if os.name == "nt" else "Arial", 9)
+        )
+        self.status_label.pack(side=tk.LEFT, padx=4)
+
         self.notebook = ttk.Notebook(self)
-        self.notebook.pack(fill="both", expand=True, padx=10, pady=10)
+        self.notebook.pack(fill="both", expand=True, padx=10, pady=(10, 5))
 
         self.tab1 = ttk.Frame(self.notebook)
         self.notebook.add(self.tab1, text=_t("Metadaten"))
@@ -874,7 +1104,7 @@ class StorePackagerApp(tk.Tk):
         frm.pack(fill="both", expand=True, padx=12, pady=12)
         row = 0
 
-        def add_row(label, var, browse_cmd=None, browse_label="Wählen", width=60):
+        def add_row(label, var, browse_cmd=None, browse_label="Wählen", width=60, tooltip_key=None, status_key=None, btn_tooltip_key=None, btn_status_key=None):
             nonlocal row
             lbl = ttk.Label(frm, text=_t(label))
             lbl.grid(row=row, column=0, sticky="w", pady=3)
@@ -882,27 +1112,32 @@ class StorePackagerApp(tk.Tk):
 
             ent = ttk.Entry(frm, textvariable=var, width=width)
             ent.grid(row=row, column=1, sticky="we", pady=3, padx=5)
+            if tooltip_key:
+                self._add_tooltip(ent, tooltip_key, status_key or tooltip_key)
+
             if browse_cmd:
                 btn = ttk.Button(frm, text=_t(browse_label), command=browse_cmd)
                 btn.grid(row=row, column=2, sticky="w")
                 self._register_translatable(btn, "text", browse_label)
+                if btn_tooltip_key:
+                    self._add_tooltip(btn, btn_tooltip_key, btn_status_key or btn_tooltip_key)
             row += 1
 
-        add_row("App-Name:", self.app_name)
-        add_row("Publisher (CN=... aus Partner Center):", self.publisher)
-        add_row("Publisher Display Name:", self.publisher_display)
-        add_row("Identity Name:", self.identity_name)
-        add_row("Version (z.B. 1.0.0.0):", self.version)
+        add_row("App-Name:", self.app_name, tooltip_key="Name der Windows-Anwendung für das Store-Paket", status_key="Eingabefeld für den Anwendungsnamen")
+        add_row("Publisher (CN=... aus Partner Center):", self.publisher, tooltip_key="Publisher-CN aus dem Partner Center (z.B. CN=12345678-...)", status_key="Eingabefeld für den Publisher-CN")
+        add_row("Publisher Display Name:", self.publisher_display, tooltip_key="Öffentlich angezeigter Name des Herausgebers", status_key="Eingabefeld für den Publisher-Anzeigenamen")
+        add_row("Identity Name:", self.identity_name, tooltip_key="Paketidentifikator (z.B. MeinUnternehmen.MeinProgramm)", status_key="Eingabefeld für den Identity Name")
+        add_row("Version (z.B. 1.0.0.0):", self.version, tooltip_key="Vierstellige Versionsnummer im Format Major.Minor.Build.Revision (z.B. 1.0.0.0)", status_key="Eingabefeld für die Versionsnummer")
 
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
 
-        add_row("Haupt-Skript (.py):", self.script_path, self.choose_script, browse_label="Skript wählen")
-        add_row("Icon (PNG, mind. 310x310):", self.icon_path, self.choose_icon, browse_label="Icon wählen")
-        add_row("Quelltext (ZIP oder Datei):", self.source_path, self.choose_source, browse_label="Quelle wählen")
-        add_row("Installer (EXE oder MSIX):", self.installer_path, self.choose_installer, browse_label="Installer wählen")
-        add_row("Ausgabeordner:", self.output_dir)
-        add_row("EXE-Name (z.B. MyApp.exe):", self.exe_name)
+        add_row("Haupt-Skript (.py):", self.script_path, self.choose_script, browse_label="Skript wählen", tooltip_key="Pfad zum Python-Hauptskript (.py)", status_key="Eingabefeld für das Hauptskript", btn_tooltip_key="Öffnet den Dateidialog zur Auswahl des Python-Hauptskripts", btn_status_key="Schaltfläche: Skript auswählen")
+        add_row("Icon (PNG, mind. 310x310):", self.icon_path, self.choose_icon, browse_label="Icon wählen", tooltip_key="Pfad zur Icon-Grafik (mindestens 310x310 PNG)", status_key="Eingabefeld für das Anwendungsicon", btn_tooltip_key="Öffnet den Dateidialog zur Auswahl des Icons (PNG)", btn_status_key="Schaltfläche: Icon auswählen")
+        add_row("Quelltext (ZIP oder Datei):", self.source_path, self.choose_source, browse_label="Quelle wählen", tooltip_key="Pfad zum Quellcode-Verzeichnis oder ZIP-Archiv", status_key="Eingabefeld für den Quellcode", btn_tooltip_key="Öffnet den Dateidialog zur Auswahl des Quellcodes", btn_status_key="Schaltfläche: Quellcode auswählen")
+        add_row("Installer (EXE oder MSIX):", self.installer_path, self.choose_installer, browse_label="Installer wählen", tooltip_key="Pfad zu einem bestehenden Installer (EXE oder MSIX)", status_key="Eingabefeld für den Installer", btn_tooltip_key="Öffnet den Dateidialog zur Auswahl des Installers", btn_status_key="Schaltfläche: Installer auswählen")
+        add_row("Ausgabeordner:", self.output_dir, tooltip_key="Ausgabeverzeichnis für generierte Store-Pakete", status_key="Eingabefeld für den Ausgabeordner")
+        add_row("EXE-Name (z.B. MyApp.exe):", self.exe_name, tooltip_key="Dateiname der ausführbaren Datei (z.B. MyApp.exe)", status_key="Eingabefeld für den EXE-Namen")
 
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
@@ -915,10 +1150,12 @@ class StorePackagerApp(tk.Tk):
         readme_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.readme_box = scrolledtext.ScrolledText(readme_frame, width=70, height=5)
         self.readme_box.pack(fill="both", expand=True)
+        self._add_tooltip(self.readme_box, "README-Inhalt oder Dokumentationsdatei für das Paket", "Textfeld für README-Dokumentation")
 
         btn_rm = ttk.Button(frm, text=_t("README laden"), command=self.load_readme_file)
         btn_rm.grid(row=row, column=2, sticky="nw")
         self._register_translatable(btn_rm, "text", "README laden")
+        self._add_tooltip(btn_rm, "Lädt den Inhalt einer README-Datei in das Textfeld", "Schaltfläche: README-Datei laden")
         row += 1
 
         lbl_lic = ttk.Label(frm, text=_t("Lizenz (Text/Dateien):"))
@@ -929,16 +1166,19 @@ class StorePackagerApp(tk.Tk):
         license_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.license_box = scrolledtext.ScrolledText(license_frame, width=70, height=5)
         self.license_box.pack(fill="both", expand=True)
+        self._add_tooltip(self.license_box, "Lizenzvereinbarungen und Third-Party-Lizenzen", "Textfeld für Lizenzen")
         lic_btns = ttk.Frame(frm)
         lic_btns.grid(row=row, column=2, sticky="nw")
 
         btn_l1 = ttk.Button(lic_btns, text=_t("Datei +"), command=self.add_license_file)
         btn_l1.pack(anchor="w", pady=2)
         self._register_translatable(btn_l1, "text", "Datei +")
+        self._add_tooltip(btn_l1, "Fügt eine Lizenzdatei zum Paket hinzu", "Schaltfläche: Lizenzdatei hinzufügen")
 
         btn_l2 = ttk.Button(lic_btns, text=_t("Text +"), command=self.add_license_text_entry)
         btn_l2.pack(anchor="w", pady=2)
         self._register_translatable(btn_l2, "text", "Text +")
+        self._add_tooltip(btn_l2, "Fügt einen benutzerdefinierten Lizenztext hinzu", "Schaltfläche: Lizenztext hinzufügen")
         row += 1
 
         lbl_desc = ttk.Label(frm, text=_t("Beschreibung:"))
@@ -949,10 +1189,12 @@ class StorePackagerApp(tk.Tk):
         desc_frame.grid(row=row, column=1, sticky="we", pady=5, padx=5)
         self.desc_box = scrolledtext.ScrolledText(desc_frame, width=70, height=5)
         self.desc_box.pack(fill="both", expand=True)
+        self._add_tooltip(self.desc_box, "Ausführliche Store-Produktbeschreibung", "Textfeld für die Produktbeschreibung")
 
         btn_desc = ttk.Button(frm, text=_t("Beschreibung laden"), command=self.load_desc_file)
         btn_desc.grid(row=row, column=2, sticky="nw")
         self._register_translatable(btn_desc, "text", "Beschreibung laden")
+        self._add_tooltip(btn_desc, "Lädt eine Beschreibung aus einer Textdatei", "Schaltfläche: Beschreibung laden")
         row += 1
 
         frm.columnconfigure(1, weight=1)
@@ -962,7 +1204,7 @@ class StorePackagerApp(tk.Tk):
         frm.pack(fill="both", expand=True, padx=12, pady=12)
         row = 0
 
-        def add_row(label, var, browse_cmd=None, browse_label="Wählen", width=60, show=None):
+        def add_row(label, var, browse_cmd=None, browse_label="Wählen", width=60, show=None, tooltip_key=None, status_key=None, btn_tooltip_key=None, btn_status_key=None):
             nonlocal row
             lbl = ttk.Label(frm, text=_t(label))
             lbl.grid(row=row, column=0, sticky="w", pady=3)
@@ -970,10 +1212,14 @@ class StorePackagerApp(tk.Tk):
 
             ent = ttk.Entry(frm, textvariable=var, width=width, show=show)
             ent.grid(row=row, column=1, sticky="we", pady=3, padx=5)
+            if tooltip_key:
+                self._add_tooltip(ent, tooltip_key, status_key or tooltip_key)
             if browse_cmd:
                 btn = ttk.Button(frm, text=_t(browse_label), command=browse_cmd)
                 btn.grid(row=row, column=2, sticky="w")
                 self._register_translatable(btn, "text", browse_label)
+                if btn_tooltip_key:
+                    self._add_tooltip(btn, btn_tooltip_key, btn_status_key or btn_tooltip_key)
             row += 1
 
         # NEU: Python Environment für externe Builds
@@ -982,7 +1228,7 @@ class StorePackagerApp(tk.Tk):
         self._register_translatable(lbl_hdr1, "text", "Python Umgebung (für Builds)")
         row += 1
 
-        add_row("Python.exe Pfad:", self.python_path, self.choose_python_exe, browse_label="Python wählen")
+        add_row("Python.exe Pfad:", self.python_path, self.choose_python_exe, browse_label="Python wählen", tooltip_key="Pfad zur python.exe mit installiertem PyInstaller", status_key="Eingabefeld für den Python-Interpreter-Pfad", btn_tooltip_key="Wählt den Python-Interpreter aus", btn_status_key="Schaltfläche: Python-Pfad auswählen")
         lbl_hint = ttk.Label(frm, text=_t("Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben."), foreground="gray")
         lbl_hint.grid(row=row, column=1, sticky="w")
         self._register_translatable(lbl_hint, "text", "Wichtig, wenn dieses Tool als EXE läuft. Muss 'pip install pyinstaller' haben.")
@@ -996,9 +1242,9 @@ class StorePackagerApp(tk.Tk):
         self._register_translatable(lbl_hdr2, "text", "Windows SDK Tools")
         row += 1
 
-        add_row("MakeAppx.exe:", self.makeappx_path, self.choose_makeappx, browse_label="MakeAppx wählen")
-        add_row("SignTool.exe:", self.signtool_path, self.choose_signtool, browse_label="SignTool wählen")
-        add_row("AppCert.exe (WACK):", self.appcert_path, self.choose_appcert, browse_label="AppCert wählen")
+        add_row("MakeAppx.exe:", self.makeappx_path, self.choose_makeappx, browse_label="MakeAppx wählen", tooltip_key="Pfad zu makeappx.exe aus dem Windows SDK", status_key="Eingabefeld für den MakeAppx-Pfad", btn_tooltip_key="Wählt makeappx.exe aus", btn_status_key="Schaltfläche: MakeAppx auswählen")
+        add_row("SignTool.exe:", self.signtool_path, self.choose_signtool, browse_label="SignTool wählen", tooltip_key="Pfad zu signtool.exe aus dem Windows SDK", status_key="Eingabefeld für den SignTool-Pfad", btn_tooltip_key="Wählt signtool.exe aus", btn_status_key="Schaltfläche: SignTool auswählen")
+        add_row("AppCert.exe (WACK):", self.appcert_path, self.choose_appcert, browse_label="AppCert wählen", tooltip_key="Pfad zu appcert.exe (Windows App Certification Kit)", status_key="Eingabefeld für den AppCert-Pfad", btn_tooltip_key="Wählt appcert.exe für WACK aus", btn_status_key="Schaltfläche: AppCert auswählen")
 
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=3, sticky='ew', pady=10)
         row += 1
@@ -1008,10 +1254,10 @@ class StorePackagerApp(tk.Tk):
         self._register_translatable(lbl_hdr3, "text", "Zertifikat & Signierung")
         row += 1
 
-        add_row("Zertifikat (.pfx):", self.pfx_path, self.choose_pfx, browse_label="Zertifikat wählen")
-        add_row("PFX Passwort:", self.pfx_password, show="*")
-        add_row("Timestamp URL:", self.timestamp_url)
-        add_row("MSIX Name:", self.msix_name)
+        add_row("Zertifikat (.pfx):", self.pfx_path, self.choose_pfx, browse_label="Zertifikat wählen", tooltip_key="Pfad zum Code-Signing-Zertifikat (.pfx)", status_key="Eingabefeld für die Zertifikatsdatei", btn_tooltip_key="Wählt die PFX-Zertifikatsdatei aus", btn_status_key="Schaltfläche: Zertifikat auswählen")
+        add_row("PFX Passwort:", self.pfx_password, show="*", tooltip_key="Passwort für das PFX-Zertifikat (wird sicher im Keyring abgelegt)", status_key="Eingabefeld für das Zertifikatspasswort")
+        add_row("Timestamp URL:", self.timestamp_url, tooltip_key="RFC-3161 Zeitstempel-Server (z.B. http://timestamp.digicert.com)", status_key="Eingabefeld für die Timestamp-URL")
+        add_row("MSIX Name:", self.msix_name, tooltip_key="Zieldateiname des MSIX-Pakets (z.B. MyApp.msix)", status_key="Eingabefeld für den MSIX-Paketnamen")
 
         lbl_keyring = ttk.Label(frm, text=_t("✓ Passwort wird sicher im Keyring gespeichert"), foreground="green")
         lbl_keyring.grid(row=row, column=1, sticky="w", pady=3)
@@ -1024,6 +1270,7 @@ class StorePackagerApp(tk.Tk):
         chk_i18n = ttk.Checkbutton(frm, text=_t("Sprachmodul automatisch integrieren (i18n)"), variable=self.enable_i18n)
         chk_i18n.grid(row=row, column=0, columnspan=3, sticky="w", pady=8)
         self._register_translatable(chk_i18n, "text", "Sprachmodul automatisch integrieren (i18n)")
+        self._add_tooltip(chk_i18n, "Bindet das universelle 6-Sprachen-Modul automatisch in die EXE ein", "Checkbox: Sprachmodul integrieren")
         row += 1
 
         frm.columnconfigure(1, weight=1)
@@ -1033,7 +1280,7 @@ class StorePackagerApp(tk.Tk):
         frm.pack(fill="both", expand=True, padx=12, pady=12)
         row = 0
 
-        def add_row(label, var, width=60):
+        def add_row(label, var, width=60, tooltip_key=None, status_key=None):
             nonlocal row
             lbl = ttk.Label(frm, text=_t(label))
             lbl.grid(row=row, column=0, sticky="w", pady=3)
@@ -1041,6 +1288,8 @@ class StorePackagerApp(tk.Tk):
 
             ent = ttk.Entry(frm, textvariable=var, width=width)
             ent.grid(row=row, column=1, sticky="we", pady=3, padx=5)
+            if tooltip_key:
+                self._add_tooltip(ent, tooltip_key, status_key or tooltip_key)
             row += 1
 
         lbl_hdr = ttk.Label(frm, text=_t("Store-Pflichtfelder"), font=("Arial", 10, "bold"))
@@ -1048,9 +1297,9 @@ class StorePackagerApp(tk.Tk):
         self._register_translatable(lbl_hdr, "text", "Store-Pflichtfelder")
         row += 1
 
-        add_row("Privacy Policy URL:", self.privacy_url)
-        add_row("Support URL:", self.support_url)
-        add_row("Capabilities (Komma-getrennt):", self.capabilities)
+        add_row("Privacy Policy URL:", self.privacy_url, tooltip_key="Öffentliche HTTPS-URL zur Datenschutzerklärung", status_key="Eingabefeld für die Privacy-Policy-URL")
+        add_row("Support URL:", self.support_url, tooltip_key="Öffentliche HTTPS-URL für Benutzer-Support und Anfragen", status_key="Eingabefeld für die Support-URL")
+        add_row("Capabilities (Komma-getrennt):", self.capabilities, tooltip_key="Kommagetrennte Liste erforderlicher Windows-Rechte (z.B. internetClient)", status_key="Eingabefeld für Capabilities")
 
         lbl_cap = ttk.Label(frm, text=_t("Beispiele: internetClient, microphone, webcam, location"))
         lbl_cap.grid(row=row, column=1, sticky="w", pady=2)
@@ -1066,6 +1315,7 @@ class StorePackagerApp(tk.Tk):
 
         cat_combo = ttk.Combobox(frm, textvariable=self.category, values=CATEGORIES, state="readonly", width=57)
         cat_combo.grid(row=row, column=1, sticky="w", pady=3, padx=5)
+        self._add_tooltip(cat_combo, "Hauptkategorie im Microsoft Store", "Auswahlliste für Store-Kategorie")
         row += 1
 
         lbl_age = ttk.Label(frm, text=_t("Altersfreigabe:"))
@@ -1074,6 +1324,7 @@ class StorePackagerApp(tk.Tk):
 
         age_combo = ttk.Combobox(frm, textvariable=self.age_rating, values=AGE_RATINGS, state="readonly", width=57)
         age_combo.grid(row=row, column=1, sticky="w", pady=3, padx=5)
+        self._add_tooltip(age_combo, "Altersfreigabe (z.B. 3+, 7+, 12+, 16+, 18+)", "Auswahlliste für Altersfreigabe")
         row += 1
 
         ttk.Separator(frm, orient='horizontal').grid(row=row, column=0, columnspan=2, sticky='ew', pady=10)
@@ -1094,6 +1345,7 @@ class StorePackagerApp(tk.Tk):
         self.changelog_box = scrolledtext.ScrolledText(changelog_frame, width=60, height=6)
         self.changelog_box.pack(fill="both", expand=True)
         self.changelog_box.insert(tk.END, f"Version {self.version.get()}\n- \n- \n- ")
+        self._add_tooltip(self.changelog_box, "Changelog-Eintrag für dieses Release", "Textfeld für Release-Hinweise")
         row += 1
 
         btn_frame = ttk.Frame(frm)
@@ -1102,10 +1354,12 @@ class StorePackagerApp(tk.Tk):
         btn_cf = ttk.Button(btn_frame, text=_t("Format für Store"), command=self.format_changelog)
         btn_cf.pack(side="left", padx=2)
         self._register_translatable(btn_cf, "text", "Format für Store")
+        self._add_tooltip(btn_cf, "Formatiert den Text passend für das Microsoft Store Listing", "Schaltfläche: Changelog formatieren")
 
         btn_cc = ttk.Button(btn_frame, text=_t("In Zwischenablage"), command=self.copy_changelog)
         btn_cc.pack(side="left", padx=2)
         self._register_translatable(btn_cc, "text", "In Zwischenablage")
+        self._add_tooltip(btn_cc, "Kopiert den formatierten Changelog in die Zwischenablage", "Schaltfläche: In Zwischenablage kopieren")
         row += 1
 
         frm.columnconfigure(1, weight=1)
@@ -1124,6 +1378,7 @@ class StorePackagerApp(tk.Tk):
         btn_a1 = ttk.Button(actions_frame, text=_t("1. Preflight-Check"), command=self.preflight_check, width=25)
         btn_a1.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_a1, "text", "1. Preflight-Check")
+        self._add_tooltip(btn_a1, "Prüft alle Pflichtfelder und Pfade vor dem Paketbau (F5)", "Schaltfläche: Preflight-Prüfung starten")
 
         lbl_a1 = ttk.Label(actions_frame, text=_t("Validiert alle Pflichtfelder"))
         lbl_a1.grid(row=0, column=1, sticky="w", padx=10)
@@ -1132,6 +1387,7 @@ class StorePackagerApp(tk.Tk):
         btn_a2 = ttk.Button(actions_frame, text=_t("2. Paket erzeugen"), command=self.build_package, width=25)
         btn_a2.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_a2, "text", "2. Paket erzeugen")
+        self._add_tooltip(btn_a2, "Erstellt den Ausgabeordner, konvertiert Icons und generiert AppxManifest.xml", "Schaltfläche: Paket erzeugen")
 
         lbl_a2 = ttk.Label(actions_frame, text=_t("Erstellt Ausgabeordner mit allen Assets"))
         lbl_a2.grid(row=1, column=1, sticky="w", padx=10)
@@ -1140,6 +1396,7 @@ class StorePackagerApp(tk.Tk):
         btn_a3 = ttk.Button(actions_frame, text=_t("3. EXE bauen"), command=self.build_exe, width=25)
         btn_a3.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_a3, "text", "3. EXE bauen")
+        self._add_tooltip(btn_a3, "Führt PyInstaller-Build mit allen Assets und i18n durch", "Schaltfläche: Standalone-EXE kompilieren")
 
         lbl_a3 = ttk.Label(actions_frame, text=_t("PyInstaller-Build mit i18n"))
         lbl_a3.grid(row=2, column=1, sticky="w", padx=10)
@@ -1148,6 +1405,7 @@ class StorePackagerApp(tk.Tk):
         btn_a4 = ttk.Button(actions_frame, text=_t("4. MSIX bauen & signieren"), command=self.build_and_sign_msix, width=25)
         btn_a4.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_a4, "text", "4. MSIX bauen & signieren")
+        self._add_tooltip(btn_a4, "Erstellt das MSIX-Paket mit makeappx und signiert es mit signtool", "Schaltfläche: MSIX bauen und signieren")
 
         lbl_a4 = ttk.Label(actions_frame, text=_t("Erstellt signiertes Store-Paket"))
         lbl_a4.grid(row=3, column=1, sticky="w", padx=10)
@@ -1165,6 +1423,7 @@ class StorePackagerApp(tk.Tk):
         btn_e1 = ttk.Button(extras_frame, text=_t("Screenshots erzeugen"), command=self.run_screenshots, width=25)
         btn_e1.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_e1, "text", "Screenshots erzeugen")
+        self._add_tooltip(btn_e1, "Erstellt automatisierte Screenshots für den Store", "Schaltfläche: Screenshots aufnehmen")
 
         lbl_e1 = ttk.Label(extras_frame, text=_t("Automatische Store-Screenshots"))
         lbl_e1.grid(row=0, column=1, sticky="w", padx=10)
@@ -1173,6 +1432,7 @@ class StorePackagerApp(tk.Tk):
         btn_e2 = ttk.Button(extras_frame, text=_t("WACK-Test starten"), command=self.run_wack_test, width=25)
         btn_e2.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_e2, "text", "WACK-Test starten")
+        self._add_tooltip(btn_e2, "Führt den Microsoft Windows App Certification Kit Test durch", "Schaltfläche: WACK-Zertifizierungstest ausführen")
 
         lbl_e2 = ttk.Label(extras_frame, text=_t("Windows App Certification Kit"))
         lbl_e2.grid(row=1, column=1, sticky="w", padx=10)
@@ -1181,6 +1441,7 @@ class StorePackagerApp(tk.Tk):
         btn_e3 = ttk.Button(extras_frame, text=_t("Ausgabeordner öffnen"), command=self.open_output_folder, width=25)
         btn_e3.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_e3, "text", "Ausgabeordner öffnen")
+        self._add_tooltip(btn_e3, "Öffnet den Ausgabeordner im Windows-Explorer", "Schaltfläche: Ausgabeordner anzeigen")
 
         lbl_e3 = ttk.Label(extras_frame, text=_t("Zeigt erstellte Dateien"))
         lbl_e3.grid(row=2, column=1, sticky="w", padx=10)
@@ -1189,6 +1450,7 @@ class StorePackagerApp(tk.Tk):
         btn_e4 = ttk.Button(extras_frame, text=_t("Projektprofil exportieren"), command=self.export_project_profile, width=25)
         btn_e4.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_e4, "text", "Projektprofil exportieren")
+        self._add_tooltip(btn_e4, "Speichert die Konfiguration ohne Geheimnisse als JSON (Strg+E)", "Schaltfläche: Profil exportieren")
 
         lbl_e4 = ttk.Label(extras_frame, text=_t("Export ohne Publisher- und Zertifikatsgeheimnisse"))
         lbl_e4.grid(row=3, column=1, sticky="w", padx=10)
@@ -1197,6 +1459,7 @@ class StorePackagerApp(tk.Tk):
         btn_e5 = ttk.Button(extras_frame, text=_t("Projektprofil importieren"), command=self.import_project_profile, width=25)
         btn_e5.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
         self._register_translatable(btn_e5, "text", "Projektprofil importieren")
+        self._add_tooltip(btn_e5, "Lädt ein gespeichertes JSON-Projektprofil (Strg+O)", "Schaltfläche: Profil importieren")
 
         lbl_e5 = ttk.Label(extras_frame, text=_t("Lädt Web-/Desktop-Vorarbeit aus JSON"))
         lbl_e5.grid(row=4, column=1, sticky="w", padx=10)
@@ -1210,10 +1473,12 @@ class StorePackagerApp(tk.Tk):
         btn_b1 = ttk.Button(bottom_frame, text=_t("Einstellungen speichern"), command=self.save_settings)
         btn_b1.pack(side="left", padx=5)
         self._register_translatable(btn_b1, "text", "Einstellungen speichern")
+        self._add_tooltip(btn_b1, "Speichert alle Einstellungen und Pfade dauerhaft (Strg+S)", "Schaltfläche: Einstellungen speichern")
 
         btn_b2 = ttk.Button(bottom_frame, text=_t("Beenden"), command=self.on_quit)
         btn_b2.pack(side="right", padx=5)
         self._register_translatable(btn_b2, "text", "Beenden")
+        self._add_tooltip(btn_b2, "Beendet das Programm nach Sicherheitsabfrage (Strg+Q)", "Schaltfläche: Programm beenden")
 
     # ---------- SDK autodetect ----------
     def autodetect_sdk_tools(self):

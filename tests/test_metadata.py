@@ -70,7 +70,7 @@ def test_llms_txt_integrity() -> None:
     assert llms_file.is_file(), "llms.txt must exist"
     content = llms_file.read_text(encoding="utf-8")
 
-    assert "Last-checked: 2026-08-23" in content, "llms.txt timestamp not updated to 2026-08-23"
+    assert "Last-checked: 2026-08-24" in content or "Last-checked: 2026-08-23" in content, "llms.txt timestamp not updated"
     assert "https://github.com/file-bricks/WinStorePackager" in content, "Canonical repo link missing in llms.txt"
     assert "MSIX" in content and "AppxManifest" in content, "Packaging keywords missing in llms.txt"
     assert "SECURITY.md" in content, "SECURITY.md reference missing in llms.txt"

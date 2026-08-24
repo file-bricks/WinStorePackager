@@ -838,5 +838,949 @@
     "zh": "退出前是否要保存设置？",
     "ja": "終了する前に設定を保存しますか？",
     "ru": "Сохранить настройки перед выходом?"
+  },
+  "Datei": {
+    "de": "Datei",
+    "en": "File",
+    "es": "Archivo",
+    "zh": "文件",
+    "ja": "ファイル",
+    "ru": "Файл"
+  },
+  "Ansicht": {
+    "de": "Ansicht",
+    "en": "View",
+    "es": "Ver",
+    "zh": "查看",
+    "ja": "表示",
+    "ru": "Вид"
+  },
+  "Hilfe": {
+    "de": "Hilfe",
+    "en": "Help",
+    "es": "Ayuda",
+    "zh": "帮助",
+    "ja": "ヘルプ",
+    "ru": "Справка"
+  },
+  "Profil importieren...": {
+    "de": "Profil importieren...",
+    "en": "Import Profile...",
+    "es": "Importar perfil...",
+    "zh": "导入配置文件...",
+    "ja": "プロファイルをインポート...",
+    "ru": "Импортировать профиль..."
+  },
+  "Profil exportieren...": {
+    "de": "Profil exportieren...",
+    "en": "Export Profile...",
+    "es": "Exportar perfil...",
+    "zh": "导出配置文件...",
+    "ja": "プロファイルをエクスポート...",
+    "ru": "Экспортировать профиль..."
+  },
+  "Tastaturkürzel & Barrierefreiheit": {
+    "de": "Tastaturkürzel & Barrierefreiheit",
+    "en": "Keyboard Shortcuts & Accessibility",
+    "es": "Atajos de teclado y accesibilidad",
+    "zh": "键盘快捷键与无障碍",
+    "ja": "キーボードショートカットとアクセシビリティ",
+    "ru": "Горячие клавиши и доступность"
+  },
+  "Über WinStorePackager": {
+    "de": "Über WinStorePackager",
+    "en": "About WinStorePackager",
+    "es": "Acerca de WinStorePackager",
+    "zh": "关于 WinStorePackager",
+    "ja": "WinStorePackager について",
+    "ru": "О программе WinStorePackager"
+  },
+  "Status: Bereit": {
+    "de": "Status: Bereit",
+    "en": "Status: Ready",
+    "es": "Estado: Listo",
+    "zh": "状态: 就绪",
+    "ja": "ステータス: 準備完了",
+    "ru": "Статус: Готово"
+  },
+  "Name der Windows-Anwendung für das Store-Paket": {
+    "de": "Name der Windows-Anwendung für das Store-Paket",
+    "en": "Windows application name for Store package",
+    "es": "Nombre de la aplicación de Windows para el paquete de la tienda",
+    "zh": "商店包的 Windows 应用程序名称",
+    "ja": "ストアパッケージ用の Windows アプリ名",
+    "ru": "Имя приложения Windows для пакета Store"
+  },
+  "Eingabefeld für den Anwendungsnamen": {
+    "de": "Eingabefeld für den Anwendungsnamen",
+    "en": "Input field for application name",
+    "es": "Campo de entrada para el nombre de la aplicación",
+    "zh": "应用程序名称输入字段",
+    "ja": "アプリ名の入力フィールド",
+    "ru": "Поле ввода имени приложения"
+  },
+  "Publisher-CN aus dem Partner Center (z.B. CN=12345678-...)": {
+    "de": "Publisher-CN aus dem Partner Center (z.B. CN=12345678-...)",
+    "en": "Publisher CN from Partner Center (e.g. CN=12345678-...)",
+    "es": "CN del editor de Partner Center (p. ej., CN=12345678-...)",
+    "zh": "来自 Partner Center 的发布者 CN (例如 CN=12345678-...)",
+    "ja": "Partner Center からの発行元 CN (例: CN=12345678-...)",
+    "ru": "CN издателя из Partner Center (например, CN=12345678-...)"
+  },
+  "Eingabefeld für den Publisher-CN": {
+    "de": "Eingabefeld für den Publisher-CN",
+    "en": "Input field for Publisher CN",
+    "es": "Campo de entrada para el CN del editor",
+    "zh": "发布者 CN 输入字段",
+    "ja": "発行元 CN の入力フィールド",
+    "ru": "Поле ввода CN издателя"
+  },
+  "Öffentlich angezeigter Name des Herausgebers": {
+    "de": "Öffentlich angezeigter Name des Herausgebers",
+    "en": "Public display name of publisher",
+    "es": "Nombre público mostrado del editor",
+    "zh": "发布者公开显示名称",
+    "ja": "発行元の公開表示名",
+    "ru": "Отображаемое имя издателя"
+  },
+  "Eingabefeld für den Publisher-Anzeigenamen": {
+    "de": "Eingabefeld für den Publisher-Anzeigenamen",
+    "en": "Input field for publisher display name",
+    "es": "Campo de entrada para el nombre para mostrar del editor",
+    "zh": "发布者显示名称输入字段",
+    "ja": "発行元表示名の入力フィールド",
+    "ru": "Поле ввода отображаемого имени издателя"
+  },
+  "Paketidentifikator (z.B. MeinUnternehmen.MeinProgramm)": {
+    "de": "Paketidentifikator (z.B. MeinUnternehmen.MeinProgramm)",
+    "en": "Package identifier (e.g. MyCompany.MyApp)",
+    "es": "Identificador de paquete (p. ej., MiEmpresa.MiApp)",
+    "zh": "包标识符 (例如 MyCompany.MyApp)",
+    "ja": "パッケージ識別子 (例: MyCompany.MyApp)",
+    "ru": "Идентификатор пакета (например, MyCompany.MyApp)"
+  },
+  "Eingabefeld für den Identity Name": {
+    "de": "Eingabefeld für den Identity Name",
+    "en": "Input field for Identity Name",
+    "es": "Campo de entrada para el Identity Name",
+    "zh": "Identity Name 输入字段",
+    "ja": "Identity Name の入力フィールド",
+    "ru": "Поле ввода Identity Name"
+  },
+  "Vierstellige Versionsnummer im Format Major.Minor.Build.Revision (z.B. 1.0.0.0)": {
+    "de": "Vierstellige Versionsnummer im Format Major.Minor.Build.Revision (z.B. 1.0.0.0)",
+    "en": "Four-part version number in format Major.Minor.Build.Revision (e.g. 1.0.0.0)",
+    "es": "Número de versión de cuatro partes en formato Major.Minor.Build.Revision (p. ej., 1.0.0.0)",
+    "zh": "格式为 Major.Minor.Build.Revision 的四位版本号 (例如 1.0.0.0)",
+    "ja": "Major.Minor.Build.Revision 形式の4桁のバージョン番号 (例: 1.0.0.0)",
+    "ru": "Четырехзначный номер версии в формате Major.Minor.Build.Revision (например, 1.0.0.0)"
+  },
+  "Eingabefeld für die Versionsnummer": {
+    "de": "Eingabefeld für die Versionsnummer",
+    "en": "Input field for version number",
+    "es": "Campo de entrada para el número de versión",
+    "zh": "版本号输入字段",
+    "ja": "バージョン番号の入力フィールド",
+    "ru": "Поле ввода номера версии"
+  },
+  "Pfad zum Python-Hauptskript (.py)": {
+    "de": "Pfad zum Python-Hauptskript (.py)",
+    "en": "Path to main Python script (.py)",
+    "es": "Ruta al script principal de Python (.py)",
+    "zh": "Python 主脚本路径 (.py)",
+    "ja": "メイン Python スクリプトのパス (.py)",
+    "ru": "Путь к основному скрипту Python (.py)"
+  },
+  "Eingabefeld für das Hauptskript": {
+    "de": "Eingabefeld für das Hauptskript",
+    "en": "Input field for main script",
+    "es": "Campo de entrada para el script principal",
+    "zh": "主脚本输入字段",
+    "ja": "メインスクリプトの入力フィールド",
+    "ru": "Поле ввода основного скрипта"
+  },
+  "Pfad zur Icon-Grafik (mindestens 310x310 PNG)": {
+    "de": "Pfad zur Icon-Grafik (mindestens 310x310 PNG)",
+    "en": "Path to icon image (at least 310x310 PNG)",
+    "es": "Ruta a la imagen del icono (mínimo 310x310 PNG)",
+    "zh": "图标图片路径 (至少 310x310 PNG)",
+    "ja": "アイコン画像のパス (最小 310x310 PNG)",
+    "ru": "Путь к файлу значка (минимум 310x310 PNG)"
+  },
+  "Eingabefeld für das Anwendungsicon": {
+    "de": "Eingabefeld für das Anwendungsicon",
+    "en": "Input field for application icon",
+    "es": "Campo de entrada para el icono de la aplicación",
+    "zh": "应用程序图标输入字段",
+    "ja": "アプリ アイコンの入力フィールド",
+    "ru": "Поле ввода значка приложения"
+  },
+  "Pfad zum Quellcode-Verzeichnis oder ZIP-Archiv": {
+    "de": "Pfad zum Quellcode-Verzeichnis oder ZIP-Archiv",
+    "en": "Path to source directory or ZIP archive",
+    "es": "Ruta al directorio de código fuente o archivo ZIP",
+    "zh": "源代码目录或 ZIP 压缩包路径",
+    "ja": "ソースコード ディレクトリまたは ZIP アーカイブのパス",
+    "ru": "Путь к каталогу с исходным кодом или ZIP-архиву"
+  },
+  "Eingabefeld für den Quellcode": {
+    "de": "Eingabefeld für den Quellcode",
+    "en": "Input field for source code",
+    "es": "Campo de entrada para el código fuente",
+    "zh": "源代码输入字段",
+    "ja": "ソースコードの入力フィールド",
+    "ru": "Поле ввода исходного кода"
+  },
+  "Pfad zu einem bestehenden Installer (EXE oder MSIX)": {
+    "de": "Pfad zu einem bestehenden Installer (EXE oder MSIX)",
+    "en": "Path to existing installer (EXE or MSIX)",
+    "es": "Ruta a un instalador existente (EXE o MSIX)",
+    "zh": "现有安装程序路径 (EXE 或 MSIX)",
+    "ja": "既存のインストーラーのパス (EXE または MSIX)",
+    "ru": "Путь к существующему установщику (EXE или MSIX)"
+  },
+  "Eingabefeld für den Installer": {
+    "de": "Eingabefeld für den Installer",
+    "en": "Input field for installer",
+    "es": "Campo de entrada para el instalador",
+    "zh": "安装程序输入字段",
+    "ja": "インストーラーの入力フィールド",
+    "ru": "Поле ввода установщика"
+  },
+  "Ausgabeverzeichnis für generierte Store-Pakete": {
+    "de": "Ausgabeverzeichnis für generierte Store-Pakete",
+    "en": "Output directory for generated Store packages",
+    "es": "Directorio de salida para paquetes de la tienda generados",
+    "zh": "生成的商店包输出目录",
+    "ja": "生成されたストアパッケージの出力ディレクトリ",
+    "ru": "Каталог вывода для созданных пакетов Store"
+  },
+  "Eingabefeld für den Ausgabeordner": {
+    "de": "Eingabefeld für den Ausgabeordner",
+    "en": "Input field for output folder",
+    "es": "Campo de entrada para la carpeta de salida",
+    "zh": "输出文件夹输入字段",
+    "ja": "出力フォルダーの入力フィールド",
+    "ru": "Поле ввода папки вывода"
+  },
+  "Dateiname der ausführbaren Datei (z.B. MyApp.exe)": {
+    "de": "Dateiname der ausführbaren Datei (z.B. MyApp.exe)",
+    "en": "Executable file name (e.g. MyApp.exe)",
+    "es": "Nombre del archivo ejecutable (p. ej., MyApp.exe)",
+    "zh": "可执行文件名 (例如 MyApp.exe)",
+    "ja": "実行可能ファイル名 (例: MyApp.exe)",
+    "ru": "Имя исполняемого файла (например, MyApp.exe)"
+  },
+  "Eingabefeld für den EXE-Namen": {
+    "de": "Eingabefeld für den EXE-Namen",
+    "en": "Input field for EXE name",
+    "es": "Campo de entrada para el nombre del EXE",
+    "zh": "EXE 名称输入字段",
+    "ja": "EXE 名の入力フィールド",
+    "ru": "Поле ввода имени EXE"
+  },
+  "README-Inhalt oder Dokumentationsdatei für das Paket": {
+    "de": "README-Inhalt oder Dokumentationsdatei für das Paket",
+    "en": "README content or documentation file for package",
+    "es": "Contenido o archivo de documentación README para el paquete",
+    "zh": "包的 README 内容或文档文件",
+    "ja": "パッケージの README 内容またはドキュメント ファイル",
+    "ru": "Содержимое README или файл документации для пакета"
+  },
+  "Textfeld für README-Dokumentation": {
+    "de": "Textfeld für README-Dokumentation",
+    "en": "Text area for README documentation",
+    "es": "Área de texto para documentación README",
+    "zh": "README 文档文本区域",
+    "ja": "README ドキュメントのテキストエリア",
+    "ru": "Текстовое поле для документации README"
+  },
+  "Lizenzvereinbarungen und Third-Party-Lizenzen": {
+    "de": "Lizenzvereinbarungen und Third-Party-Lizenzen",
+    "en": "License agreements and third-party licenses",
+    "es": "Acuerdos de licencia y licencias de terceros",
+    "zh": "许可协议与第三方许可",
+    "ja": "ライセンス契約およびサードパーティ ライセンス",
+    "ru": "Лицензионные соглашения и сторонние лицензии"
+  },
+  "Textfeld für Lizenzen": {
+    "de": "Textfeld für Lizenzen",
+    "en": "Text area for licenses",
+    "es": "Área de texto para licencias",
+    "zh": "许可文本区域",
+    "ja": "ライセンス用テキストエリア",
+    "ru": "Текстовое поле для лицензий"
+  },
+  "Ausführliche Store-Produktbeschreibung": {
+    "de": "Ausführliche Store-Produktbeschreibung",
+    "en": "Detailed Store product description",
+    "es": "Descripción detallada del producto en la tienda",
+    "zh": "详细的商店产品描述",
+    "ja": "詳細なストア製品の説明",
+    "ru": "Подробное описание продукта для Store"
+  },
+  "Textfeld für die Produktbeschreibung": {
+    "de": "Textfeld für die Produktbeschreibung",
+    "en": "Text area for product description",
+    "es": "Área de texto para la descripción del producto",
+    "zh": "产品描述文本区域",
+    "ja": "製品説明のテキストエリア",
+    "ru": "Текстовое поле для описания продукта"
+  },
+  "Öffnet den Dateidialog zur Auswahl des Python-Hauptskripts": {
+    "de": "Öffnet den Dateidialog zur Auswahl des Python-Hauptskripts",
+    "en": "Opens file dialog to select main Python script",
+    "es": "Abre el cuadro de diálogo para seleccionar el script principal de Python",
+    "zh": "打开文件对话框以选择主 Python 脚本",
+    "ja": "メイン Python スクリプトを選択するファイルダイアログを開きます",
+    "ru": "Открывает диалог выбора основного скрипта Python"
+  },
+  "Schaltfläche: Skript auswählen": {
+    "de": "Schaltfläche: Skript auswählen",
+    "en": "Button: Select script",
+    "es": "Botón: Seleccionar script",
+    "zh": "按钮: 选择脚本",
+    "ja": "ボタン: スクリプトを選択",
+    "ru": "Кнопка: Выбрать скрипт"
+  },
+  "Öffnet den Dateidialog zur Auswahl des Icons (PNG)": {
+    "de": "Öffnet den Dateidialog zur Auswahl des Icons (PNG)",
+    "en": "Opens file dialog to select icon (PNG)",
+    "es": "Abre el cuadro de diálogo para seleccionar el icono (PNG)",
+    "zh": "打开文件对话框以选择图标 (PNG)",
+    "ja": "アイコンを選択するファイルダイアログを開きます (PNG)",
+    "ru": "Открывает диалог выбора значка (PNG)"
+  },
+  "Schaltfläche: Icon auswählen": {
+    "de": "Schaltfläche: Icon auswählen",
+    "en": "Button: Select icon",
+    "es": "Botón: Seleccionar icono",
+    "zh": "按钮: 选择图标",
+    "ja": "ボタン: アイコンを選択",
+    "ru": "Кнопка: Выбрать значок"
+  },
+  "Öffnet den Dateidialog zur Auswahl des Quellcodes": {
+    "de": "Öffnet den Dateidialog zur Auswahl des Quellcodes",
+    "en": "Opens file dialog to select source code",
+    "es": "Abre el cuadro de diálogo para seleccionar el código fuente",
+    "zh": "打开文件对话框以选择源代码",
+    "ja": "ソースコードを選択するファイルダイアログを開きます",
+    "ru": "Открывает диалог выбора исходного кода"
+  },
+  "Schaltfläche: Quellcode auswählen": {
+    "de": "Schaltfläche: Quellcode auswählen",
+    "en": "Button: Select source code",
+    "es": "Botón: Seleccionar código fuente",
+    "zh": "按钮: 选择源码",
+    "ja": "ボタン: ソースを選択",
+    "ru": "Кнопка: Выбрать исходный код"
+  },
+  "Öffnet den Dateidialog zur Auswahl des Installers": {
+    "de": "Öffnet den Dateidialog zur Auswahl des Installers",
+    "en": "Opens file dialog to select installer",
+    "es": "Abre el cuadro de diálogo para seleccionar el instalador",
+    "zh": "打开文件对话框以选择安装程序",
+    "ja": "インストーラーを選択するファイルダイアログを開きます",
+    "ru": "Открывает диалог выбора установщика"
+  },
+  "Schaltfläche: Installer auswählen": {
+    "de": "Schaltfläche: Installer auswählen",
+    "en": "Button: Select installer",
+    "es": "Botón: Seleccionar instalador",
+    "zh": "按钮: 选择安装程序",
+    "ja": "ボタン: インストーラーを選択",
+    "ru": "Кнопка: Выбрать установщик"
+  },
+  "Lädt den Inhalt einer README-Datei in das Textfeld": {
+    "de": "Lädt den Inhalt einer README-Datei in das Textfeld",
+    "en": "Loads content of a README file into text area",
+    "es": "Carga el contenido de un archivo README en el área de texto",
+    "zh": "将 README 文件的内容加载到文本框中",
+    "ja": "README ファイルの内容をテキストエリアに読み込みます",
+    "ru": "Загружает содержимое файла README в текстовое поле"
+  },
+  "Schaltfläche: README-Datei laden": {
+    "de": "Schaltfläche: README-Datei laden",
+    "en": "Button: Load README file",
+    "es": "Botón: Cargar archivo README",
+    "zh": "按钮: 加载 README 文件",
+    "ja": "ボタン: README ファイルを読み込む",
+    "ru": "Кнопка: Загрузить файл README"
+  },
+  "Fügt eine Lizenzdatei zum Paket hinzu": {
+    "de": "Fügt eine Lizenzdatei zum Paket hinzu",
+    "en": "Adds a license file to package",
+    "es": "Agrega un archivo de licencia al paquete",
+    "zh": "向包添加许可文件",
+    "ja": "パッケージにライセンスファイルを追加します",
+    "ru": "Добавляет файл лицензии в пакет"
+  },
+  "Schaltfläche: Lizenzdatei hinzufügen": {
+    "de": "Schaltfläche: Lizenzdatei hinzufügen",
+    "en": "Button: Add license file",
+    "es": "Botón: Agregar archivo de licencia",
+    "zh": "按钮: 添加许可文件",
+    "ja": "ボタン: ライセンスファイルを追加",
+    "ru": "Кнопка: Добавить файл лицензии"
+  },
+  "Fügt einen benutzerdefinierten Lizenztext hinzu": {
+    "de": "Fügt einen benutzerdefinierten Lizenztext hinzu",
+    "en": "Adds a custom license text",
+    "es": "Agrega un texto de licencia personalizado",
+    "zh": "添加自定义许可文本",
+    "ja": "カスタムライセンス テキストを追加します",
+    "ru": "Добавляет пользовательский текст лицензии"
+  },
+  "Schaltfläche: Lizenztext hinzufügen": {
+    "de": "Schaltfläche: Lizenztext hinzufügen",
+    "en": "Button: Add license text",
+    "es": "Botón: Agregar texto de licencia",
+    "zh": "按钮: 添加许可文本",
+    "ja": "ボタン: ライセンス テキストを追加",
+    "ru": "Кнопка: Добавить текст лицензии"
+  },
+  "Lädt eine Beschreibung aus einer Textdatei": {
+    "de": "Lädt eine Beschreibung aus einer Textdatei",
+    "en": "Loads description from a text file",
+    "es": "Carga la descripción desde un archivo de texto",
+    "zh": "从文本文件加载描述",
+    "ja": "テキストファイルから説明を読み込みます",
+    "ru": "Загружает описание из текстового файла"
+  },
+  "Schaltfläche: Beschreibung laden": {
+    "de": "Schaltfläche: Beschreibung laden",
+    "en": "Button: Load description",
+    "es": "Botón: Cargar descripción",
+    "zh": "按钮: 加载描述",
+    "ja": "ボタン: 説明を読み込む",
+    "ru": "Кнопка: Загрузить описание"
+  },
+  "Pfad zur python.exe mit installiertem PyInstaller": {
+    "de": "Pfad zur python.exe mit installiertem PyInstaller",
+    "en": "Path to python.exe with PyInstaller installed",
+    "es": "Ruta a python.exe con PyInstaller instalado",
+    "zh": "已安装 PyInstaller 的 python.exe 路径",
+    "ja": "PyInstaller がインストールされた python.exe のパス",
+    "ru": "Путь к python.exe с установленным PyInstaller"
+  },
+  "Eingabefeld für den Python-Interpreter-Pfad": {
+    "de": "Eingabefeld für den Python-Interpreter-Pfad",
+    "en": "Input field for Python interpreter path",
+    "es": "Campo de entrada para la ruta del intérprete de Python",
+    "zh": "Python 解释器路径输入字段",
+    "ja": "Python インタープリター パスの入力フィールド",
+    "ru": "Поле ввода пути к интерпретатору Python"
+  },
+  "Pfad zu makeappx.exe aus dem Windows SDK": {
+    "de": "Pfad zu makeappx.exe aus dem Windows SDK",
+    "en": "Path to makeappx.exe from Windows SDK",
+    "es": "Ruta a makeappx.exe del Windows SDK",
+    "zh": "Windows SDK 中的 makeappx.exe 路径",
+    "ja": "Windows SDK の makeappx.exe のパス",
+    "ru": "Путь к makeappx.exe из Windows SDK"
+  },
+  "Eingabefeld für den MakeAppx-Pfad": {
+    "de": "Eingabefeld für den MakeAppx-Pfad",
+    "en": "Input field for MakeAppx path",
+    "es": "Campo de entrada para la ruta de MakeAppx",
+    "zh": "MakeAppx 路径输入字段",
+    "ja": "MakeAppx パスの入力フィールド",
+    "ru": "Поле ввода пути к MakeAppx"
+  },
+  "Pfad zu signtool.exe aus dem Windows SDK": {
+    "de": "Pfad zu signtool.exe aus dem Windows SDK",
+    "en": "Path to signtool.exe from Windows SDK",
+    "es": "Ruta a signtool.exe del Windows SDK",
+    "zh": "Windows SDK 中的 signtool.exe 路径",
+    "ja": "Windows SDK の signtool.exe のパス",
+    "ru": "Путь к signtool.exe из Windows SDK"
+  },
+  "Eingabefeld für den SignTool-Pfad": {
+    "de": "Eingabefeld für den SignTool-Pfad",
+    "en": "Input field for SignTool path",
+    "es": "Campo de entrada para la ruta de SignTool",
+    "zh": "SignTool 路径输入字段",
+    "ja": "SignTool パスの入力フィールド",
+    "ru": "Поле ввода пути к SignTool"
+  },
+  "Pfad zu appcert.exe (Windows App Certification Kit)": {
+    "de": "Pfad zu appcert.exe (Windows App Certification Kit)",
+    "en": "Path to appcert.exe (Windows App Certification Kit)",
+    "es": "Ruta a appcert.exe (Windows App Certification Kit)",
+    "zh": "appcert.exe 路径 (Windows 应用认证工具包)",
+    "ja": "appcert.exe のパス (Windows アプリ認定キット)",
+    "ru": "Путь к appcert.exe (Windows App Certification Kit)"
+  },
+  "Eingabefeld für den AppCert-Pfad": {
+    "de": "Eingabefeld für den AppCert-Pfad",
+    "en": "Input field for AppCert path",
+    "es": "Campo de entrada para la ruta de AppCert",
+    "zh": "AppCert 路径输入字段",
+    "ja": "AppCert パスの入力フィールド",
+    "ru": "Поле ввода пути к AppCert"
+  },
+  "Pfad zum Code-Signing-Zertifikat (.pfx)": {
+    "de": "Pfad zum Code-Signing-Zertifikat (.pfx)",
+    "en": "Path to code signing certificate (.pfx)",
+    "es": "Ruta al certificado de firma de código (.pfx)",
+    "zh": "代码签名证书路径 (.pfx)",
+    "ja": "コード署名証明書のパス (.pfx)",
+    "ru": "Путь к сертификату подписи кода (.pfx)"
+  },
+  "Eingabefeld für die Zertifikatsdatei": {
+    "de": "Eingabefeld für die Zertifikatsdatei",
+    "en": "Input field for certificate file",
+    "es": "Campo de entrada para el archivo de certificado",
+    "zh": "证书文件输入字段",
+    "ja": "証明書ファイルの入力フィールド",
+    "ru": "Поле ввода файла сертификата"
+  },
+  "Passwort für das PFX-Zertifikat (wird sicher im Keyring abgelegt)": {
+    "de": "Passwort für das PFX-Zertifikat (wird sicher im Keyring abgelegt)",
+    "en": "Password for PFX certificate (stored securely in keyring)",
+    "es": "Contraseña para el certificado PFX (almacenada de forma segura en el llavero)",
+    "zh": "PFX 证书密码 (安全存储在密钥环中)",
+    "ja": "PFX 証明書のパスワード (キーリングに安全に保存)",
+    "ru": "Пароль для сертификата PFX (безопасно хранится в связке ключей)"
+  },
+  "Eingabefeld für das Zertifikatspasswort": {
+    "de": "Eingabefeld für das Zertifikatspasswort",
+    "en": "Input field for certificate password",
+    "es": "Campo de entrada para la contraseña del certificado",
+    "zh": "证书密码输入字段",
+    "ja": "証明書パスワードの入力フィールド",
+    "ru": "Поле ввода пароля сертификата"
+  },
+  "RFC-3161 Zeitstempel-Server (z.B. http://timestamp.digicert.com)": {
+    "de": "RFC-3161 Zeitstempel-Server (z.B. http://timestamp.digicert.com)",
+    "en": "RFC-3161 timestamp server (e.g. http://timestamp.digicert.com)",
+    "es": "Servidor de marca de tiempo RFC-3161 (p. ej., http://timestamp.digicert.com)",
+    "zh": "RFC-3161 时间戳服务器 (例如 http://timestamp.digicert.com)",
+    "ja": "RFC-3161 タイムスタンプサーバー (例: http://timestamp.digicert.com)",
+    "ru": "Сервер меток времени RFC-3161 (например, http://timestamp.digicert.com)"
+  },
+  "Eingabefeld für die Timestamp-URL": {
+    "de": "Eingabefeld für die Timestamp-URL",
+    "en": "Input field for timestamp URL",
+    "es": "Campo de entrada para la URL de marca de tiempo",
+    "zh": "时间戳 URL 输入字段",
+    "ja": "タイムスタンプ URL の入力フィールド",
+    "ru": "Поле ввода URL метки времени"
+  },
+  "Zieldateiname des MSIX-Pakets (z.B. MyApp.msix)": {
+    "de": "Zieldateiname des MSIX-Pakets (z.B. MyApp.msix)",
+    "en": "Target file name of MSIX package (e.g. MyApp.msix)",
+    "es": "Nombre del archivo de destino del paquete MSIX (p. ej., MyApp.msix)",
+    "zh": "MSIX 包的目标文件名 (例如 MyApp.msix)",
+    "ja": "MSIX パッケージのターゲット ファイル名 (例: MyApp.msix)",
+    "ru": "Целевое имя файла пакета MSIX (например, MyApp.msix)"
+  },
+  "Eingabefeld für den MSIX-Paketnamen": {
+    "de": "Eingabefeld für den MSIX-Paketnamen",
+    "en": "Input field for MSIX package name",
+    "es": "Campo de entrada para el nombre del paquete MSIX",
+    "zh": "MSIX 包名称输入字段",
+    "ja": "MSIX パッケージ名の入力フィールド",
+    "ru": "Поле ввода имени пакета MSIX"
+  },
+  "Wählt den Python-Interpreter aus": {
+    "de": "Wählt den Python-Interpreter aus",
+    "en": "Selects Python interpreter",
+    "es": "Selecciona el intérprete de Python",
+    "zh": "选择 Python 解释器",
+    "ja": "Python インタープリターを選択",
+    "ru": "Выбирает интерпретатор Python"
+  },
+  "Schaltfläche: Python-Pfad auswählen": {
+    "de": "Schaltfläche: Python-Pfad auswählen",
+    "en": "Button: Select Python path",
+    "es": "Botón: Seleccionar ruta de Python",
+    "zh": "按钮: 选择 Python 路径",
+    "ja": "ボタン: Python パスを選択",
+    "ru": "Кнопка: Выбрать путь к Python"
+  },
+  "Wählt makeappx.exe aus": {
+    "de": "Wählt makeappx.exe aus",
+    "en": "Selects makeappx.exe",
+    "es": "Selecciona makeappx.exe",
+    "zh": "选择 makeappx.exe",
+    "ja": "makeappx.exe を選択",
+    "ru": "Выбирает makeappx.exe"
+  },
+  "Schaltfläche: MakeAppx auswählen": {
+    "de": "Schaltfläche: MakeAppx auswählen",
+    "en": "Button: Select MakeAppx",
+    "es": "Botón: Seleccionar MakeAppx",
+    "zh": "按钮: 选择 MakeAppx",
+    "ja": "ボタン: MakeAppx を選択",
+    "ru": "Кнопка: Выбрать MakeAppx"
+  },
+  "Wählt signtool.exe aus": {
+    "de": "Wählt signtool.exe aus",
+    "en": "Selects signtool.exe",
+    "es": "Selecciona signtool.exe",
+    "zh": "选择 signtool.exe",
+    "ja": "signtool.exe を選択",
+    "ru": "Выбирает signtool.exe"
+  },
+  "Schaltfläche: SignTool auswählen": {
+    "de": "Schaltfläche: SignTool auswählen",
+    "en": "Button: Select SignTool",
+    "es": "Botón: Seleccionar SignTool",
+    "zh": "按钮: 选择 SignTool",
+    "ja": "ボタン: SignTool を選択",
+    "ru": "Кнопка: Выбрать SignTool"
+  },
+  "Wählt appcert.exe für WACK aus": {
+    "de": "Wählt appcert.exe für WACK aus",
+    "en": "Selects appcert.exe for WACK",
+    "es": "Selecciona appcert.exe para WACK",
+    "zh": "选择用于 WACK 的 appcert.exe",
+    "ja": "WACK 用の appcert.exe を選択",
+    "ru": "Выбирает appcert.exe для WACK"
+  },
+  "Schaltfläche: AppCert auswählen": {
+    "de": "Schaltfläche: AppCert auswählen",
+    "en": "Button: Select AppCert",
+    "es": "Botón: Seleccionar AppCert",
+    "zh": "按钮: 选择 AppCert",
+    "ja": "ボタン: AppCert を選択",
+    "ru": "Кнопка: Выбрать AppCert"
+  },
+  "Wählt die PFX-Zertifikatsdatei aus": {
+    "de": "Wählt die PFX-Zertifikatsdatei aus",
+    "en": "Selects PFX certificate file",
+    "es": "Selecciona el archivo de certificado PFX",
+    "zh": "选择 PFX 证书文件",
+    "ja": "PFX 証明書ファイルを選択",
+    "ru": "Выбирает файл сертификата PFX"
+  },
+  "Schaltfläche: Zertifikat auswählen": {
+    "de": "Schaltfläche: Zertifikat auswählen",
+    "en": "Button: Select certificate",
+    "es": "Botón: Seleccionar certificado",
+    "zh": "按钮: 选择证书",
+    "ja": "ボタン: 証明書を選択",
+    "ru": "Кнопка: Выбрать сертификат"
+  },
+  "Bindet das universelle 6-Sprachen-Modul automatisch in die EXE ein": {
+    "de": "Bindet das universelle 6-Sprachen-Modul automatisch in die EXE ein",
+    "en": "Automatically integrates universal 6-language module into EXE",
+    "es": "Integra automáticamente el módulo universal de 6 idiomas en el EXE",
+    "zh": "自动将通用的 6 种语言模块集成到 EXE 中",
+    "ja": "汎用6言語モジュールを EXE に自動統合",
+    "ru": "Автоматически встраивает универсальный модуль на 6 языках в EXE"
+  },
+  "Checkbox: Sprachmodul integrieren": {
+    "de": "Checkbox: Sprachmodul integrieren",
+    "en": "Checkbox: Integrate language module",
+    "es": "Casilla: Integrar módulo de idioma",
+    "zh": "复选框: 集成语言模块",
+    "ja": "チェックボックス: 言語モジュールを統合",
+    "ru": "Флажок: Встроить языковой модуль"
+  },
+  "Öffentliche HTTPS-URL zur Datenschutzerklärung": {
+    "de": "Öffentliche HTTPS-URL zur Datenschutzerklärung",
+    "en": "Public HTTPS URL for privacy policy",
+    "es": "URL HTTPS pública para la política de privacidad",
+    "zh": "隐私政策的公开 HTTPS URL",
+    "ja": "プライバシー ポリシーの公開 HTTPS URL",
+    "ru": "Публичный HTTPS URL для политики конфиденциальности"
+  },
+  "Eingabefeld für die Privacy-Policy-URL": {
+    "de": "Eingabefeld für die Privacy-Policy-URL",
+    "en": "Input field for privacy policy URL",
+    "es": "Campo de entrada para la URL de la política de privacidad",
+    "zh": "隐私政策 URL 输入字段",
+    "ja": "プライバシー ポリシー URL の入力フィールド",
+    "ru": "Поле ввода URL политики конфиденциальности"
+  },
+  "Öffentliche HTTPS-URL für Benutzer-Support und Anfragen": {
+    "de": "Öffentliche HTTPS-URL für Benutzer-Support und Anfragen",
+    "en": "Public HTTPS URL for user support and inquiries",
+    "es": "URL HTTPS pública para soporte y consultas de usuarios",
+    "zh": "用于用户支持和咨询的公开 HTTPS URL",
+    "ja": "ユーザーサポートおよび問い合わせ用の公開 HTTPS URL",
+    "ru": "Публичный HTTPS URL для поддержки пользователей и запросов"
+  },
+  "Eingabefeld für die Support-URL": {
+    "de": "Eingabefeld für die Support-URL",
+    "en": "Input field for support URL",
+    "es": "Campo de entrada para la URL de soporte",
+    "zh": "支持 URL 输入字段",
+    "ja": "サポート URL の入力フィールド",
+    "ru": "Поле ввода URL поддержки"
+  },
+  "Kommagetrennte Liste erforderlicher Windows-Rechte (z.B. internetClient)": {
+    "de": "Kommagetrennte Liste erforderlicher Windows-Rechte (z.B. internetClient)",
+    "en": "Comma-separated list of required Windows capabilities (e.g. internetClient)",
+    "es": "Lista separada por comas de permisos de Windows requeridos (p. ej., internetClient)",
+    "zh": "逗号分隔的所需 Windows 权限列表 (例如 internetClient)",
+    "ja": "必要な Windows 機能のカンマ区切りリスト (例: internetClient)",
+    "ru": "Список необходимых разрешений Windows через запятую (например, internetClient)"
+  },
+  "Eingabefeld für Capabilities": {
+    "de": "Eingabefeld für Capabilities",
+    "en": "Input field for Capabilities",
+    "es": "Campo de entrada para Capabilities",
+    "zh": "功能 (Capabilities) 输入字段",
+    "ja": "機能 (Capabilities) の入力フィールド",
+    "ru": "Поле ввода Capabilities"
+  },
+  "Hauptkategorie im Microsoft Store": {
+    "de": "Hauptkategorie im Microsoft Store",
+    "en": "Main category in Microsoft Store",
+    "es": "Categoría principal en Microsoft Store",
+    "zh": "Microsoft Store 中的主要类别",
+    "ja": "Microsoft Store のメイン カテゴリ",
+    "ru": "Основная категория в Microsoft Store"
+  },
+  "Auswahlliste für Store-Kategorie": {
+    "de": "Auswahlliste für Store-Kategorie",
+    "en": "Dropdown list for Store category",
+    "es": "Lista desplegable para categoría de tienda",
+    "zh": "商店类别下拉列表",
+    "ja": "ストア カテゴリのドロップダウン リスト",
+    "ru": "Выпадающий список категории Store"
+  },
+  "Altersfreigabe (z.B. 3+, 7+, 12+, 16+, 18+)": {
+    "de": "Altersfreigabe (z.B. 3+, 7+, 12+, 16+, 18+)",
+    "en": "Age rating (e.g. 3+, 7+, 12+, 16+, 18+)",
+    "es": "Clasificación por edad (p. ej., 3+, 7+, 12+, 16+, 18+)",
+    "zh": "年龄分级 (例如 3+, 7+, 12+, 16+, 18+)",
+    "ja": "対象年齢 (例: 3+, 7+, 12+, 16+, 18+)",
+    "ru": "Возрастной рейтинг (например, 3+, 7+, 12+, 16+, 18+)"
+  },
+  "Auswahlliste für Altersfreigabe": {
+    "de": "Auswahlliste für Altersfreigabe",
+    "en": "Dropdown list for age rating",
+    "es": "Lista desplegable para clasificación por edad",
+    "zh": "年龄分级下拉列表",
+    "ja": "対象年齢のドロップダウン リスト",
+    "ru": "Выпадающий список возрастного рейтинга"
+  },
+  "Changelog-Eintrag für dieses Release": {
+    "de": "Changelog-Eintrag für dieses Release",
+    "en": "Changelog entry for this release",
+    "es": "Entrada de registro de cambios para esta versión",
+    "zh": "此版本的更新日志条目",
+    "ja": "このリリースの変更ログ エントリ",
+    "ru": "Запись журнала изменений для этого выпуска"
+  },
+  "Textfeld für Release-Hinweise": {
+    "de": "Textfeld für Release-Hinweise",
+    "en": "Text area for release notes",
+    "es": "Área de texto para notas de la versión",
+    "zh": "发布说明文本区域",
+    "ja": "リリースノートのテキストエリア",
+    "ru": "Текстовое поле для примечаний к выпуску"
+  },
+  "Formatiert den Text passend für das Microsoft Store Listing": {
+    "de": "Formatiert den Text passend für das Microsoft Store Listing",
+    "en": "Formats text suitable for Microsoft Store listing",
+    "es": "Formatea el text adecuado para la lista de Microsoft Store",
+    "zh": "格式化适合 Microsoft Store 上架的文本",
+    "ja": "Microsoft Store 掲載用にテキストをフォーマットします",
+    "ru": "Форматирует текст для описания в Microsoft Store"
+  },
+  "Schaltfläche: Changelog formatieren": {
+    "de": "Schaltfläche: Changelog formatieren",
+    "en": "Button: Format changelog",
+    "es": "Botón: Formatear registro de cambios",
+    "zh": "按钮: 格式化更新日志",
+    "ja": "ボタン: 変更ログをフォーマット",
+    "ru": "Кнопка: Форматировать журнал изменений"
+  },
+  "Kopiert den formatierten Changelog in die Zwischenablage": {
+    "de": "Kopiert den formatierten Changelog in die Zwischenablage",
+    "en": "Copies formatted changelog to clipboard",
+    "es": "Copia el registro de cambios formateado al portapapeles",
+    "zh": "将格式化的更新日志复制到剪贴板",
+    "ja": "フォーマットされた変更ログをクリップボードにコピー",
+    "ru": "Копирует отформатированный журнал изменений в буфер обмена"
+  },
+  "Schaltfläche: In Zwischenablage kopieren": {
+    "de": "Schaltfläche: In Zwischenablage kopieren",
+    "en": "Button: Copy to clipboard",
+    "es": "Botón: Copiar al portapapeles",
+    "zh": "按钮: 复制到剪贴板",
+    "ja": "ボタン: クリップボードにコピー",
+    "ru": "Кнопка: Копировать в буфер обмена"
+  },
+  "Prüft alle Pflichtfelder und Pfade vor dem Paketbau (F5)": {
+    "de": "Prüft alle Pflichtfelder und Pfade vor dem Paketbau (F5)",
+    "en": "Checks all mandatory fields and paths before packaging (F5)",
+    "es": "Comprueba todos los campos y rutas obligatorios antes de empaquetar (F5)",
+    "zh": "打包前检查所有必填字段和路径 (F5)",
+    "ja": "パッケージ化の前にすべての必須フィールドとパスを確認します (F5)",
+    "ru": "Проверяет все обязательные поля и пути перед сборкой пакета (F5)"
+  },
+  "Schaltfläche: Preflight-Prüfung starten": {
+    "de": "Schaltfläche: Preflight-Prüfung starten",
+    "en": "Button: Start preflight check",
+    "es": "Botón: Iniciar verificación previa",
+    "zh": "按钮: 启动预检检查",
+    "ja": "ボタン: プリフライト チェックを開始",
+    "ru": "Кнопка: Запустить предварительную проверку"
+  },
+  "Erstellt den Ausgabeordner, konvertiert Icons und generiert AppxManifest.xml": {
+    "de": "Erstellt den Ausgabeordner, konvertiert Icons und generiert AppxManifest.xml",
+    "en": "Creates output folder, converts icons, and generates AppxManifest.xml",
+    "es": "Crea la carpeta de salida, convierte iconos y genera AppxManifest.xml",
+    "zh": "创建输出文件夹、转换图标并生成 AppxManifest.xml",
+    "ja": "出力フォルダーを作成し、アイコンを変換して AppxManifest.xml を生成します",
+    "ru": "Создает папку вывода, преобразует значки и генерирует AppxManifest.xml"
+  },
+  "Schaltfläche: Paket erzeugen": {
+    "de": "Schaltfläche: Paket erzeugen",
+    "en": "Button: Create package",
+    "es": "Botón: Crear paquete",
+    "zh": "按钮: 生成包",
+    "ja": "ボタン: パッケージを作成",
+    "ru": "Кнопка: Создать пакет"
+  },
+  "Führt PyInstaller-Build mit allen Assets und i18n durch": {
+    "de": "Führt PyInstaller-Build mit allen Assets und i18n durch",
+    "en": "Runs PyInstaller build with all assets and i18n",
+    "es": "Ejecuta la compilación de PyInstaller con todos los activos e i18n",
+    "zh": "使用所有资源和 i18n 运行 PyInstaller 构建",
+    "ja": "すべてのアセットと i18n を使用して PyInstaller ビルドを実行します",
+    "ru": "Выполняет сборку PyInstaller со всеми ресурсами и i18n"
+  },
+  "Schaltfläche: Standalone-EXE kompilieren": {
+    "de": "Schaltfläche: Standalone-EXE kompilieren",
+    "en": "Button: Compile standalone EXE",
+    "es": "Botón: Compilar EXE independiente",
+    "zh": "按钮: 编译独立 EXE",
+    "ja": "ボタン: スタンドアロン EXE をコンパイル",
+    "ru": "Кнопка: Скомпилировать автономный EXE"
+  },
+  "Erstellt das MSIX-Paket mit makeappx und signiert es mit signtool": {
+    "de": "Erstellt das MSIX-Paket mit makeappx und signiert es mit signtool",
+    "en": "Creates MSIX package with makeappx and signs it with signtool",
+    "es": "Crea el paquete MSIX con makeappx y lo firma con signtool",
+    "zh": "使用 makeappx 创建 MSIX 包并使用 signtool 对其进行签名",
+    "ja": "makeappx で MSIX パッケージを作成し、signtool で署名します",
+    "ru": "Создает пакет MSIX с помощью makeappx и подписывает его с помощью signtool"
+  },
+  "Schaltfläche: MSIX bauen und signieren": {
+    "de": "Schaltfläche: MSIX bauen und signieren",
+    "en": "Button: Build and sign MSIX",
+    "es": "Botón: Crear y firmar MSIX",
+    "zh": "按钮: 构建并签名 MSIX",
+    "ja": "ボタン: MSIX をビルドして署名",
+    "ru": "Кнопка: Собрать и подписать MSIX"
+  },
+  "Erstellt automatisierte Screenshots für den Store": {
+    "de": "Erstellt automatisierte Screenshots für den Store",
+    "en": "Creates automated screenshots for the Store",
+    "es": "Crea capturas de pantalla automatizadas para la tienda",
+    "zh": "自动为商店创建屏幕截图",
+    "ja": "ストア用の自動スクリーンショットを作成します",
+    "ru": "Создает автоматические снимки экрана для Store"
+  },
+  "Schaltfläche: Screenshots aufnehmen": {
+    "de": "Schaltfläche: Screenshots aufnehmen",
+    "en": "Button: Capture screenshots",
+    "es": "Botón: Capturar pantallas",
+    "zh": "按钮: 截取屏幕截图",
+    "ja": "ボタン: スクリーンショットを撮影",
+    "ru": "Кнопка: Сделать снимки экрана"
+  },
+  "Führt den Microsoft Windows App Certification Kit Test durch": {
+    "de": "Führt den Microsoft Windows App Certification Kit Test durch",
+    "en": "Runs Microsoft Windows App Certification Kit test",
+    "es": "Ejecuta la prueba del Kit de certificación de aplicaciones de Windows",
+    "zh": "运行 Microsoft Windows 应用认证工具包测试",
+    "ja": "Microsoft Windows アプリ認定キット テストを実行します",
+    "ru": "Запускает тест комплекта сертификации приложений Microsoft Windows"
+  },
+  "Schaltfläche: WACK-Zertifizierungstest ausführen": {
+    "de": "Schaltfläche: WACK-Zertifizierungstest ausführen",
+    "en": "Button: Run WACK certification test",
+    "es": "Botón: Ejecutar prueba de certificación WACK",
+    "zh": "按钮: 运行 WACK 认证测试",
+    "ja": "ボタン: WACK 認定テストを実行",
+    "ru": "Кнопка: Запустить сертификационный тест WACK"
+  },
+  "Öffnet den Ausgabeordner im Windows-Explorer": {
+    "de": "Öffnet den Ausgabeordner im Windows-Explorer",
+    "en": "Opens output folder in Windows Explorer",
+    "es": "Abre la carpeta de salida en el Explorador de Windows",
+    "zh": "在 Windows 资源管理器中打开输出文件夹",
+    "ja": "Windows エクスプローラーで出力フォルダーを開きます",
+    "ru": "Открывает папку вывода в проводнике Windows"
+  },
+  "Schaltfläche: Ausgabeordner anzeigen": {
+    "de": "Schaltfläche: Ausgabeordner anzeigen",
+    "en": "Button: Show output folder",
+    "es": "Botón: Mostrar carpeta de salida",
+    "zh": "按钮: 显示输出文件夹",
+    "ja": "ボタン: 出力フォルダーを表示",
+    "ru": "Кнопка: Показать папку вывода"
+  },
+  "Speichert die Konfiguration ohne Geheimnisse als JSON (Strg+E)": {
+    "de": "Speichert die Konfiguration ohne Geheimnisse als JSON (Strg+E)",
+    "en": "Saves configuration without secrets as JSON (Ctrl+E)",
+    "es": "Guarda la configuración sin secretos como JSON (Ctrl+E)",
+    "zh": "将不含机密信息的配置另存为 JSON (Ctrl+E)",
+    "ja": "秘密情報を含まない構成を JSON として保存 (Ctrl+E)",
+    "ru": "Сохраняет конфигурацию без секретов в формате JSON (Ctrl+E)"
+  },
+  "Schaltfläche: Profil exportieren": {
+    "de": "Schaltfläche: Profil exportieren",
+    "en": "Button: Export profile",
+    "es": "Botón: Exportar perfil",
+    "zh": "按钮: 导出配置文件",
+    "ja": "ボタン: プロファイルをエクスポート",
+    "ru": "Кнопка: Экспортировать профиль"
+  },
+  "Lädt ein gespeichertes JSON-Projektprofil (Strg+O)": {
+    "de": "Lädt ein gespeichertes JSON-Projektprofil (Strg+O)",
+    "en": "Loads a saved JSON project profile (Ctrl+O)",
+    "es": "Carga un perfil de proyecto JSON guardado (Ctrl+O)",
+    "zh": "加载已保存的 JSON 项目配置文件 (Ctrl+O)",
+    "ja": "保存された JSON プロジェクト プロファイルを読み込む (Ctrl+O)",
+    "ru": "Загружает сохраненный профиль проекта JSON (Ctrl+O)"
+  },
+  "Schaltfläche: Profil importieren": {
+    "de": "Schaltfläche: Profil importieren",
+    "en": "Button: Import profile",
+    "es": "Botón: Importar perfil",
+    "zh": "按钮: 导入配置文件",
+    "ja": "ボタン: プロファイルをインポート",
+    "ru": "Кнопка: Импортировать профиль"
+  },
+  "Speichert alle Einstellungen und Pfade dauerhaft (Strg+S)": {
+    "de": "Speichert alle Einstellungen und Pfade dauerhaft (Strg+S)",
+    "en": "Saves all settings and paths persistently (Ctrl+S)",
+    "es": "Guarda todos los ajustes y rutas de forma persistente (Ctrl+S)",
+    "zh": "持久保存所有设置和路径 (Ctrl+S)",
+    "ja": "すべての設定とパスを永続的に保存 (Ctrl+S)",
+    "ru": "Постоянно сохраняет все настройки и пути (Ctrl+S)"
+  },
+  "Schaltfläche: Einstellungen speichern": {
+    "de": "Schaltfläche: Einstellungen speichern",
+    "en": "Button: Save settings",
+    "es": "Botón: Guardar ajustes",
+    "zh": "按钮: 保存设置",
+    "ja": "ボタン: 設定を保存",
+    "ru": "Кнопка: Сохранить настройки"
+  },
+  "Beendet das Programm nach Sicherheitsabfrage (Strg+Q)": {
+    "de": "Beendet das Programm nach Sicherheitsabfrage (Strg+Q)",
+    "en": "Exits program after confirmation prompt (Ctrl+Q)",
+    "es": "Sale del programa tras confirmación (Ctrl+Q)",
+    "zh": "确认后退出程序 (Ctrl+Q)",
+    "ja": "確認プロンプトの後にプログラムを終了 (Ctrl+Q)",
+    "ru": "Завершает работу программы после подтверждения (Ctrl+Q)"
+  },
+  "Schaltfläche: Programm beenden": {
+    "de": "Schaltfläche: Programm beenden",
+    "en": "Button: Exit program",
+    "es": "Botón: Salir del programa",
+    "zh": "按钮: 退出程序",
+    "ja": "ボタン: プログラムを終了",
+    "ru": "Кнопка: Выйти из программы"
   }
 }

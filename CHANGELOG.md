@@ -17,6 +17,17 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt / Added (2026-08-24)
+
+- **UX, Barrierefreiheit & Tastaturnavigation (SOFTWARE_UX_AND_ACCESSIBILITY_REVIEW):**
+  - **Barrierefreies ToolTip-System (`ToolTip`):** Dualer Aktivierungs-Trigger über Maus-Hover (`<Enter>/<Leave>`) und Tastaturfokus (`<FocusIn>/<FocusOut>`) sowie automatische Anbindung an die untere Statusleiste für visuelle und Screenreader-Unterstützung.
+  - **Permanente Statusleiste:** Kontextuelle Rückmeldung fokussierter Eingabefelder und Steuerelemente am unteren Fensterrand mit automatischem Reset auf Standardstatus (`Status: Bereit`).
+  - **Menüleiste & Schnellnavigation:** Vollständige Menüleiste mit Untermenüs `Datei` (Profil Import/Export, Speichern, Beenden), `Aktionen` (Preflight, Paket, EXE, MSIX, WACK, Screenshots), `Ansicht` (Direktsprung zu Reitern 1–4), `Sprache / Language` (6 Sprachen: DE, EN, ES, ZH, JA, RU) und `Hilfe` (Tastaturkürzel & Info).
+  - **Globale Tastaturkürzel:** Direkte Navigation via `Strg+S` (Speichern), `Strg+O` (Import), `Strg+E` (Export), `F5` (Preflight-Check), `Strg+1..4` (Reiter Metadaten/Build/Store/Aktionen), `F1` (Tastatur- & Barrierefreiheits-Hilfe) und `Strg+Q` (Beenden).
+  - **Modaler Barrierefreiheits-Dialog:** `show_shortcuts_help()` zur Erläuterung aller Tastatur- und Screenreader-Steuerungen.
+  - **Erweiterter 6-Sprachen-Katalog:** 223 lokalisierte Begriffe für alle Menüpunkte, Tooltips, Statusmeldungen und Dialoge in `locales/translations.json`.
+  - **Automatisierte UI- & Accessibility-Tests:** `tests/test_ui_accessibility.py` erweitert auf ToolTip-Lifecycle, Menüleistenstruktur, Shortcut-Bindings und dynamische Sprachumschaltung (111 Tests gesamt: 107 passed, 4 skipped, 100% grün).
+
 ### Hinzugefügt / Added (2026-08-23)
 
 - **Marketing, Discoverability, Visual Showcase & Governance (Pfad B):**
