@@ -193,6 +193,21 @@ def sanitize_application_id(app_name):
             segments.append(segment)
     return ".".join(segments)[:64].rstrip(".") or "App"
 
+
+def safe_package_dir_name(app_name):
+    """Return a single safe output-folder segment derived from the app name."""
+    name = (app_name or "").strip() or "MyApp"
+    has_separator = any(sep in name for sep in ("/", "\\"))
+    if (
+        has_separator
+        or os.path.isabs(name)
+        or name in {".", ".."}
+        or os.path.splitdrive(name)[0]
+    ):
+        return sanitize_application_id(name)
+    return name
+
+
 MANIFEST_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
 <Package {{NAMESPACES}}
          IgnorableNamespaces="{{IGNORABLE}}">
@@ -1625,7 +1640,10 @@ class StorePackagerApp(tk.Tk):
     def package_dir(self):
         appname = (self.app_name.get().strip() or "MyApp")
         outdir_root = os.path.abspath(self.output_dir.get().strip() or OUTPUT_ROOT)
-        outdir = os.path.join(outdir_root, appname)
+        package_leaf = safe_package_dir_name(appname)
+        outdir = os.path.abspath(os.path.join(outdir_root, package_leaf))
+        if os.path.commonpath([outdir_root, outdir]) != outdir_root:
+            raise ValueError("Ausgabeordner muss innerhalb des gewählten Output-Ordners liegen.")
         return outdir
 
     # ---------- i18n integration ----------

@@ -17,6 +17,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Sicherheit / Security (2026-08-26)
+
+- **Output-Pfad-Härtung (SOFTWARE_BUGSEARCH):** Der aus `app_name` und `output_dir`
+  abgeleitete Paketordner verwendet jetzt ein sicheres einzelnes
+  Verzeichnis-Segment. Profilwerte wie `.` oder `..` können den gewählten
+  Output-Root dadurch nicht mehr als Überschreib-/Löschziel umbiegen; normale
+  Anzeigenamen wie `SQLite Viewer Pro` bleiben als Ordnername erhalten.
+
 ### Sicherheit / Security (2026-08-25)
 
 - **Kontrollierte Build-Abhängigkeiten:** Die Lizenzsammlung installiert `pip-licenses` nicht mehr ungeprüft und ungepinnt zur Laufzeit. Das Werkzeug muss vorab in einer kontrollierten Build-Umgebung bereitgestellt werden; fehlt es, bricht die Sammlung mit einem klaren Hinweis ab und entfernt eine unvollständige Ausgabedatei.

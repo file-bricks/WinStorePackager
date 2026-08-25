@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9--3.12-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Bestanden-brightgreen?style=for-the-badge&logo=githubactions" alt="CI Status">
-  <img src="https://img.shields.io/badge/Tests-107%20bestanden%20%7C%204%20%C3%BCbersprungen-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-103%20bestanden%20%7C%2011%20%C3%BCbersprungen-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/Lizenz-MIT-green?style=for-the-badge" alt="Lizenz">
   <img src="https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="Plattform">
   <img src="https://img.shields.io/badge/Datenschutz-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="Datenschutz">

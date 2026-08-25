@@ -8,6 +8,15 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 import manage_translations as mt
+import WindowsStorePublisher_3 as wsp
+
+
+class _StringVar:
+    def __init__(self, value=""):
+        self._value = value
+
+    def get(self):
+        return self._value
 
 
 class TestU2TranslatorCode(unittest.TestCase):
@@ -50,6 +59,30 @@ class TestD3SubprocessTimeout(unittest.TestCase):
         snippet = src[idx:idx + 300]
         self.assertIn("timeout", snippet,
                       "subprocess.run für PyInstaller --version ohne timeout= — BUG-D3")
+
+
+class TestOutputDirectorySafety(unittest.TestCase):
+    """Bugsearch: Profil-Appnamen dürfen den Output-Root nicht als Löschziel umbiegen."""
+
+    def test_package_dir_never_uses_traversal_app_name_as_output_root(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            app = wsp.StorePackagerApp.__new__(wsp.StorePackagerApp)
+            app.output_dir = _StringVar(tmpdir)
+            app.app_name = _StringVar("..")
+
+            package_dir = Path(app.package_dir()).resolve(strict=False)
+
+            self.assertNotEqual(package_dir, Path(tmpdir).resolve(strict=False))
+            self.assertEqual(package_dir.parent, Path(tmpdir).resolve(strict=False))
+            self.assertEqual(package_dir.name, "App")
+
+    def test_package_dir_preserves_plain_display_names(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            app = wsp.StorePackagerApp.__new__(wsp.StorePackagerApp)
+            app.output_dir = _StringVar(tmpdir)
+            app.app_name = _StringVar("SQLite Viewer Pro")
+
+            self.assertEqual(Path(app.package_dir()).name, "SQLite Viewer Pro")
 
 
 if __name__ == "__main__":
