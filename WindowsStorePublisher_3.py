@@ -606,7 +606,7 @@ class StorePackagerApp(tk.Tk):
                 self.iconbitmap(default=app_icon_path)
             except tk.TclError:
                 pass
-        self.title("Windows Store Packager v2.3 (Auto-Setup)")
+        self.title("Windows Store Packager v3.1.0 (Auto-Setup)")
         self.geometry("1200x1000")
 
         # State variables

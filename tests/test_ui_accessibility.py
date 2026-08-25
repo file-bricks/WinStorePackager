@@ -209,5 +209,9 @@ class TestUiAccessibility(unittest.TestCase):
         de_text = translations["Tastaturkürzel & Barrierefreiheit"].get("de", "")
         self.assertIn("ü", de_text)
 
+    def test_window_title_matches_current_release_version(self):
+        source = Path(_wsp.__file__).read_text(encoding="utf-8")
+        self.assertIn('self.title("Windows Store Packager v3.1.0 (Auto-Setup)")', source)
+
 if __name__ == "__main__":
     unittest.main()
