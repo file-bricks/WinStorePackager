@@ -1784,9 +1784,6 @@ def patch_widgets(translator):
 
         try:
             python_exe = self.get_build_interpreter() or sys.executable
-            subprocess.run([python_exe, "-m", "pip", "install", "pip-licenses"],
-                          check=True, capture_output=True, timeout=60)
-
             with open(target, "w", encoding="utf-8") as f:
                 subprocess.run(
                     [python_exe, "-m", "pip_licenses",
@@ -1803,8 +1800,19 @@ def patch_widgets(translator):
 
             return True, target
         except subprocess.TimeoutExpired:
+            if os.path.exists(target):
+                os.remove(target)
             return False, "Timeout beim Sammeln der Lizenzen"
+        except subprocess.CalledProcessError:
+            if os.path.exists(target):
+                os.remove(target)
+            return False, (
+                "pip-licenses konnte nicht ausgeführt werden. Installiere das Werkzeug vorab "
+                "in einer kontrollierten Build-Umgebung und starte die Lizenzsammlung erneut."
+            )
         except Exception as e:
+            if os.path.exists(target):
+                os.remove(target)
             return False, str(e)
 
     # ---------- Builders ----------

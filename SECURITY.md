@@ -6,7 +6,7 @@
 
 `file-bricks/WinStorePackager` ist als rein lokale Desktop- und CLI-Anwendung zur Vorbereitung, Validierung und Paketierung von Python-Anwendungen für den Microsoft Store konzipiert. Sicherheit, Datenschutz und Geheimnisschutz basieren auf folgenden Kernprinzipien:
 
-- **Local-First & Zero-Egress:** WinStorePackager führt alle Analysen, Icon-Skalierungen, Manifest-Generierungen und Build-Schritte 100% lokal aus. Es werden keinerlei Telemetriedaten, Nutzungsstatistiken oder Projektinhalte über das Netzwerk übertragen.
+- **Local-First & kontrollierter Egress:** WinStorePackager überträgt keine Telemetriedaten, Nutzungsstatistiken oder Projektinhalte. Fehlende Build-Werkzeuge werden niemals automatisch aus dem Netzwerk installiert. Nur eine ausdrücklich konfigurierte Signatur-Zeitstempelung kann den gewählten Zeitstempeldienst kontaktieren.
 - **Keine Cloud-Zwangsverbindung:** Es existieren keine Zwangsverbindungen zu Cloud-Diensten. Der Paketierungsworkflow nutzt die lokal auf dem System installierten Windows SDK-Tools (`makeappx.exe`, `signtool.exe`) bzw. das SDK-freie Unix-Preflight.
 - **Unprivilegierter User-Mode (Non-Elevation):** WinStorePackager benötigt und verlangt keine Administratorrechte. Alle Dateioperationen, Manifest-Erzeugungen und Hilfsskripte laufen streng im unprivilegierten Benutzerkontext ab.
 - **OS-Keyring-Geheimnisschutz:** Zertifikatspasswörter werden ausschließlich über den sicheren Keyring des Betriebssystems (`keyring`-Bibliothek) verwaltet. Passwörter werden niemals im Klartext, in JSON-Konfigurationsdateien oder im Git-Repository gespeichert.
@@ -44,7 +44,7 @@ Bitte öffnen Sie für Sicherheitslücken **keine öffentlichen Issues** und ver
 
 `file-bricks/WinStorePackager` is engineered as a strictly local desktop GUI and CLI tool for preparing, validating, and packaging Python applications for the Microsoft Store. Security, privacy, and secret protection are grounded in the following guarantees:
 
-- **Local-First & Zero-Egress:** WinStorePackager executes all inspection, icon generation, manifest templating, and MSIX build tasks 100% locally. No user project files, telemetry, or analytics are transmitted across the network.
+- **Local-First & Controlled Egress:** WinStorePackager does not transmit project files, telemetry, or analytics. Missing build tools are never installed automatically from the network. Only explicitly configured signature timestamping may contact the selected timestamp service.
 - **Zero Cloud Requirement:** No mandatory cloud accounts or external telemetry endpoints. The build workflow utilizes local Windows SDK binaries (`makeappx.exe`, `signtool.exe`) or SDK-free Unix preflight scripts.
 - **Unprivileged User-Mode Operation (Non-Elevation):** WinStorePackager operates strictly within standard user privileges and does not require elevated administrator rights.
 - **OS Keyring Cryptographic Isolation:** Code-signing certificate passwords are encrypted and managed exclusively through the operating-system Keyring. Passwords are never written to disk in plaintext, configuration JSONs, or Git-tracked files.

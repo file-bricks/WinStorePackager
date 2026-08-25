@@ -1,6 +1,6 @@
 # Privacy Policy — WinStorePackager
 
-**Last updated:** May 1, 2026
+**Last updated:** August 25, 2026
 **Publisher:** Geiger
 
 ## Overview
@@ -19,7 +19,7 @@ The application reads project files, icons, and configuration files that you cho
 
 ## External Services
 
-WinStorePackager does not send project files, icons, manifests, certificates, or settings to the developer or third parties during packaging. If required Python packages are missing, the application can invoke `pip` to install them from PyPI. External tools (e.g., Windows SDK utilities for code signing and WACK tests) are invoked locally on your machine according to your configuration.
+WinStorePackager does not send project files, icons, manifests, certificates, or settings to the developer or third parties during packaging. Missing Python build tools are never installed automatically; you must provision them in your controlled build environment. External tools (e.g., Windows SDK utilities for code signing and WACK tests) are invoked locally according to your configuration. If you explicitly configure signature timestamping, the signing tool may contact the selected timestamp service.
 
 ## Local Storage
 
@@ -43,7 +43,7 @@ For questions about this privacy policy:
 
 # Datenschutzrichtlinie — WinStorePackager
 
-**Zuletzt aktualisiert:** 1. Mai 2026
+**Zuletzt aktualisiert:** 25. August 2026
 **Herausgeber:** Geiger
 
 ## Überblick
@@ -62,7 +62,7 @@ Die Anwendung liest Projektdateien, Icons und Konfigurationsdateien, die Sie ver
 
 ## Externe Dienste
 
-WinStorePackager überträgt beim Packaging keine Projektdateien, Icons, Manifeste, Zertifikate oder Einstellungen an den Entwickler oder Dritte. Wenn erforderliche Python-Pakete fehlen, kann die Anwendung `pip` aufrufen, um diese von PyPI zu installieren. Externe Tools (z. B. Windows SDK-Hilfsprogramme für Code-Signierung und WACK-Tests) werden lokal auf Ihrem Rechner gemäß Ihrer Konfiguration aufgerufen.
+WinStorePackager überträgt beim Packaging keine Projektdateien, Icons, Manifeste, Zertifikate oder Einstellungen an den Entwickler oder Dritte. Fehlende Python-Build-Werkzeuge werden niemals automatisch installiert; Sie stellen sie in Ihrer kontrollierten Build-Umgebung bereit. Externe Tools (z. B. Windows SDK-Hilfsprogramme für Code-Signierung und WACK-Tests) werden lokal gemäß Ihrer Konfiguration aufgerufen. Wenn Sie ausdrücklich eine Signatur-Zeitstempelung konfigurieren, kann das Signaturwerkzeug den gewählten Zeitstempeldienst kontaktieren.
 
 ## Lokale Speicherung
 

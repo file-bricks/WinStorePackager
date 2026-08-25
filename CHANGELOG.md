@@ -17,6 +17,11 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Sicherheit / Security (2026-08-25)
+
+- **Kontrollierte Build-Abhängigkeiten:** Die Lizenzsammlung installiert `pip-licenses` nicht mehr ungeprüft und ungepinnt zur Laufzeit. Das Werkzeug muss vorab in einer kontrollierten Build-Umgebung bereitgestellt werden; fehlt es, bricht die Sammlung mit einem klaren Hinweis ab und entfernt eine unvollständige Ausgabedatei.
+- `SECURITY.md` und `PRIVACY_POLICY.md` dokumentieren den verbleibenden, ausdrücklich konfigurierten Netzwerkpfad für Signatur-Zeitstempelung und den Verzicht auf automatische Paketinstallation.
+
 ### Hinzugefügt / Added (2026-08-24)
 
 - **UX, Barrierefreiheit & Tastaturnavigation (SOFTWARE_UX_AND_ACCESSIBILITY_REVIEW):**
