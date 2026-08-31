@@ -848,10 +848,10 @@ class StorePackagerApp(tk.Tk):
 
     def export_project_profile(self):
         path = filedialog.asksaveasfilename(
-            title="Projektprofil exportieren",
+            title=_t("Projektprofil exportieren"),
             defaultextension=".json",
             initialfile="winstorepackager-project-v1.json",
-            filetypes=[("JSON", "*.json"), ("Alle Dateien", "*.*")],
+            filetypes=[(_t("JSON-Dateien"), "*.json"), (_t("Alle Dateien"), "*.*")],
         )
         if not path:
             return
@@ -859,17 +859,22 @@ class StorePackagerApp(tk.Tk):
         try:
             write_project_profile(path, self.collect_project_profile_state())
             messagebox.showinfo(
-                "Projektprofil exportiert",
-                "Projektprofil wurde exportiert.\n\n"
-                "Nicht enthalten sind Publisher-ID, SDK-Pfade, Zertifikatspfade und Passwörter.",
+                _t("Projektprofil exportiert"),
+                _t(
+                    "Projektprofil wurde exportiert.\n\n"
+                    "Nicht enthalten sind Publisher-ID, SDK-Pfade, Zertifikatspfade und Passwörter."
+                ),
             )
         except Exception as e:
-            messagebox.showerror("Fehler", f"Projektprofil konnte nicht exportiert werden:\n{e}")
+            messagebox.showerror(
+                _t("Fehler"),
+                f"{_t('Projektprofil konnte nicht exportiert werden:')}\n{e}",
+            )
 
     def import_project_profile(self):
         path = filedialog.askopenfilename(
-            title="Projektprofil importieren",
-            filetypes=[("JSON", "*.json"), ("Alle Dateien", "*.*")],
+            title=_t("Projektprofil importieren"),
+            filetypes=[(_t("JSON-Dateien"), "*.json"), (_t("Alle Dateien"), "*.*")],
         )
         if not path:
             return
@@ -878,12 +883,17 @@ class StorePackagerApp(tk.Tk):
             profile_state = read_project_profile(path)
             self.apply_project_profile_state(profile_state)
             messagebox.showinfo(
-                "Projektprofil importiert",
-                "Projektprofil wurde geladen.\n\n"
-                "Bitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen.",
+                _t("Projektprofil importiert"),
+                _t(
+                    "Projektprofil wurde geladen.\n\n"
+                    "Bitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen."
+                ),
             )
         except Exception as e:
-            messagebox.showerror("Fehler", f"Projektprofil konnte nicht importiert werden:\n{e}")
+            messagebox.showerror(
+                _t("Fehler"),
+                f"{_t('Projektprofil konnte nicht importiert werden:')}\n{e}",
+            )
 
     def _register_translatable(self, widget, prop, key):
         if not hasattr(self, "_translatable_items") or self._translatable_items is None:

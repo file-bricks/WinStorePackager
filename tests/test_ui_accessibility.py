@@ -2,6 +2,8 @@ import sys
 import tkinter as tk
 from tkinter import ttk
 import unittest
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -59,6 +61,59 @@ def _button_texts(parent: tk.Misc) -> list[str]:
             except tk.TclError:
                 continue
     return texts
+
+
+class TestProjectProfileDialogLocalization(unittest.TestCase):
+    def setUp(self):
+        self.translator = _wsp.get_translator()
+        if self.translator is None:
+            self.skipTest("Translation system is unavailable")
+        self.translator.set_language("en")
+
+    def tearDown(self):
+        if self.translator is not None:
+            self.translator.set_language("de")
+
+    def test_profile_dialogs_follow_the_selected_language(self):
+        export_app = SimpleNamespace(collect_project_profile_state=lambda: {"app_name": "Demo"})
+        with (
+            patch.object(_wsp.filedialog, "asksaveasfilename", return_value="demo.json") as save_dialog,
+            patch.object(_wsp, "write_project_profile") as write_profile,
+            patch.object(_wsp.messagebox, "showinfo") as show_info,
+        ):
+            _wsp.StorePackagerApp.export_project_profile(export_app)
+
+        self.assertEqual(save_dialog.call_args.kwargs["title"], "Export Project Profile")
+        self.assertEqual(
+            save_dialog.call_args.kwargs["filetypes"],
+            [("JSON Files", "*.json"), ("All Files", "*.*")],
+        )
+        write_profile.assert_called_once_with("demo.json", {"app_name": "Demo"})
+        show_info.assert_called_once_with(
+            "Project Profile Exported",
+            "Project profile was exported.\n\n"
+            "Publisher ID, SDK paths, certificate paths, and passwords are not included.",
+        )
+
+        import_app = SimpleNamespace(apply_project_profile_state=Mock())
+        with (
+            patch.object(_wsp.filedialog, "askopenfilename", return_value="demo.json") as open_dialog,
+            patch.object(_wsp, "read_project_profile", return_value={"app_name": "Demo"}),
+            patch.object(_wsp.messagebox, "showinfo") as show_info,
+        ):
+            _wsp.StorePackagerApp.import_project_profile(import_app)
+
+        self.assertEqual(open_dialog.call_args.kwargs["title"], "Import Project Profile")
+        self.assertEqual(
+            open_dialog.call_args.kwargs["filetypes"],
+            [("JSON Files", "*.json"), ("All Files", "*.*")],
+        )
+        import_app.apply_project_profile_state.assert_called_once_with({"app_name": "Demo"})
+        show_info.assert_called_once_with(
+            "Project Profile Imported",
+            "Project profile was loaded.\n\n"
+            "Please add Publisher ID, SDK paths, and certificate locally.",
+        )
 
 
 class TestUiAccessibility(unittest.TestCase):
@@ -162,7 +217,10 @@ class TestUiAccessibility(unittest.TestCase):
             full_app.destroy()
 
     def test_dynamic_language_switch_updates_tooltips(self):
-        full_app = _minimal_app()
+        try:
+            full_app = _minimal_app()
+        except tk.TclError as exc:
+            self.skipTest(f"Tkinter display is unavailable for a second window: {exc}")
         try:
             full_app.build_gui()
 

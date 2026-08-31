@@ -823,6 +823,46 @@
     "ja": "プロジェクトプロファイルがインポートされました",
     "ru": "Профиль проекта импортирован"
   },
+  "JSON-Dateien": {
+    "de": "JSON-Dateien",
+    "en": "JSON Files",
+    "es": "Archivos JSON",
+    "zh": "JSON 文件",
+    "ja": "JSON ファイル",
+    "ru": "Файлы JSON"
+  },
+  "Alle Dateien": {
+    "de": "Alle Dateien",
+    "en": "All Files",
+    "es": "Todos los archivos",
+    "zh": "所有文件",
+    "ja": "すべてのファイル",
+    "ru": "Все файлы"
+  },
+  "Projektprofil wurde exportiert.\n\nNicht enthalten sind Publisher-ID, SDK-Pfade, Zertifikatspfade und Passwörter.": {
+    "de": "Projektprofil wurde exportiert.\n\nNicht enthalten sind Publisher-ID, SDK-Pfade, Zertifikatspfade und Passwörter.",
+    "en": "Project profile was exported.\n\nPublisher ID, SDK paths, certificate paths, and passwords are not included.",
+    "es": "El perfil del proyecto se exportó.\n\nNo se incluyen el ID del editor, las rutas de SDK, las rutas de certificados ni las contraseñas.",
+    "zh": "项目配置文件已导出。\n\n其中不包含发布者 ID、SDK 路径、证书路径和密码。",
+    "ja": "プロジェクトプロファイルをエクスポートしました。\n\n発行元 ID、SDK パス、証明書パス、パスワードは含まれません。",
+    "ru": "Профиль проекта экспортирован.\n\nИдентификатор издателя, пути SDK, пути к сертификатам и пароли не включаются."
+  },
+  "Projektprofil konnte nicht exportiert werden:": {
+    "de": "Projektprofil konnte nicht exportiert werden:",
+    "en": "Project profile could not be exported:",
+    "es": "No se pudo exportar el perfil del proyecto:",
+    "zh": "无法导出项目配置文件：",
+    "ja": "プロジェクトプロファイルをエクスポートできませんでした：",
+    "ru": "Не удалось экспортировать профиль проекта:"
+  },
+  "Projektprofil konnte nicht importiert werden:": {
+    "de": "Projektprofil konnte nicht importiert werden:",
+    "en": "Project profile could not be imported:",
+    "es": "No se pudo importar el perfil del proyecto:",
+    "zh": "无法导入项目配置文件：",
+    "ja": "プロジェクトプロファイルをインポートできませんでした：",
+    "ru": "Не удалось импортировать профиль проекта:"
+  },
   "Projektprofil wurde geladen.\n\nBitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen.": {
     "de": "Projektprofil wurde geladen.\n\nBitte Publisher-ID, SDK-Pfade und Zertifikat lokal ergänzen.",
     "en": "Project profile was loaded.\n\nPlease add Publisher ID, SDK paths, and certificate locally.",
