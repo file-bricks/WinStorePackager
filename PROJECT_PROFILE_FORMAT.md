@@ -32,6 +32,17 @@ das dokumentierte JSON-Schema unabhängig davon verarbeiten.
 - Zertifikatspfad und Zertifikatspasswort
 - Keyring-Inhalte
 
+Import und Export validieren diesen Vertrag strikt. Unbekannte Felder und
+falsche Feldtypen werden als Schema-Drift gemeldet, statt stillschweigend
+übernommen zu werden. Auch in ansonsten erlaubten Feldern lehnt der Validator
+echte Publisher-CNs, exakte Windows-SDK-Toolpfade, Zertifikatsdateien
+(`.pfx`/`.p12`) sowie erkennbare Zugangstoken und private Schlüssel ab. Diese
+Werte werden erst nach dem Import in den hostlokalen Einstellungen ergänzt.
+`null` wird bei optionalen Feldern wie ein fehlender Wert behandelt; insbesondere
+bleibt `enable_i18n` dann beim sicheren Standard `true`. Frühere Profile mit
+nicht dokumentierten Erweiterungsfeldern müssen diese Felder vor dem Import
+entfernen oder in ein neues, versioniertes Schema migrieren.
+
 ## Struktur
 
 ```json

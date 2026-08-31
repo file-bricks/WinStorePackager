@@ -17,6 +17,17 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Sicherheit / Security (2026-08-31)
+
+- **Strikter Projektprofilvertrag:** Import und Export von
+  `winstorepackager-project-v1.json` melden unbekannte Zusatzfelder, falsche
+  Feldtypen, echte Publisher-CNs, exakte Windows-SDK-Toolpfade,
+  Zertifikatsdateien sowie erkennbare Zugangstoken und private Schlüssel jetzt
+  als Validierungsfehler. Damit bleibt Schema-Drift sichtbar und hostlokale
+  Signaturdaten gelangen nicht unbemerkt in den Austauschvertrag. Optionale
+  `null`-Werte werden konsistent wie fehlende Werte normalisiert;
+  nicht dokumentierte Erweiterungsfelder erfordern künftig eine Migration.
+
 ### Sicherheit / Security (2026-08-26)
 
 - **Output-Pfad-Härtung (SOFTWARE_BUGSEARCH):** Der aus `app_name` und `output_dir`
