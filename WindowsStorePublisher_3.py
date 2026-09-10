@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Windows Store Packager — Version 2.3 (Auto-Setup & Safe Mode)
+Windows Store Packager — Version 3.1.0 (Auto-Setup & Safe Mode)
 Complete GUI tool for Microsoft Store app packaging.
 
 Changelog v2.3:
@@ -532,7 +532,8 @@ class ProgressDialog(tk.Toplevel):
 class ToolTip:
     """
     Barrierefreies, leichtgewichtiges Tooltip-Widget für Tkinter-Komponenten.
-    Unterstützt Maus-Hover (<Enter>/<Leave>) und Tastaturfokus (<FocusIn>/<FocusOut>).
+    Unterstützt Maus-Hover (<Enter>/<Leave>), Tastaturfokus (<FocusIn>/<FocusOut>)
+    und barrierefreie Escape-Schließung (<Escape> gem. WCAG 2.1 AA 1.4.13).
     """
 
     def __init__(self, widget: tk.Widget, text: str = "", app: Optional[Any] = None, status_text: Optional[str] = None):
@@ -546,6 +547,7 @@ class ToolTip:
         self.widget.bind("<FocusIn>", self._on_focus_in, add="+")
         self.widget.bind("<FocusOut>", self._on_focus_out, add="+")
         self.widget.bind("<ButtonPress>", self.hide_tip, add="+")
+        self.widget.bind("<Escape>", self.hide_tip, add="+")
 
     def set_text(self, text: str, status_text: Optional[str] = None) -> None:
         self.text = text
@@ -579,6 +581,7 @@ class ToolTip:
             self.tip_window = tw = tk.Toplevel(self.widget)
             tw.wm_overrideredirect(True)
             tw.wm_geometry(f"+{x}+{y}")
+            tw.bind("<Escape>", self.hide_tip)
             try:
                 tw.attributes("-topmost", True)
             except Exception:
@@ -981,7 +984,7 @@ class StorePackagerApp(tk.Tk):
         """Zeigt Informationen über WinStorePackager an."""
         about_text = (
             "Windows Store Packager — MSIX Creator\n"
-            "Version 2.3 (Auto-Setup & Safe Mode)\n\n"
+            "Version 3.1.0 (Auto-Setup & Safe Mode)\n\n"
             "Vollständiges GUI-Tool für Microsoft Store Packaging & MSIX-Erstellung.\n"
             "Unterstützt Python-Desktop-Apps, i18n-Mehrsprachigkeit (6 Sprachen),\n"
             "WACK-Validierung und barrierefreie Tastaturbedienung.\n\n"
@@ -1107,6 +1110,9 @@ class StorePackagerApp(tk.Tk):
         self.bind_all("<Control-Key-3>", lambda e: self.select_tab(2))
         self.bind_all("<Control-Key-4>", lambda e: self.select_tab(3))
 
+        # Safe window closing handler (save-on-exit prompt)
+        self.protocol("WM_DELETE_WINDOW", self.on_quit)
+
         # Status Bar at bottom
         self.status_bar = ttk.Frame(self, relief=tk.SUNKEN, padding=(6, 3))
         self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
@@ -1207,14 +1213,14 @@ class StorePackagerApp(tk.Tk):
         lic_btns = ttk.Frame(frm)
         lic_btns.grid(row=row, column=2, sticky="nw")
 
-        btn_l1 = ttk.Button(lic_btns, text=_t("Datei +"), command=self.add_license_file)
+        btn_l1 = ttk.Button(lic_btns, text=_t("Lizenzdatei +"), command=self.add_license_file)
         btn_l1.pack(anchor="w", pady=2)
-        self._register_translatable(btn_l1, "text", "Datei +")
+        self._register_translatable(btn_l1, "text", "Lizenzdatei +")
         self._add_tooltip(btn_l1, "Fügt eine Lizenzdatei zum Paket hinzu", "Schaltfläche: Lizenzdatei hinzufügen")
 
-        btn_l2 = ttk.Button(lic_btns, text=_t("Text +"), command=self.add_license_text_entry)
+        btn_l2 = ttk.Button(lic_btns, text=_t("Lizenztext +"), command=self.add_license_text_entry)
         btn_l2.pack(anchor="w", pady=2)
-        self._register_translatable(btn_l2, "text", "Text +")
+        self._register_translatable(btn_l2, "text", "Lizenztext +")
         self._add_tooltip(btn_l2, "Fügt einen benutzerdefinierten Lizenztext hinzu", "Schaltfläche: Lizenztext hinzufügen")
         row += 1
 

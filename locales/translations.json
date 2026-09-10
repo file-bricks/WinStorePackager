@@ -271,6 +271,22 @@
     "ja": "テキスト +",
     "ru": "Текст +"
   },
+  "Lizenzdatei +": {
+    "de": "Lizenzdatei +",
+    "en": "License File +",
+    "es": "Archivo de licencia +",
+    "zh": "许可证文件 +",
+    "ja": "ライセンスファイル +",
+    "ru": "Файл лицензии +"
+  },
+  "Lizenztext +": {
+    "de": "Lizenztext +",
+    "en": "License Text +",
+    "es": "Texto de licencia +",
+    "zh": "许可证文本 +",
+    "ja": "ライセンス文章 +",
+    "ru": "Текст лицензии +"
+  },
   "Beschreibung:": {
     "de": "Beschreibung:",
     "en": "Description:",

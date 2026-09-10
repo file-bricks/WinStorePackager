@@ -178,11 +178,15 @@ class TestUiAccessibility(unittest.TestCase):
             "Installer wählen",
             "README laden",
             "Beschreibung laden",
+            "Lizenzdatei +",
+            "Lizenztext +",
         ):
             self.assertIn(label, texts)
 
         self.assertNotIn("Wählen", texts)
         self.assertNotIn("Datei laden", texts)
+        self.assertNotIn("Datei +", texts)
+        self.assertNotIn("Text +", texts)
 
     def test_build_tab_uses_contextual_button_labels(self):
         parent = tk.Frame(self.app)
@@ -224,6 +228,12 @@ class TestUiAccessibility(unittest.TestCase):
         self.assertEqual(tip.text, "Neuer Text")
         self.assertEqual(tip.status_text, "Neuer Status")
 
+        # Test dismissibility via hide_tip and Escape
+        tip.show_tip()
+        self.assertIsNotNone(tip.tip_window)
+        tip.hide_tip()
+        self.assertIsNone(tip.tip_window)
+
     def test_full_gui_structure_and_menubar(self):
         full_app = _minimal_app()
         try:
@@ -243,6 +253,9 @@ class TestUiAccessibility(unittest.TestCase):
             # Menubar exists
             menu = full_app.cget("menu")
             self.assertTrue(menu != "" and menu is not None)
+
+            # Safe shutdown handler registered on window manager close
+            self.assertTrue(bool(full_app.protocol("WM_DELETE_WINDOW")))
 
             # Keyboard shortcut helper
             self.assertTrue(hasattr(full_app, "show_shortcuts_help"))
@@ -305,6 +318,12 @@ class TestUiAccessibility(unittest.TestCase):
     def test_window_title_matches_current_release_version(self):
         source = Path(_wsp.__file__).read_text(encoding="utf-8")
         self.assertIn('self.title("Windows Store Packager v3.1.0 (Auto-Setup)")', source)
+
+    def test_about_dialog_and_docstring_version_parity(self):
+        source = Path(_wsp.__file__).read_text(encoding="utf-8")
+        self.assertIn('"Version 3.1.0 (Auto-Setup & Safe Mode)\\n\\n"', source)
+        self.assertNotIn('"Version 2.3 (Auto-Setup & Safe Mode)\\n\\n"', source)
+        self.assertIn("Windows Store Packager — Version 3.1.0", source)
 
 if __name__ == "__main__":
     unittest.main()
