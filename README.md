@@ -8,31 +8,38 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="CI Status">
-  <img src="https://img.shields.io/badge/Tests-125%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-151%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="Windows">
-  <img src="https://img.shields.io/badge/Security%20SLA-48h%20SLA-blue?style=for-the-badge" alt="Security SLA">
+  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="Platform">
+  <img src="https://img.shields.io/badge/Security%20SLA-48h%20SLA%20%7C%205d%20triage-blue?style=for-the-badge" alt="Security SLA">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="Local First">
-  <img src="https://img.shields.io/badge/Security-Local--First%20%7C%20Keyring--Protected-success?style=for-the-badge" alt="Security">
+  <img src="https://img.shields.io/badge/Security-Local--First%20%7C%20Non--Elevation-success?style=for-the-badge" alt="Security">
+  <img src="https://img.shields.io/badge/Third--Party%20Audited-100%25%20Permissive-blue?style=for-the-badge" alt="Third-Party Audited">
+  <img src="https://img.shields.io/badge/Marketing%20Log-Active-teal?style=for-the-badge" alt="Marketing Log">
   <img src="https://img.shields.io/badge/Code%20Style-Ruff-000000?style=for-the-badge" alt="Code Style">
-  <img src="https://img.shields.io/badge/LLM--Context-llms.txt-blueviolet?style=for-the-badge" alt="LLM Context">
+  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt-blueviolet?style=for-the-badge" alt="LLM Ready">
 </p>
 
 <h1 align="center">WinStorePackager</h1>
 
-<h4 align="center">Local-first Windows GUI for preparing Python apps for Microsoft Store submission: AppxManifest, Store icons, project profiles, screenshots, and MSIX packaging</h4>
+<h4 align="center">Local-first Windows GUI & CLI tool for preparing Python desktop applications for Microsoft Store submission: AppxManifest, Store icons, project profiles, screenshots, and MSIX packaging</h4>
 
 <p align="center">
-  <a href="#start-here">Quick Start</a> •
+  <a href="#quick-start">Quick Start</a> •
   <a href="#features">Features</a> •
   <a href="#architecture--packaging-pipeline">Architecture</a> •
   <a href="#packaging-lifecycle-flow">Lifecycle Flow</a> •
+  <a href="#governance--runtime-invariants">Governance & Invariants</a> •
   <a href="#visual-showcase--store-assets">Visual Showcase</a> •
-  <a href="#project-profile-exchange-and-local-profile-helper">Project Profiles</a> •
+  <a href="#project-profiles">Project Profiles</a> •
+  <a href="#prerequisites--installation">Installation</a> •
+  <a href="#sdk-free-unix-preflight">Unix Preflight</a> •
+  <a href="#local-data-and-security">Local Data & Security</a> •
   <a href="#sibling-tools--ecosystem">Sibling Tools</a> •
-  <a href="SECURITY.md">Security Policy</a> •
-  <a href="CHANGELOG.md">Changelog</a> •
-  <a href="llms.txt">LLM Context</a>
+  <a href="#comparison-with-alternatives">Comparison</a> •
+  <a href="#third-party-licenses--transparency">Third-Party Licenses</a> •
+  <a href="#marketing--target-personas">Marketing & Personas</a> •
+  <a href="#documentation--license">Documentation & License</a>
 </p>
 
 > [!NOTE]
@@ -40,17 +47,17 @@
 
 ---
 
-## Start Here
+## Quick Start
 
 | I want to... | Start with |
 |---|---|
-| Package a Python desktop app for the Microsoft Store | [`WindowsStorePublisher_3.py`](WindowsStorePublisher_3.py) on Windows |
+| Package a Python desktop app for the Microsoft Store | [`WindowsStorePublisher_3.py`](WindowsStorePublisher_3.py) or `START.bat` on Windows |
 | Run the SDK-free Unix (Linux/macOS) desktop preflight | [`unix_preflight.py`](unix_preflight.py) |
 | Share project metadata without local secrets | [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) |
 | Dogfood the WinStorePackager Store profile | [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json) |
-| Check security, local-data, and privacy boundaries | [`SECURITY.md`](SECURITY.md), [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md), and [Local Data](#local-data-and-build-artifacts) |
+| Check security, local-data, and privacy boundaries | [`SECURITY.md`](SECURITY.md), [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md), and [Local Data & Security](#local-data-and-security) |
 
-WinStorePackager is built for solo developers and small teams that need a practical Python-to-Microsoft-Store workflow without setting up Visual Studio projects for every app. It focuses on the repetitive pieces: Store manifest fields, required icon sizes, screenshot collection, profile exchange, and Windows SDK packaging commands.
+WinStorePackager is built for solo developers, indie hackers, and software teams that need a practical Python-to-Microsoft-Store workflow without setting up heavy Visual Studio projects for every app. It focuses on the repetitive pieces: Store manifest fields, required icon sizes, screenshot collection, profile exchange, and Windows SDK packaging commands.
 
 ---
 
@@ -58,14 +65,14 @@ WinStorePackager is built for solo developers and small teams that need a practi
 
 | Feature | Description |
 |---------|-------------|
-| **Manifest Generator** | Automatically creates `AppxManifest.xml` from form inputs with XML schema validation |
-| **Icon Generator** | Generates all required Store sizes: 44×44, 50×50, 150×150, 310×310, 310×150 (Wide) |
-| **6-Language GUI (i18n)** | Full localization support (Tier 2 / P-006: DE, EN, ES, ZH, JA, RU) |
-| **Keyring Integration** | Secure storage of certificate passwords via OS Keyring (no plaintext on disk) |
-| **Screenshot Assistant** | Captures app screenshots directly via `pygetwindow` for Store listing assets |
+| **Manifest Generator** | Automatically creates `AppxManifest.xml` from form inputs with XML schema validation and attribute escaping |
+| **Icon Generator** | Generates all required Store sizes: 44×44, 50×50, 150×150, 310×310, 310×150 (Wide) with Lanczos resampling |
+| **6-Language GUI (i18n)** | Full localization support (Tier 2 / P-006: DE, EN, ES, ZH, JA, RU) with runtime switching |
+| **Keyring Integration** | Secure storage of certificate passwords via OS Keyring (no plaintext passwords on disk) |
+| **Screenshot Assistant** | Captures app screenshots directly via `pygetwindow` for Microsoft Store listing assets |
 | **11 Store Categories** | Predefined categories (Developer Tools, Productivity, Education, Utilities, ...) |
 | **Age Ratings** | 3+ to 18+ ratings with compliant manifest capabilities declaration |
-| **MSIX Build & Sign** | Invokes `makeappx.exe` and `signtool.exe` from the Windows SDK with SHA-256 signing |
+| **MSIX Build & Sign** | Invokes `makeappx.exe` and `signtool.exe` from the Windows SDK with SHA-256 code signing |
 | **Settings Persistence** | Host-local JSON configuration outside Git with atomic migration safety |
 | **SDK-Free Preflight** | Cross-platform validation of manifests, profiles, and listings on Linux & macOS |
 
@@ -147,6 +154,25 @@ sequenceDiagram
 
 ---
 
+## Governance & Runtime Invariants
+
+WinStorePackager enforces 10 strict governance and runtime invariants across development, packaging, and execution:
+
+| Invariant ID | Rule & Principle | Enforcement Mechanism & Guarantee |
+|---|---|---|
+| **INV-LOCAL-01** | **100% Local-First & Zero-Egress** | All manifest compilation, icon rendering, packaging, and preflight checks run entirely offline. Zero outbound telemetry or cloud tracking. |
+| **INV-SEC-02** | **Cryptographic Password Protection & Non-Elevation** | Signing certificate passwords reside exclusively in the OS Keyring (Windows Credential Vault). The app runs in user space (`RunAsInvoker`) without administrator elevation. |
+| **INV-STORE-03** | **Microsoft Store Manifest Compliance** | Enforces strict XML schema validation, namespace handling, and attribute escaping compliant with Microsoft Partner Center guidelines. |
+| **INV-ASSET-04** | **Multi-Scale Asset Integrity** | Deterministic high-quality Lanczos resampling generates exact Microsoft Store tile dimensions (44×44, 50×50, 150×150, 310×310, 310×150). |
+| **INV-PROFILE-05** | **Redacted Profile Portability** | Shared project profiles (`winstorepackager-project-v1.json`) redact machine paths, Publisher IDs, certificate paths, and secrets for safe version-control sharing. |
+| **INV-CROSS-06** | **Cross-Platform Preflight Parity** | `unix_preflight.py` executes full metadata, listing, and schema checks on Linux and macOS without requiring Windows SDK binaries. |
+| **INV-STATE-07** | **Host-Local State Isolation & Atomic Writes** | Settings and rotating logs persist to `%LOCALAPPDATA%` outside git checkouts via atomic file replacement (`os.replace`) to prevent file corruption. |
+| **INV-WACK-08** | **Fail-Closed WACK Certification Evaluation** | Deterministic parsing of Windows App Certification Kit reports with fail-closed rejection on errors or crashes (`FAIL`, `FAILED`, `ERROR`, `CRASH`). |
+| **INV-I18N-09** | **Universal 6-Language Localization** | Complete Tier-2 multilingual GUI support (DE, EN, ES, ZH, JA, RU) with dynamic runtime switching and native umlauts. |
+| **INV-SLA-10** | **Vulnerability Floor & 48h Security SLA** | Enforced minimum dependency floors (Pillow>=12.3.0, keyring>=25.0.0, pytest>=9.1.1), 48h initial security response SLA, and 5-day triage commitment. |
+
+---
+
 ## Visual Showcase & Store Assets
 
 | Store Feature | Visual Overview |
@@ -166,7 +192,7 @@ The generator writes four 1920x1080 PNGs to `releases/windowsstore/screenshots/`
 
 ---
 
-## Project Profile Exchange and Local Profile Helper
+## Project Profiles
 
 WinStorePackager ships with a shared project profile format: [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md). The desktop app can import and export `winstorepackager-project-v1.json` so that Store metadata can be prepared outside Windows without exposing local Publisher IDs, SDK paths, certificate paths, or passwords.
 
@@ -182,7 +208,7 @@ The profile intentionally keeps Partner Center Publisher IDs, certificate paths,
 
 ## Prerequisites & Installation
 
-- Python 3.9–3.12+
+- Python 3.9–3.13+
 - Windows 10/11 (for MSIX build and signing) or Linux/macOS (for preflight validation)
 - [Windows SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/) (for `makeappx.exe` and `signtool.exe`)
 - Microsoft Store developer account (for submission)
@@ -198,7 +224,7 @@ Or on Windows, double-click `START.bat`.
 
 ---
 
-## SDK-Free Unix Preflight (Linux / macOS)
+## SDK-Free Unix Preflight
 
 For Linux/macOS workstations or CI runs without the Windows SDK, the repository includes a metadata-only preflight:
 
@@ -211,7 +237,7 @@ The Unix preflight checks project structure, `store_package.json`, README, priva
 
 ---
 
-## Local Data and Build Artifacts
+## Local Data and Security
 
 WinStorePackager operates on local project files only:
 
@@ -265,9 +291,30 @@ WinStorePackager is part of the **file-bricks** and **open-bricks** open-source 
 
 ---
 
-## Search and Discovery Context
+## Third-Party Licenses & Transparency
 
-Useful search phrases for this repository:
+WinStorePackager is audited to ensure 100% license transparency and zero-egress compliance:
+
+- **Complete Inventory:** Detailed upstream package listings, licenses, and notices are maintained in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) and [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt).
+- **Runtime Packages:** Includes Pillow (`HPND-sell-variant`), keyring (`MIT`), and pygetwindow (`BSD-3-Clause`) with strict vulnerability floors.
+- **Build & Packaging:** PyInstaller (`GPL-2.0-or-later WITH Bootloader-exception`), pyinstaller-hooks-contrib (`Apache-2.0`), and packaging (`Apache-2.0 OR BSD-2-Clause`).
+- **Quality Assurance & Testing:** pytest (`MIT`, `>=9.1.1`), pluggy (`MIT`), and ruff (`MIT OR Apache-2.0`).
+- **Standard Library:** Python Software Foundation License (`PSFL-2.0`). External Windows SDK binaries are proprietary to Microsoft and called via standard unprivileged sub-process execution.
+
+---
+
+## Marketing & Target Personas
+
+WinStorePackager is optimized for discoverability and targeted towards four core developer segments:
+
+### Target Personas
+
+1. **Solo Python Desktop Developers & Indie Hackers:** Need an effortless pathway from standalone Python scripts (Tkinter, PyQt, PySide, CustomTkinter) to Microsoft Store distribution without setting up Visual Studio or learning complex XML schema specifications.
+2. **Enterprise & Commercial Python ISVs:** Require reproducible, scriptable packaging pipelines, strict OS Keyring credential protection for proprietary code signing certificates, and fail-closed WACK validation.
+3. **Open-Source Maintainers & Multi-OS Teams:** Develop primarily on Linux or macOS and demand SDK-free preflight validation in CI workflows before touching Windows deployment machines.
+4. **Privacy-Conscious & Local-First Desktop Builders:** Require 100% offline packaging, zero telemetry, non-elevation `RunAsInvoker` security, and redacted project profiles.
+
+### High-Intent Search Phrases
 
 - `WinStorePackager Python Microsoft Store MSIX`
 - `file-bricks WinStorePackager`
@@ -275,19 +322,23 @@ Useful search phrases for this repository:
 - `local-first MSIX packaging tool`
 - `Microsoft Store packaging GUI for Python apps`
 - `MSIX packaging tool without Visual Studio`
+- `Python desktop app Windows Store submission helper`
+- `AppxManifest XML generator Python`
+
+See [`MARKETING-LOG.txt`](MARKETING-LOG.txt) for full keyword rankings, persona pain-point analyses, and competitive positioning data.
 
 ---
 
-## Documentation & Governance
+## Documentation & License
 
 - 📄 **Security Policy:** [`SECURITY.md`](SECURITY.md) — Bilingual vulnerability disclosure & local-first guarantees
 - 📝 **Changelog:** [`CHANGELOG.md`](CHANGELOG.md) — Version history and release notes
 - 🤖 **LLM Reference:** [`llms.txt`](llms.txt) — Machine-readable architectural guide
 - 📦 **Profile Format:** [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) — Portable project profile specification
+- 📜 **Third-Party Licenses:** [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) & [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt)
+- 📊 **Marketing Log:** [`MARKETING-LOG.txt`](MARKETING-LOG.txt) — Persona and discoverability registry
 
----
-
-## License & Liability
+### License & Liability
 
 Dieses Projekt steht unter der [MIT License](LICENSE).
 

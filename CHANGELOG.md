@@ -17,6 +17,25 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Discoverability, Visual Architecture & Marketing Overhaul (Pfad B, 2026-09-11)
+
+- **Zweisprachige 15-Punkte-Schnellnavigation (`README.md`, `README_de.md`):**
+  - Paritätische Schnellnavigation mit 15 identischen Ankerpunkten eingerichtet: Quick Start, Features, Architecture & Packaging Pipeline, Packaging Lifecycle Flow, Governance & Runtime Invariants, Visual Showcase & Store Assets, Project Profiles, Prerequisites & Installation, SDK-Free Unix Preflight, Local Data & Security, Sibling Tools & Ecosystem, Comparison with Alternatives, Third-Party Licenses & Transparency, Marketing & Target Personas, Documentation & License.
+- **Shields.io Badges aktualisiert:**
+  - Badges für Version 3.1.0, Python 3.9–3.13, Multi-OS CI, Teststatus (100% grün), MIT-Lizenz, Plattformen (Windows, Linux, macOS), 48h Security SLA / 5d Triage, 100% Local-First / Zero-Egress, Non-Elevation (`RunAsInvoker`), Third-Party Audited (100% Permissive), Marketing Log Active, Ruff Code Style und LLM Ready (`llms.txt`).
+- **Architektur- & Governance-Tabelle (10 Invarianten):**
+  - Vollständige Tabelle mit 10 verbindlichen Invarianten verankert (`INV-LOCAL-01` bis `INV-SLA-10`): 100% Local-First & Zero-Egress, Non-Elevation & OS Keyring Passwortschutz, Microsoft Store Schema-Konformität, Multi-Scale Lanczos Asset-Integrität, redigierte Profilportabilität, plattformunabhängige Preflight-Parität, host-lokale Isolation mit atomaren Schreibvorgängen, Fail-Closed WACK-Auswertung, universelle 6-Sprachen-Lokalisierung und 48h Security-SLA mit Vulnerability-Floors.
+- **Drittanbieter-Lizenzdokumentation (`THIRD_PARTY_LICENSES.md`):**
+  - Vollständig ausformulierte Markdown-Lizenzdokumentation mit direkten Laufzeitabhängigkeiten, transitiven Modulen, Build-Tools (PyInstaller Bootloader-Exception) und Test-Werkzeugen mit SPDX-IDs und Sicherheits-Floors erstellt.
+- **Lokales Marketing-Register (`MARKETING-LOG.txt`):**
+  - Marketing- und Auffindbarkeitsregister angelegt: 4 Zielgruppen (Solo Python Desktop Developers, Commercial ISVs, Open-Source Maintainers, Local-First Engineers), High-Intent Suchbegriffe (Englisch & Deutsch), tabellarische 4-Wege-Wettbewerbsmatrix und Roadmap.
+- **PEP 621 Metadaten-Erweiterung (`pyproject.toml`):**
+  - Projekt-URLs um `Third-Party Licenses`, `Marketing Log` und `LLM Ready` erweitert.
+- **LLM-Kontext & Zeitstempel (`llms.txt`):**
+  - Auf Stand 2026-09-11 aktualisiert, Invarianten und Lizenzdokumente referenziert.
+- **Erweiterte Vertragstestsuite (`tests/test_metadata.py`):**
+  - Neue Vertragstests für 15-Punkte-Navigationsparität, 10 Governance-Invarianten, Third-Party-Lizenzdokumentation, Marketing-Log-Integrität, pyproject-URLs und Changelog-Pfad-B-Dokumentation integriert.
+
 ### Security- & Lizenz-Härtung (2026-09-10)
 
 - **Abhängigkeiten & Vulnerability-Floors (`requirements.txt`, `pyproject.toml`):**

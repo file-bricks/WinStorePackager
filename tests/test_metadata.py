@@ -73,10 +73,12 @@ def test_llms_txt_integrity() -> None:
     assert llms_file.is_file(), "llms.txt must exist"
     content = llms_file.read_text(encoding="utf-8")
 
-    assert "Last-checked: 2026-09-09" in content, "llms.txt timestamp not updated to 2026-09-09"
+    assert "Last-checked: 2026-09-11" in content, "llms.txt timestamp not updated to 2026-09-11"
     assert "https://github.com/file-bricks/WinStorePackager" in content, "Canonical repo link missing in llms.txt"
     assert "MSIX" in content and "AppxManifest" in content, "Packaging keywords missing in llms.txt"
     assert "SECURITY.md" in content, "SECURITY.md reference missing in llms.txt"
+    assert "THIRD_PARTY_LICENSES.md" in content, "THIRD_PARTY_LICENSES.md reference missing in llms.txt"
+    assert "MARKETING-LOG.txt" in content, "MARKETING-LOG.txt reference missing in llms.txt"
 
 
 def test_sibling_ecosystem_matrix() -> None:
@@ -142,6 +144,133 @@ def test_gitignore_hardening() -> None:
     assert "*.lock" in content, "*.lock pattern missing in .gitignore"
     assert "wheelhouse/" in content, "wheelhouse pattern missing in .gitignore"
     assert ".wheel-smoke/" in content, ".wheel-smoke pattern missing in .gitignore"
+
+
+def test_bilingual_readme_15_point_navigation_parity() -> None:
+    """Verify exact 15-point quick navigation and matching section headers in English and German READMEs."""
+    readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    en_anchors = [
+        "#quick-start",
+        "#features",
+        "#architecture--packaging-pipeline",
+        "#packaging-lifecycle-flow",
+        "#governance--runtime-invariants",
+        "#visual-showcase--store-assets",
+        "#project-profiles",
+        "#prerequisites--installation",
+        "#sdk-free-unix-preflight",
+        "#local-data-and-security",
+        "#sibling-tools--ecosystem",
+        "#comparison-with-alternatives",
+        "#third-party-licenses--transparency",
+        "#marketing--target-personas",
+        "#documentation--license",
+    ]
+
+    de_anchors = [
+        "#schnellstart",
+        "#funktionen",
+        "#architektur--paketierungs-pipeline",
+        "#paketierungs-lebenszyklus",
+        "#governance--laufzeit-invarianten",
+        "#visuelle-showcase--store-assets",
+        "#projektprofile",
+        "#voraussetzungen--installation",
+        "#sdk-freier-unix-preflight",
+        "#lokale-daten-und-sicherheit",
+        "#geschwister-tools--ökosystem",
+        "#vergleich-mit-alternativen",
+        "#drittanbieter-lizenzen--transparenz",
+        "#marketing--zielgruppen",
+        "#dokumentation--lizenz",
+    ]
+
+    assert len(en_anchors) == 15, "English anchors list must have 15 elements"
+    assert len(de_anchors) == 15, "German anchors list must have 15 elements"
+
+    for anchor in en_anchors:
+        assert f'href="{anchor}"' in readme_en, f"Anchor {anchor} missing in README.md navigation bar"
+
+    for anchor in de_anchors:
+        assert f'href="{anchor}"' in readme_de, f"Anchor {anchor} missing in README_de.md navigation bar"
+
+
+def test_governance_invariants_table_parity() -> None:
+    """Verify all 10 governance and runtime invariants (INV-LOCAL-01 to INV-SLA-10) are present in both READMEs."""
+    readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    invariants = [
+        "INV-LOCAL-01",
+        "INV-SEC-02",
+        "INV-STORE-03",
+        "INV-ASSET-04",
+        "INV-PROFILE-05",
+        "INV-CROSS-06",
+        "INV-STATE-07",
+        "INV-WACK-08",
+        "INV-I18N-09",
+        "INV-SLA-10",
+    ]
+
+    for inv in invariants:
+        assert inv in readme_en, f"Invariant {inv} missing in README.md"
+        assert inv in readme_de, f"Invariant {inv} missing in README_de.md"
+
+
+def test_third_party_licenses_md_integrity() -> None:
+    """Verify THIRD_PARTY_LICENSES.md exists, is comprehensive, and covers all required packages and invariants."""
+    lic_md = ROOT / "THIRD_PARTY_LICENSES.md"
+    assert lic_md.is_file(), "THIRD_PARTY_LICENSES.md must exist"
+    content = lic_md.read_text(encoding="utf-8")
+
+    for pkg in ["Pillow", "keyring", "pygetwindow", "PyInstaller", "pytest", "ruff", "pywin32-ctypes"]:
+        assert pkg in content, f"Package {pkg} missing in THIRD_PARTY_LICENSES.md"
+
+    for term in ["Zero Egress", "RunAsInvoker", "HPND-sell-variant", "MIT", "BSD-3-Clause", "Bootloader"]:
+        assert term in content, f"Term/concept {term} missing in THIRD_PARTY_LICENSES.md"
+
+
+def test_marketing_log_contract() -> None:
+    """Verify MARKETING-LOG.txt exists, is active, and contains target personas, search terms, and 10 invariants."""
+    m_log = ROOT / "MARKETING-LOG.txt"
+    assert m_log.is_file(), "MARKETING-LOG.txt must exist"
+    content = m_log.read_text(encoding="utf-8")
+
+    assert "ACTIVE / PFAD B DISCOVERABILITY & MARKETING VERIFIED" in content
+    assert "TARGET PERSONAS" in content
+    assert "Solo Python Desktop App Developers" in content
+    assert "Enterprise & Commercial Python ISVs" in content
+    assert "Open-Source Maintainers" in content
+    assert "Privacy-Conscious & Local-First Desktop Engineers" in content
+    assert "COMPETITIVE COMPARISON MATRIX" in content
+    assert "HIGH-INTENT SEARCH TERM MATRIX" in content
+    for inv in ["INV-LOCAL-01", "INV-SEC-02", "INV-STORE-03", "INV-ASSET-04", "INV-PROFILE-05",
+                "INV-CROSS-06", "INV-STATE-07", "INV-WACK-08", "INV-I18N-09", "INV-SLA-10"]:
+        assert inv in content, f"Invariant {inv} missing in MARKETING-LOG.txt"
+
+
+def test_pyproject_extended_urls() -> None:
+    """Verify pyproject.toml contains all extended Pfad B project URLs."""
+    pyproject_file = ROOT / "pyproject.toml"
+    assert pyproject_file.is_file()
+    content = pyproject_file.read_text(encoding="utf-8")
+
+    assert '"Third-Party Licenses"' in content
+    assert '"Marketing Log"' in content
+    assert '"LLM Ready"' in content
+
+
+def test_changelog_pfad_b_entry() -> None:
+    """Verify CHANGELOG.md contains recent Pfad B release notes."""
+    changelog_file = ROOT / "CHANGELOG.md"
+    assert changelog_file.is_file()
+    content = changelog_file.read_text(encoding="utf-8")
+
+    assert "Discoverability, Visual Architecture & Marketing Overhaul" in content
+    assert "Pfad B, 2026-09-11" in content
 
 
 if __name__ == "__main__":

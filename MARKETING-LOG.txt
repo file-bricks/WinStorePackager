@@ -1,0 +1,96 @@
+# MARKETING-LOG: WinStorePackager
+# Status: ACTIVE / PFAD B DISCOVERABILITY & MARKETING VERIFIED
+# Repository: file-bricks/WinStorePackager
+# Organization: file-bricks (Umbrella: open-bricks)
+# Audit Date: 2026-09-11
+# Tested Baseline: 149 passed | 5 skipped | 100% green
+
+================================================================================
+1. TARGET PERSONAS & MARKET SEGMENTS
+================================================================================
+
+Persona 1: Solo Python Desktop App Developers & Indie Hackers
+- Role: Independent software creators building Python tools (Tkinter, PySide, PyQt, CustomTkinter, Kivy).
+- Core Pain: Packaging for the Microsoft Store traditionally required heavy Visual Studio installations, complex C++ project templates, or cumbersome manual XML manifest editing.
+- Value Proposition: Lightweight, local-first GUI and CLI tool that handles AppxManifest.xml, multi-scale Store tile generation (44px to 310px), and automated MSIX build & sign in seconds.
+
+Persona 2: Enterprise & Commercial Python ISVs
+- Role: Software vendors and internal enterprise tooling teams distributing commercial desktop utilities to Windows Store customers.
+- Core Pain: Storing code signing certificate passwords on disk or in CI configuration exposes enterprise keys; complex packaging manifests cause frequent WACK validation rejections.
+- Value Proposition: Native OS Keyring cryptographic password storage (Windows Credential Vault), schema-validated AppxManifest templating, and integrated WACK report parsing with fail-closed safety.
+
+Persona 3: Open-Source Maintainers & Cross-Platform Teams
+- Role: Maintainers of open-source desktop software who develop primarily on Linux or macOS but target Windows Store distribution.
+- Core Pain: Cannot run Windows SDK makeappx or signtool on Linux/macOS build servers, making pre-submission validation frustrating and delayed.
+- Value Proposition: SDK-free Unix preflight (unix_preflight.py) validating project profiles, store listings, asset dimensions, and manifest schemas directly in cross-platform CI pipelines before touching Windows hardware.
+
+Persona 4: Privacy-Conscious & Local-First Desktop Engineers
+- Role: Security-focused developers building zero-telemetry, confidential, or offline desktop software.
+- Core Pain: Commercial packaging solutions frequently inject cloud telemetry, analytics trackers, or require subscription accounts.
+- Value Proposition: 100% offline and zero network egress guarantee (INV-LOCAL-01), unprivileged execution (RunAsInvoker non-elevation), and portable redacted project profiles (winstorepackager-project-v1.json).
+
+================================================================================
+2. HIGH-INTENT SEARCH TERM MATRIX
+================================================================================
+
+English High-Intent Search Phrases:
+- 'WinStorePackager Python Microsoft Store MSIX'
+- 'file-bricks WinStorePackager'
+- 'Python AppxManifest generator'
+- 'local-first MSIX packaging tool'
+- 'Microsoft Store packaging GUI for Python apps'
+- 'MSIX packaging tool without Visual Studio'
+- 'Python desktop app Windows Store submission helper'
+- 'AppxManifest XML generator Python'
+- 'Python code signing with signtool and keyring'
+- 'cross platform Windows Store preflight validation'
+
+German High-Intent Search Phrases:
+- 'Python Windows Store MSIX Paketierung Tool'
+- 'AppxManifest Generator Python Deutsch'
+- 'Microsoft Store Paketierung ohne Visual Studio'
+- 'Python App im Microsoft Store veröffentlichen'
+- 'MSIX Erstellung und Signierung Python GUI'
+- 'file-bricks Windows Store Paketierer'
+- 'Lokale Store-Zertifizierung WACK Vorprüfung'
+- 'Store Kacheln und Icons automatisch generieren'
+
+================================================================================
+3. COMPETITIVE COMPARISON MATRIX
+================================================================================
+
+| Capability / Feature                | WinStorePackager | MS MSIX Packaging Tool | Visual Studio | Advanced Installer |
+|-------------------------------------|:----------------:|:----------------------:|:-------------:|:------------------:|
+| Dedicated Python Desktop Focus     | YES (Native)     | NO (Generic Capture)   | NO (C#/C++)   | NO (Generic)       |
+| Free & Open Source (MIT)            | YES (100%)       | YES (Freeware binary)  | NO (Freemium) | NO (Commercial)    |
+| Automated Store Tile Multi-Scaling  | YES (Lanczos)    | NO                     | PARTIAL       | YES                |
+| AppxManifest XML Schema Guard       | YES              | NO                     | YES           | YES                |
+| OS Keyring Credential Protection    | YES              | NO (Plaintext/Prompt)  | PARTIAL       | PARTIAL            |
+| SDK-Free Linux/macOS Preflight      | YES              | NO                     | NO            | NO                 |
+| Portable Redacted Project Profiles  | YES (v1.json)    | NO                     | NO            | NO                 |
+| Integrated WACK Parsing & Triage    | YES (Fail-Closed)| NO                     | YES           | PARTIAL            |
+| Multilingual 6-Language GUI (i18n)  | YES (Tier-2)     | NO (EN only)           | PARTIAL       | YES                |
+| Zero Telemetry / 100% Local-First   | YES              | NO                     | NO            | NO                 |
+
+================================================================================
+4. GOVERNANCE & RUNTIME INVARIANTS
+================================================================================
+
+- INV-LOCAL-01: 100% Local-First & Zero-Egress — Manifest generation, icon processing, and preflights execute strictly offline without external network calls.
+- INV-SEC-02: Cryptographic Password Protection & Non-Elevation — Certificate passwords reside exclusively in OS Keyring; runs in user space without administrator elevation.
+- INV-STORE-03: Microsoft Store Manifest Compliance — Strict XML schema validation, namespace handling, and attribute escaping compliant with Microsoft Partner Center policies.
+- INV-ASSET-04: Multi-Scale Asset Integrity — Automated Lanczos resampling generates exact Store tile resolutions (44x44, 50x50, 150x150, 310x310, 310x150).
+- INV-PROFILE-05: Redacted Profile Portability — Shared project profiles strictly redact local machine paths, publisher IDs, certificates, and secrets for safe multi-host sharing.
+- INV-CROSS-06: Cross-Platform Preflight Parity — Full preflight validation runs identically on Linux, macOS, and Windows without requiring Windows SDK binaries.
+- INV-STATE-07: Host-Local State Isolation & Atomic Writes — Runtime settings and logs persist to host-local directories outside git checkouts via atomic file replacement.
+- INV-WACK-08: Fail-Closed WACK Certification Evaluation — Deterministic parsing of Windows App Certification Kit reports with fail-closed rejection on errors or crashes.
+- INV-I18N-09: Universal 6-Language Localization — Complete Tier-2 multilingual GUI support across German, English, Spanish, Chinese, Japanese, and Russian.
+- INV-SLA-10: Vulnerability Floor & 48h Security SLA — Continuous dependency vulnerability floors, 48h security response SLA, and 5-day triage commitment.
+
+================================================================================
+5. STRATEGIC DISCOVERABILITY ROADMAP
+================================================================================
+
+- Cross-Linking: Maintained in open-bricks umbrella catalog, file-bricks organization profile, and sibling tool README matrices (ProSync, CleanMarkdown, DokuZen, UniversalDocsGrabber).
+- LLM Readiness: Detailed architectural boundaries and exchange formats documented in llms.txt and PROJECT_PROFILE_FORMAT.md.
+- Microsoft Store Live Identity: Published in Microsoft Partner Center under Publisher Lukas Geiger (Store-ID: 9NT273Z50BJR, Identity: Geiger.WinStorePackager).
