@@ -106,6 +106,48 @@ class TestTranslationSystem(unittest.TestCase):
         lang = detect_system_language()
         self.assertIn(lang, SUPPORTED_LANGUAGES)
 
+    def test_is_german_detection(self):
+        ts = TranslationSystem(default_lang="de", app_dir=Path(__file__).parent.parent)
+
+        # German strings with umlauts / eszett
+        self.assertTrue(ts._is_german("Öffnen"))
+        self.assertTrue(ts._is_german("Schließen"))
+        self.assertTrue(ts._is_german("Menü"))
+        self.assertTrue(ts._is_german("Größe"))
+
+        # German strings matching german_hints
+        self.assertTrue(ts._is_german("Datei speichern"))
+        self.assertTrue(ts._is_german("Einstellungen"))
+        self.assertTrue(ts._is_german("Abbrechen"))
+        self.assertTrue(ts._is_german("oeffnen"))
+
+        # English strings containing regular English vowels (a, e, o, u, s) MUST NOT be classified as German
+        self.assertFalse(ts._is_german("Cancel"))
+        self.assertFalse(ts._is_german("English"))
+        self.assertFalse(ts._is_german("Quit"))
+        self.assertFalse(ts._is_german("Open"))
+        self.assertFalse(ts._is_german("File"))
+        self.assertFalse(ts._is_german("Close"))
+        self.assertFalse(ts._is_german("Settings"))
+        self.assertFalse(ts._is_german("Options"))
+        self.assertFalse(ts._is_german("Build"))
+        self.assertFalse(ts._is_german("Tools"))
+
+    def test_auto_register_ignores_english_keys(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            ts = TranslationSystem(default_lang="de", app_dir=Path(tmp_dir), auto_register=True)
+            # Query an English string: should return key and NOT add to translations
+            result_en = ts.t("Cancel")
+            self.assertEqual(result_en, "Cancel")
+            self.assertNotIn("Cancel", ts.translations)
+
+            # Query a German string: should return key and add to translations under "de"
+            result_de = ts.t("Datei schließen")
+            self.assertEqual(result_de, "Datei schließen")
+            self.assertIn("Datei schließen", ts.translations)
+            self.assertEqual(ts.translations["Datei schließen"]["de"], "Datei schließen")
+
 
 def _create_test_app():
     app = _wsp.StorePackagerApp.__new__(_wsp.StorePackagerApp)

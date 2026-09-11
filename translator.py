@@ -112,10 +112,9 @@ class TranslationSystem:
 
         self.german_hints = [
             "datei", "bearbeiten", "ansicht", "hilfe", "oeffnen", "speichern",
-            "schliessen", "einstellungen", "abbrechen", "ok", "ja", "nein",
-            "start", "stop", "pause", "fortsetzen", "laden", "aktualisieren",
-            "filter", "fehler", "export", "import", "optionen", "anzeigen",
-            "wählen", "erfolgreich", "hinweis", "warnung", "ausgabeordner",
+            "schliessen", "einstellungen", "abbrechen", "fortsetzen", "laden",
+            "aktualisieren", "fehler", "anzeigen", "wählen", "erfolgreich",
+            "hinweis", "warnung", "ausgabeordner",
         ]
 
         self.translations: Dict[str, Dict[str, str]] = {}
@@ -252,7 +251,7 @@ class TranslationSystem:
         return german_strings
 
     def _is_german(self, text: str) -> bool:
-        if any(ch in text for ch in "äöüÄÖÜßaeoeueAeOeUess"):
+        if any(ch in text for ch in "äöüÄÖÜß"):
             return True
         text_lower = text.lower()
         return any(hint in text_lower for hint in self.german_hints)

@@ -67,6 +67,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
   - `scripts/check_store_readiness.py`: Automatisierter Preflight-Prüfer für Paketmetadaten, Dokumente, Icons, Richtlinien-Keywords und URL-Erreichbarkeit.
   - `tests/test_store_readiness.py`: 6 neue Pytest-Vertragstests verankert (138/138 Tests erfolgreich).
 
+### Behoben / Fixed (2026-09-12)
+
+- **Heuristische Spracherkennung deutscher UI-Strings (`translator.py`):**
+  - `translator.py`: In `TranslationSystem._is_german()` führte die zeichenweise Iteration über `"äöüÄÖÜßaeoeueAeOeUess"` dazu, dass standardmäßige englische Vokale und Konsonanten (`a`, `e`, `o`, `u`, `s`) als Treffer gewertet wurden. Dadurch wurden nahezu alle englischen UI-Texte (z. B. "Cancel", "English", "Quit", "Open", "File", "Settings") fälschlicherweise als Deutsch klassifiziert und bei aktiver Auto-Registrierung (`auto_register=True`) bzw. Quelltext-Scans als angebliche deutsche Strings in `translations.json` übernommen.
+  - Die Zeichenprüfung wurde auf echte deutsche Umlaute und Eszett (`äöüÄÖÜß`) normiert. Mehrdeutige, im Englischen und Deutschen identische Lehnwörter (`ok`, `ja`, `nein`, `start`, `stop`, `pause`, `filter`, `export`, `import`, `optionen`) wurden aus `german_hints` entfernt.
+  - Neue Regressionstests `test_is_german_detection` und `test_auto_register_ignores_english_keys` in `tests/test_i18n.py` verankert.
+
 ### Behoben / Fixed (2026-09-09)
 
 - **XML-Attribut-Escaping in Manifest-Erweiterungen (`WindowsStorePublisher_3.py`):**
