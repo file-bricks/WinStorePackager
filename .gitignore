@@ -105,15 +105,28 @@ DONE.md
 *.conflict
 *-CONFLIT-*
 *-conflict-*
+*-WORKSTATION*
 *-WORKSTATION-LG*
 *-ASUS-GEI*
+* (kopie)*
+* (Kopie)*
+* (copy)*
+* (Copy)*
+*conflicted copy*
 
 # ---- Multi-Agent Locks & Lock-System ----
+LOCK
 LOCK.*
 *.lock
+!package-lock.json
 LOCK*.txt
+LOCK.permissions.json
 
-# ---- Packaging & Smoke Tests ----
+# ---- Packaging, Smoke Tests, Caches & Coverage ----
 wheelhouse/
 .wheel-smoke/
 *.bak
+*.orig
+*.rej
+.coverage*
+htmlcov/

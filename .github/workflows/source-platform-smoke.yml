@@ -9,10 +9,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   smoke:
     name: Smoke (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -31,4 +36,4 @@ jobs:
       - name: Source-Platform-Smoke-Tests ausführen
         env:
           PYTHONPATH: ${{ github.workspace }}
-        run: pytest tests/test_unix_preflight.py tests/test_project_profile.py tests/test_windows_source_smoke.py -v
+        run: pytest tests/test_unix_preflight.py tests/test_project_profile.py tests/test_windows_source_smoke.py -ra -v

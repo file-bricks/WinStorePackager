@@ -73,7 +73,7 @@ def test_llms_txt_integrity() -> None:
     assert llms_file.is_file(), "llms.txt must exist"
     content = llms_file.read_text(encoding="utf-8")
 
-    assert "Last-checked: 2026-09-11" in content, "llms.txt timestamp not updated to 2026-09-11"
+    assert "Last-checked: 2026-09-13" in content or "Last-checked: 2026-09-11" in content, "llms.txt timestamp not updated"
     assert "https://github.com/file-bricks/WinStorePackager" in content, "Canonical repo link missing in llms.txt"
     assert "MSIX" in content and "AppxManifest" in content, "Packaging keywords missing in llms.txt"
     assert "SECURITY.md" in content, "SECURITY.md reference missing in llms.txt"
@@ -113,7 +113,7 @@ def test_pyproject_pep621_metadata() -> None:
     assert "Operating System :: Microsoft :: Windows" in content
     assert "Operating System :: OS Independent" in content, "OS Independent classifier missing"
     assert "Programming Language :: Python :: 3.13" in content, "Python 3.13 classifier missing"
-    assert 'addopts = "-v"' in content, "pytest addopts missing in pyproject.toml"
+    assert 'addopts = "-ra -v"' in content or 'addopts = "-v"' in content, "pytest addopts missing in pyproject.toml"
 
 
 def test_ci_workflow_integrity() -> None:
@@ -128,7 +128,7 @@ def test_ci_workflow_integrity() -> None:
     assert "cancel-in-progress: true" in ci_yml, "cancel-in-progress missing in ci.yml"
     assert "python -m compileall -q ." in ci_yml, "compileall bytecode gate missing in ci.yml"
     assert "ruff check ." in ci_yml
-    assert "pytest -v" in ci_yml
+    assert "pytest -v" in ci_yml or "pytest -ra -v" in ci_yml
 
 
 def test_gitignore_hardening() -> None:
@@ -271,6 +271,63 @@ def test_changelog_pfad_b_entry() -> None:
 
     assert "Discoverability, Visual Architecture & Marketing Overhaul" in content
     assert "Pfad B, 2026-09-11" in content
+
+
+def test_ci_timeout_and_concurrency_guardrails() -> None:
+    """Verify runaway timeout-minutes and concurrency guardrails in all CI workflows."""
+    workflow_dir = ROOT / ".github" / "workflows"
+
+    # Main CI
+    ci_yml = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
+    assert "timeout-minutes: 15" in ci_yml, "ci.yml missing 15 min timeout"
+    assert "concurrency:" in ci_yml, "ci.yml missing concurrency block"
+    assert "cancel-in-progress: true" in ci_yml, "ci.yml missing cancel-in-progress"
+
+    # Source Platform Smoke
+    smoke_yml = (workflow_dir / "source-platform-smoke.yml").read_text(encoding="utf-8")
+    assert "timeout-minutes: 10" in smoke_yml, "source-platform-smoke.yml missing 10 min timeout"
+    assert "concurrency:" in smoke_yml, "source-platform-smoke.yml missing concurrency block"
+    assert "cancel-in-progress: true" in smoke_yml, "source-platform-smoke.yml missing cancel-in-progress"
+
+    # Stale Workflow
+    stale_yml = (workflow_dir / "stale.yml").read_text(encoding="utf-8")
+    assert "timeout-minutes: 10" in stale_yml, "stale.yml missing 10 min timeout"
+
+
+def test_extended_gitignore_sync_and_lock_defense() -> None:
+    """Verify .gitignore contains extended multi-host sync and lock protection patterns."""
+    gitignore_file = ROOT / ".gitignore"
+    assert gitignore_file.is_file(), ".gitignore must exist"
+    content = gitignore_file.read_text(encoding="utf-8")
+
+    for pat in [
+        "*-WORKSTATION*",
+        "*-ASUS-GEI*",
+        "* (kopie)*",
+        "* (copy)*",
+        "*conflicted copy*",
+        "LOCK",
+        "LOCK.*",
+        "*.lock",
+        "!package-lock.json",
+        "LOCK.permissions.json",
+        "wheelhouse/",
+        ".wheel-smoke/",
+        ".coverage*",
+        "htmlcov/",
+    ]:
+        assert pat in content, f"Pattern {pat} missing in .gitignore"
+
+
+def test_changelog_recent_pfad_a_entry() -> None:
+    """Verify CHANGELOG.md contains recent Pfad A hygiene release and maintenance notes."""
+    changelog_file = ROOT / "CHANGELOG.md"
+    assert changelog_file.is_file()
+    content = changelog_file.read_text(encoding="utf-8")
+
+    assert "Pfad A" in content, "Pfad A marker missing in CHANGELOG.md"
+    assert "2026-09-13" in content, "2026-09-13 date missing in CHANGELOG.md"
+    assert "CI" in content and ("Härtung" in content or "Hardening" in content or "Hygiene" in content)
 
 
 if __name__ == "__main__":

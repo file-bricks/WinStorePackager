@@ -73,7 +73,7 @@ Umbrella = "https://github.com/open-bricks"
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
-addopts = "-v"
+addopts = "-ra -v"
 
 [tool.ruff]
 line-length = 120

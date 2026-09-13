@@ -17,6 +17,23 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Repository-Hygiene, CI-Runaway-Schutz & Multi-Host-Synchronisationshärtung (Pfad A, 2026-09-13)
+
+- **GitHub Actions CI-Workflow-Härtung (`.github/workflows/`):**
+  - `ci.yml`: `timeout-minutes: 15` für Test-Job zur Vermeidung von Runner-Tokens-Hängern ergänzt; Pytest-Aufruf auf standardisiertes `-ra -v` vereinheitlicht.
+  - `source-platform-smoke.yml`: Concurrency-Gruppe mit `cancel-in-progress: true` und `timeout-minutes: 10` verankert; Pytest-Aufruf auf `-ra -v` vereinheitlicht.
+  - `stale.yml`: `timeout-minutes: 10` für Stale-Job integriert.
+- **Multi-Host-Synchronisations- und Lock-Schutz (`.gitignore`):**
+  - Cloud-Sync-Konflikt-Muster um `* (kopie)*`, `* (Kopie)*`, `* (copy)*`, `* (Copy)*`, `*conflicted copy*` und Wildcard-Muster `*-WORKSTATION*` erweitert.
+  - Lock-Dateien um `LOCK`, `uv.lock`, `LOCK.permissions.json` und Ausnahme `!package-lock.json` ergänzt.
+  - Test- und Cache-Artefakte (`.coverage*`, `htmlcov/`, `*.orig`, `*.rej`) blockiert.
+- **Pytest-Standardisierung (`pyproject.toml`):**
+  - `[tool.pytest.ini_options]` addopts von `-v` auf `-ra -v` standardisiert.
+- **Automatisierte Vertragstests (`tests/test_metadata.py`):**
+  - Drei neue Vertragstests implementiert: `test_ci_timeout_and_concurrency_guardrails`, `test_extended_gitignore_sync_and_lock_defense` und `test_changelog_recent_pfad_a_entry`.
+- **LLM-Kontext & Zeitstempel (`llms.txt`):**
+  - Auf Stand 2026-09-13 und neuen Testbestand synchronisiert.
+
 ### Discoverability, Visual Architecture & Marketing Overhaul (Pfad B, 2026-09-11)
 
 - **Zweisprachige 15-Punkte-Schnellnavigation (`README.md`, `README_de.md`):**

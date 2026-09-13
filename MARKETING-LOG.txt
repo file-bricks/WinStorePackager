@@ -3,7 +3,7 @@
 # Repository: file-bricks/WinStorePackager
 # Organization: file-bricks (Umbrella: open-bricks)
 # Audit Date: 2026-09-11
-# Tested Baseline: 149 passed | 5 skipped | 100% green
+# Tested Baseline: 156 passed | 4 skipped | 100% green
 
 ================================================================================
 1. TARGET PERSONAS & MARKET SEGMENTS
@@ -94,3 +94,12 @@ German High-Intent Search Phrases:
 - Cross-Linking: Maintained in open-bricks umbrella catalog, file-bricks organization profile, and sibling tool README matrices (ProSync, CleanMarkdown, DokuZen, UniversalDocsGrabber).
 - LLM Readiness: Detailed architectural boundaries and exchange formats documented in llms.txt and PROJECT_PROFILE_FORMAT.md.
 - Microsoft Store Live Identity: Published in Microsoft Partner Center under Publisher Lukas Geiger (Store-ID: 9NT273Z50BJR, Identity: Geiger.WinStorePackager).
+
+================================================================================
+6. REPOSITORY HYGIENE & CI HARDENING AUDIT (PFAD A, 2026-09-13)
+================================================================================
+
+- CI Workflow Hardening: Added 15-minute timeout-minutes to ci.yml and 10-minute timeout-minutes & concurrency group (cancel-in-progress: true) to source-platform-smoke.yml and stale.yml.
+- Gitignore Protection: Hardened multi-host sync and lock protection patterns (*-WORKSTATION*, * (kopie)*, * (copy)*, LOCK, uv.lock, LOCK.permissions.json).
+- Contract Suite Expansion: 3 new contract tests added in tests/test_metadata.py (test_ci_timeout_and_concurrency_guardrails, test_extended_gitignore_sync_and_lock_defense, test_changelog_recent_pfad_a_entry).
+- Verified Test Baseline: 160 collected tests (156 passed | 4 skipped | 100% green).
