@@ -137,7 +137,9 @@ def _validate_store_package(data: dict[str, Any], errors: list[str], warnings: l
         errors.append("store_package.json: `app_name` fehlt.")
 
     version = str(data.get("version", "")).strip()
-    if not VERSION_RE.match(version):
+    if not version:
+        errors.append("store_package.json: `version` fehlt.")
+    elif not VERSION_RE.match(version):
         errors.append(f"store_package.json: Version hat falsches Format: {version!r}")
 
     executable = str(data.get("executable", "")).strip()
@@ -169,6 +171,16 @@ def _validate_profile_state(
     errors: list[str],
     warnings: list[str],
 ) -> None:
+    profile_app_name = str(profile.get("app_name", "")).strip()
+    if not profile_app_name:
+        errors.append("Projektprofil: `app_name` fehlt.")
+
+    profile_version = str(profile.get("version", "")).strip()
+    if not profile_version:
+        errors.append("Projektprofil: `version` fehlt.")
+    elif not VERSION_RE.match(profile_version):
+        errors.append(f"Projektprofil: Version hat falsches Format: {profile_version!r}")
+
     for key in ("script_path", "icon_path"):
         value = str(profile.get(key, "")).strip()
         if not value:
@@ -178,17 +190,17 @@ def _validate_profile_state(
             errors.append(f"Projektprofil: `{key}` zeigt ins Leere: {value}")
 
     exe_name = str(profile.get("exe_name", "")).strip()
-    if not exe_name.endswith(".exe"):
+    if not exe_name:
+        errors.append("Projektprofil: `exe_name` fehlt.")
+    elif not exe_name.endswith(".exe"):
         errors.append("Projektprofil: `exe_name` muss auf `.exe` enden.")
 
-    profile_app_name = str(profile.get("app_name", "")).strip()
     package_app_name = str(store_package.get("app_name", "")).strip()
     if profile_app_name and package_app_name and profile_app_name != package_app_name:
         warnings.append(
             "Projektprofil: `app_name` stimmt nicht mit `store_package.json` überein."
         )
 
-    profile_version = str(profile.get("version", "")).strip()
     package_version = str(store_package.get("version", "")).strip()
     if profile_version and package_version and profile_version != package_version:
         warnings.append(

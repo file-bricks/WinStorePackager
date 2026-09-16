@@ -102,6 +102,108 @@ def test_unix_preflight_reports_missing_executable_as_missing(tmp_path: Path):
     )
 
 
+def test_unix_preflight_reports_missing_profile_executable_as_missing(tmp_path: Path):
+    """Leeres oder fehlendes `exe_name` im Profil muss als 'fehlt' gemeldet werden, nicht als 'muss auf .exe enden'."""
+    root = _create_repo(tmp_path)
+    profile_path = root / "winstorepackager-project-v1.json"
+    write_project_profile(
+        profile_path,
+        {
+            "app_name": "WinStorePackager",
+            "publisher_display": "File Bricks",
+            "identity_name": "FileBricks.WinStorePackager",
+            "version": "2.3.0.0",
+            "script_path": str(root / "WindowsStorePublisher_3.py"),
+            "icon_path": str(root / "WinStorePackager.ico"),
+            "output_dir": str(root / "store_package"),
+            "exe_name": "",
+            "privacy_url": "https://example.com/privacy",
+            "support_url": "https://example.com/support",
+            "capabilities": "internetClient",
+            "category": "Developer Tools",
+            "age_rating": "3+",
+            "description": "MSIX helper",
+            "readme": "README",
+            "license_files": [str(root / "LICENSE")],
+            "license_text_entries": ["MIT"],
+        },
+    )
+
+    report = run_unix_preflight(root, profile_path=profile_path)
+
+    assert report["ok"] is False
+    assert any("Projektprofil: `exe_name` fehlt" in item for item in report["errors"]), (
+        "Leeres exe_name im Profil muss als 'fehlt' gemeldet werden"
+    )
+    assert not any("Projektprofil: `exe_name` muss auf `.exe` enden" in item for item in report["errors"]), (
+        "Bei leerem exe_name im Profil darf NICHT 'muss auf .exe enden' erscheinen"
+    )
+
+
+def test_unix_preflight_validates_profile_app_name_and_version(tmp_path: Path):
+    """Fehlender app_name oder ungültige Version im Profil müssen als Fehler gemeldet werden."""
+    root = _create_repo(tmp_path)
+    profile_path = root / "winstorepackager-project-v1.json"
+    write_project_profile(
+        profile_path,
+        {
+            "app_name": "",
+            "publisher_display": "File Bricks",
+            "identity_name": "FileBricks.WinStorePackager",
+            "version": "invalid-version",
+            "script_path": str(root / "WindowsStorePublisher_3.py"),
+            "icon_path": str(root / "WinStorePackager.ico"),
+            "output_dir": str(root / "store_package"),
+            "exe_name": "WinStorePackager.exe",
+            "privacy_url": "https://example.com/privacy",
+            "support_url": "https://example.com/support",
+            "capabilities": "internetClient",
+            "category": "Developer Tools",
+            "age_rating": "3+",
+            "description": "MSIX helper",
+            "readme": "README",
+            "license_files": [str(root / "LICENSE")],
+            "license_text_entries": ["MIT"],
+        },
+    )
+
+    report = run_unix_preflight(root, profile_path=profile_path)
+
+    assert report["ok"] is False
+    assert any("Projektprofil: `app_name` fehlt" in item for item in report["errors"])
+    assert any("Projektprofil: Version hat falsches Format" in item for item in report["errors"])
+
+
+def test_unix_preflight_reports_missing_store_package_version_as_missing(tmp_path: Path):
+    """Leeres version-Feld in store_package.json muss als 'fehlt' gemeldet werden, nicht als falsches Format ''."""
+    root = _create_repo(tmp_path)
+    (root / "store_package.json").write_text(
+        json.dumps(
+            {
+                "app_name": "WinStorePackager",
+                "version": "",
+                "description": "MSIX helper",
+                "executable": "WinStorePackager.exe",
+                "category": "Developer Tools",
+                "age_rating": "3+",
+                "privacy_url": "https://example.com/privacy",
+                "support_url": "https://example.com/support",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = run_unix_preflight(root)
+
+    assert report["ok"] is False
+    assert any("store_package.json: `version` fehlt" in item for item in report["errors"]), (
+        "Leere Version muss als 'fehlt' gemeldet werden"
+    )
+    assert not any("store_package.json: Version hat falsches Format: ''" in item for item in report["errors"]), (
+        "Bei leerer Version darf NICHT 'Version hat falsches Format: ' erscheinen"
+    )
+
+
 def test_unix_preflight_warns_on_profile_and_store_package_drift(tmp_path: Path):
     root = _create_repo(tmp_path)
     profile_path = root / "winstorepackager-project-v1.json"
