@@ -30,20 +30,20 @@ def _environment_path(
     *,
     absolute_only: bool = False,
 ) -> Path:
-    value = environ.get(name)
-    if not value:
+    raw_value = str(environ.get(name, "") or "").strip().strip('"\'')
+    if not raw_value:
         return fallback
-    candidate = Path(value).expanduser()
+    candidate = Path(raw_value).expanduser()
     if absolute_only and not candidate.is_absolute():
         return fallback
     return candidate
 
 
 def _runtime_override(environ: Mapping[str, str], name: str) -> Path | None:
-    value = environ.get(name)
-    if not value:
+    raw_value = str(environ.get(name, "") or "").strip().strip('"\'')
+    if not raw_value:
         return None
-    candidate = Path(value).expanduser()
+    candidate = Path(raw_value).expanduser()
     if not candidate.is_absolute():
         raise ValueError(f"{name} muss ein absoluter Pfad sein.")
     return candidate
@@ -67,6 +67,7 @@ def get_config_dir(
             environ,
             "LOCALAPPDATA",
             home_path / "AppData" / "Local",
+            absolute_only=True,
         )
         return base / APP_DIR_NAME
     if platform == "darwin":
@@ -189,9 +190,19 @@ def _write_json_if_absent(path: Path | str, data: Mapping[str, object]) -> bool:
     try:
         try:
             os.link(temporary, target)
+            return True
         except FileExistsError:
             return False
-        return True
+        except (OSError, NotImplementedError):
+            try:
+                with open(target, "x", encoding="utf-8") as handle:
+                    json.dump(data, handle, ensure_ascii=False, indent=2)
+                    handle.write("\n")
+                    handle.flush()
+                    os.fsync(handle.fileno())
+                return True
+            except FileExistsError:
+                return False
     finally:
         if temporary.exists():
             temporary.unlink()
@@ -205,7 +216,7 @@ def migrate_legacy_settings(legacy_path: Path | str, target_path: Path | str) ->
     """
     legacy = Path(legacy_path)
     target = Path(target_path)
-    if target.exists() or not legacy.exists() or legacy.resolve() == target.resolve():
+    if target.exists() or not legacy.is_file() or legacy.resolve() == target.resolve():
         return False
 
     try:

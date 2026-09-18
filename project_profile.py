@@ -204,12 +204,15 @@ def _iter_string_values(value: Any, field_path: str = "profile"):
 
 
 def _path_basename(value: str) -> str:
-    clean_value = re.split(r"[?#]", value, maxsplit=1)[0].replace("\\", "/")
+    raw = str(value or "").strip().strip('"\'')
+    clean_value = re.split(r"[?#]", raw, maxsplit=1)[0].replace("\\", "/").rstrip()
     return clean_value.rsplit("/", 1)[-1].lower()
 
 
 def _path_suffix(value: str) -> str:
-    return Path(re.split(r"[?#]", value, maxsplit=1)[0]).suffix.lower()
+    raw = str(value or "").strip().strip('"\'')
+    clean_value = re.split(r"[?#]", raw, maxsplit=1)[0].rstrip()
+    return Path(clean_value).suffix.lower()
 
 
 def _sensitive_path_errors(field_path: str, value: str) -> list[str]:

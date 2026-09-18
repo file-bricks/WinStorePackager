@@ -437,3 +437,37 @@ def test_deserialize_windows_project_root_is_portable_across_hosts(tmp_path: Pat
         expected = (tmp_path / "src/main.py").resolve(strict=False)
 
     assert Path(result["script_path"]).as_posix() == expected.as_posix()
+
+
+def test_validate_project_profile_rejects_sensitive_paths_with_whitespace_or_quotes():
+    # Trailing whitespace or surrounding quotes must not bypass sensitive path validation
+    for bad_path in [
+        "C:/Secrets/demo.pfx ",
+        "  C:/Secrets/demo.pfx",
+        '"C:/Secrets/demo.pfx"',
+        "'C:/Secrets/demo.pfx'",
+        "C:/SDK/makeappx.exe ",
+        " C:/SDK/signtool.exe ",
+    ]:
+        profile = {
+            "format": PROFILE_FORMAT,
+            "schema_version": 1,
+            "project_root": ".",
+            "metadata": {},
+            "paths": {
+                "script_path": bad_path,
+                "icon_path": "",
+                "source_path": "",
+                "installer_path": "",
+                "output_dir": "",
+                "exe_name": "Demo.exe",
+            },
+            "store": {},
+            "documents": {},
+            "settings": {},
+        }
+        errors = validate_project_profile(profile)
+        assert any(
+            "paths.script_path" in err and ("Zertifikatsdatei" in err or "Windows-SDK" in err)
+            for err in errors
+        ), f"Failed to reject sensitive path: {bad_path!r}"

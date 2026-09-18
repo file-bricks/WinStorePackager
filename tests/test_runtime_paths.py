@@ -250,3 +250,48 @@ def test_runtime_logging_replaces_old_target_and_is_thread_safe(tmp_path):
             if getattr(handler, "_wsp_runtime_handler", False):
                 logger.removeHandler(handler)
                 handler.close()
+
+
+def test_windows_runtime_paths_reject_relative_localappdata_and_handle_quotes(tmp_path):
+    # Relative LOCALAPPDATA must fall back to home AppData/Local
+    env_relative = {"LOCALAPPDATA": "relative_appdata"}
+    assert get_config_dir(platform="win32", environ=env_relative, home=tmp_path) == (
+        tmp_path / "AppData" / "Local" / "WinStorePackager"
+    )
+
+    # Quoted LOCALAPPDATA must have quotes stripped and resolve cleanly
+    quoted_appdata = f'"{tmp_path / "CustomAppData"}"'
+    env_quoted = {"LOCALAPPDATA": quoted_appdata}
+    assert get_config_dir(platform="win32", environ=env_quoted, home=tmp_path) == (
+        tmp_path / "CustomAppData" / "WinStorePackager"
+    )
+
+    # Quoted runtime overrides must have quotes stripped and resolve cleanly
+    quoted_override = f'"{tmp_path / "CustomConfig"}"'
+    env_override = {"WINSTOREPACKAGER_DATA_DIR": quoted_override}
+    assert get_config_dir(platform="win32", environ=env_override, home=tmp_path) == (
+        tmp_path / "CustomConfig"
+    )
+
+
+def test_write_json_if_absent_fallback_when_link_fails(tmp_path, monkeypatch):
+    from runtime_paths import _write_json_if_absent
+
+    target = tmp_path / "runtime" / "settings.json"
+
+    def fail_link(src, dst):
+        raise OSError(1, "Incorrect function (simulated non-NTFS volume)")
+
+    monkeypatch.setattr(os, "link", fail_link)
+    result = _write_json_if_absent(target, {"key": "value"})
+    assert result is True
+    assert json.loads(target.read_text(encoding="utf-8")) == {"key": "value"}
+
+
+def test_migrate_legacy_settings_ignores_directory(tmp_path):
+    legacy_dir = tmp_path / "legacy_dir"
+    legacy_dir.mkdir()
+    target = tmp_path / "target.json"
+
+    assert migrate_legacy_settings(legacy_dir, target) is False
+    assert not target.exists()

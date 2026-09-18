@@ -404,14 +404,59 @@ def which(program):
     """Find executable in PATH"""
     return shutil.which(program)
 
-def find_windows_sdk_tools():
-    """Auto-detect Windows SDK tools"""
+def find_windows_sdk_tools(search_roots=None):
+    """Auto-detect Windows SDK tools from PATH and standard Windows Kits locations."""
     makeappx = which("makeappx.exe")
     signtool = which("signtool.exe")
     appcert = which("appcert.exe")
-    if makeappx and signtool:
+
+    if makeappx and signtool and appcert:
         return makeappx, signtool, appcert
-    return None, None, None
+
+    roots_to_check = []
+    if search_roots:
+        roots_to_check.extend([Path(r) for r in search_roots])
+    elif sys.platform.startswith("win"):
+        for env_var in ("ProgramFiles(x86)", "ProgramFiles", "ProgramW6432"):
+            base = os.environ.get(env_var)
+            if base:
+                roots_to_check.append(Path(base) / "Windows Kits" / "10")
+
+    for sdk_root in roots_to_check:
+        if not sdk_root.exists():
+            continue
+
+        bin_dir = sdk_root / "bin"
+        if bin_dir.is_dir() and (not makeappx or not signtool):
+            try:
+                version_dirs = sorted(
+                    [d for d in bin_dir.iterdir() if d.is_dir()],
+                    key=lambda p: [int(x) if x.isdigit() else x for x in p.name.split(".")],
+                    reverse=True,
+                )
+            except Exception:
+                version_dirs = sorted([d for d in bin_dir.iterdir() if d.is_dir()], reverse=True)
+
+            for vdir in version_dirs:
+                for arch in ("x64", "x86", "arm64"):
+                    arch_dir = vdir / arch
+                    if not arch_dir.is_dir():
+                        continue
+                    if not makeappx and (arch_dir / "makeappx.exe").is_file():
+                        makeappx = str(arch_dir / "makeappx.exe")
+                    if not signtool and (arch_dir / "signtool.exe").is_file():
+                        signtool = str(arch_dir / "signtool.exe")
+                    if makeappx and signtool:
+                        break
+                if makeappx and signtool:
+                    break
+
+        if not appcert:
+            appcert_candidate = sdk_root / "App Certification Kit" / "appcert.exe"
+            if appcert_candidate.is_file():
+                appcert = str(appcert_candidate)
+
+    return (makeappx or None, signtool or None, appcert or None)
 
 def validate_publisher_cn(publisher):
     """Validate Publisher CN format"""
