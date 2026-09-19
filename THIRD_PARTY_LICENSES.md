@@ -3,7 +3,7 @@
 **Project:** WinStorePackager  
 **Organization:** file-bricks (Umbrella: open-bricks)  
 **License:** MIT License  
-**Audit Date:** 2026-09-11  
+**Audit Date:** 2026-09-20
 **Status:** Audited & Verified (100% Permissive Open-Source & Compliant Build Exceptions)
 
 ---
@@ -64,7 +64,7 @@ WinStorePackager is designed and developed with strict local-first, zero-egress,
 
 ## 5. Standard Library & OS Components
 
-- **Python Standard Library:** Licensed under PSFL-2.0 (Python Software Foundation License). Includes 	kinter, xml.etree.ElementTree, json, subprocess, pathlib, hashlib, logging, and os.
+- **Python Standard Library:** Licensed under PSFL-2.0 (Python Software Foundation License). Includes tkinter, xml.etree.ElementTree, json, subprocess, pathlib, hashlib, logging, and os.
 - **Windows SDK Components (makeappx.exe, signtool.exe):** Copyright © Microsoft Corporation. Provided under the Microsoft Windows SDK EULA. Tools are invoked as external unprivileged sub-processes and are not redistributed with WinStorePackager source code.
 
 ---
@@ -72,6 +72,5 @@ WinStorePackager is designed and developed with strict local-first, zero-egress,
 ## 6. Governance & Compliance Invariants
 
 1. **No Copyleft Contagion:** All runtime and transitive libraries are licensed under permissive licenses (HPND-sell-variant, MIT, BSD-3-Clause, Apache-2.0). PyInstaller's build output is covered by the official Bootloader Exception.
-2. **Deterministic Vulnerability Floors:** All dependencies strictly enforce minimum version floors in 
-equirements.txt and pyproject.toml to guard against historical CVEs.
-3. **Fail-Closed Verification:** Automated test suite (	ests/test_security_license_contract.py and 	ests/test_metadata.py) asserts license and dependency constraints on every test run.
+2. **Deterministic Vulnerability Floors:** All dependencies strictly enforce minimum version floors in requirements.txt and pyproject.toml to guard against historical CVEs.
+3. **Fail-Closed Verification:** Automated test suite (tests/test_security_license_contract.py and tests/test_metadata.py) asserts license and dependency constraints on every test run.

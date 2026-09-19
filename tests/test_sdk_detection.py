@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tests for Windows SDK tool detection in WindowsStorePublisher_3.py."""
 
-from pathlib import Path
 import WindowsStorePublisher_3 as wsp
 
 

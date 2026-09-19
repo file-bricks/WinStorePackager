@@ -39,6 +39,8 @@ token.json
 secrets.*
 *.pem
 *.key
+*.p12
+*.pfx
 keyring/
 
 # ---- Build-Artefakte & Releases ----
@@ -102,12 +104,16 @@ DONE.md
 
 # ---- Multi-Host-Synchronisation & Konfliktschutz ----
 *.sync-conflict-*
+*.sync-temp-*
 *.conflict
 *-CONFLIT-*
 *-conflict-*
 *-WORKSTATION*
 *-WORKSTATION-LG*
+*-ASUS*
 *-ASUS-GEI*
+*-LAPTOP*
+*-Mac Studio*
 * (kopie)*
 * (Kopie)*
 * (copy)*

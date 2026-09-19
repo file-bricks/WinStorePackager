@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "Lukas Geiger"}
+    {name = "Lukas Geiger", email = "support@lukasgeiger.com"}
 ]
 keywords = [
     "msix",

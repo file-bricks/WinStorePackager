@@ -38,6 +38,7 @@ def test_dependency_vulnerability_floors() -> None:
     assert "[project.optional-dependencies]" in pyproject_text, "pyproject.toml must define optional-dependencies"
     assert "pytest>=9.1.1" in pyproject_text, "pyproject.toml dev dependencies must require pytest>=9.1.1"
     assert "ruff>=0.9.0" in pyproject_text, "pyproject.toml dev dependencies must require ruff>=0.9.0"
+    assert "support@lukasgeiger.com" in pyproject_text, "pyproject.toml must specify official support email"
 
 
 def test_third_party_licenses_complete_and_accurate() -> None:
@@ -82,11 +83,11 @@ def test_gitignore_security_and_multi_host_hardening() -> None:
     content = gitignore_file.read_text(encoding="utf-8")
 
     # Secrets and certificate protection
-    for pat in ["credentials.json", "*.pfx", "*.pem", "*.key", "keyring/", "secrets.*"]:
+    for pat in ["credentials.json", "*.pfx", "*.p12", "*.pem", "*.key", "keyring/", "secrets.*"]:
         assert pat in content, f"Secret pattern {pat} missing in .gitignore"
 
     # Multi-host sync hardening
-    for host_pat in ["*-WORKSTATION-LG*", "*-ASUS-GEI*", "*.sync-conflict-*", "*.conflict"]:
+    for host_pat in ["*-WORKSTATION-LG*", "*-ASUS-GEI*", "*-LAPTOP*", "*.sync-conflict-*", "*.sync-temp-*", "*.conflict"]:
         assert host_pat in content, f"Sync conflict pattern {host_pat} missing in .gitignore"
 
     # Multi-agent lock system fail-closed patterns
@@ -116,6 +117,54 @@ def test_no_hardcoded_user_paths_in_python_code() -> None:
     assert not violating_lines, "Found hardcoded user paths in Python code:\n" + "\n".join(violating_lines)
 
 
+def test_no_hardcoded_secrets_in_production_source() -> None:
+    """Verify no leaked tokens, AWS credentials, private keys, or cleartext secrets in production source files."""
+    secret_patterns = [
+        re.compile(r"AKIA[0-9A-Z]{16}"),
+        re.compile(r"gh[pousr]_[A-Za-z0-9_]{36,255}"),
+        re.compile(r"xox[baprs]-[0-9a-zA-Z]{10,48}"),
+        re.compile(r"-----BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY-----"),
+    ]
+
+    prod_files = [ROOT / "WindowsStorePublisher_3.py"] + list((ROOT / "scripts").glob("*.py"))
+    assert len(prod_files) >= 1
+
+    violations = []
+    for f in prod_files:
+        if not f.is_file():
+            continue
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        for idx, line in enumerate(text.splitlines(), 1):
+            for pat in secret_patterns:
+                if pat.search(line):
+                    violations.append(f"{f.name}:{idx}: matches secret regex {pat.pattern}")
+
+    assert not violations, "Found secret patterns in production source files:\n" + "\n".join(violations)
+
+
+def test_zero_unauthorized_telemetry_or_tracking() -> None:
+    """Verify production application code does not import or invoke unauthorized telemetry or tracking services."""
+    disallowed_endpoints = [
+        "google-analytics.com",
+        "segment.io",
+        "mixpanel.com",
+        "sentry.io",
+        "telemetry",
+        "amplitude.com",
+    ]
+
+    prod_file = ROOT / "WindowsStorePublisher_3.py"
+    assert prod_file.is_file()
+    text = prod_file.read_text(encoding="utf-8")
+
+    violations = []
+    for endpoint in disallowed_endpoints:
+        if endpoint in text.lower():
+            violations.append(endpoint)
+
+    assert not violations, f"Found unauthorized telemetry or tracking endpoints: {violations}"
+
+
 def test_subprocess_execution_safety() -> None:
     """Verify WindowsStorePublisher_3.py does not invoke unquoted or unsafe shell=True executions."""
     pub_file = ROOT / "WindowsStorePublisher_3.py"
@@ -132,15 +181,18 @@ def test_subprocess_execution_safety() -> None:
 
 
 def test_security_policy_sla_and_contacts() -> None:
-    """Verify SECURITY.md maintains strict SLA and designated response channels."""
+    """Verify SECURITY.md maintains strict SLA, non-elevation guarantees, and designated response channels."""
     sec_file = ROOT / "SECURITY.md"
     assert sec_file.is_file(), "SECURITY.md must exist"
     content = sec_file.read_text(encoding="utf-8")
 
     assert "security@file-bricks.org" in content
     assert "security@open-bricks.org" in content
+    assert "support@lukasgeiger.com" in content
     assert "48" in content, "48h initial acknowledgment SLA missing"
     assert "5" in content, "5-day triage commitment missing"
+    assert "Local-First" in content or "local-first" in content
+    assert "Non-Elevation" in content or "unprivilegierten" in content
 
 
 if __name__ == "__main__":
