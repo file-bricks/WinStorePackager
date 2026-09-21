@@ -2,8 +2,8 @@
 # Status: ACTIVE / PFAD B DISCOVERABILITY & MARKETING VERIFIED
 # Repository: file-bricks/WinStorePackager
 # Organization: file-bricks (Umbrella: open-bricks)
-# Audit Date: 2026-09-11
-# Tested Baseline: 156 passed | 4 skipped | 100% green
+# Audit Date: 2026-09-21
+# Tested Baseline: 170 passed | 4 skipped | 100% green
 
 ================================================================================
 1. TARGET PERSONAS & MARKET SEGMENTS
@@ -103,3 +103,14 @@ German High-Intent Search Phrases:
 - Gitignore Protection: Hardened multi-host sync and lock protection patterns (*-WORKSTATION*, * (kopie)*, * (copy)*, LOCK, uv.lock, LOCK.permissions.json).
 - Contract Suite Expansion: 3 new contract tests added in tests/test_metadata.py (test_ci_timeout_and_concurrency_guardrails, test_extended_gitignore_sync_and_lock_defense, test_changelog_recent_pfad_a_entry).
 - Verified Test Baseline: 160 collected tests (156 passed | 4 skipped | 100% green).
+
+================================================================================
+7. DISCOVERABILITY, MARKETING & GOVERNANCE AUDIT (PFAD B, 2026-09-21)
+================================================================================
+
+- GitHub Topics Expansion: Utilized maximum allowed repository topics (20/20) with high-intent keywords: gui, microsoft-store, msix, packaging, python, tkinter, windows, app-packaging, developer-tools, local-first, python-packaging, windows-sdk, appxmanifest, microsoft-store-apps, msix-packaging, appx, desktop-packaging, store-submission, open-bricks, zero-egress.
+- Bilingual Navigation Parity & Deep Linking: Implemented 15 dual reciprocal HTML anchors across both README.md and README_de.md ensuring 100% cross-lingual link stability and deep navigation.
+- Invariant Cross-Reference Matrix: Synchronized the 10 core governance invariants (INV-LOCAL-01 through INV-SLA-10) directly into THIRD_PARTY_LICENSES.md Section 6.
+- llms.txt & Agent Guidance: Synchronized test counts, audit dates, and architectural boundaries for external autonomous AI coding agents.
+- Verified Test Baseline: 174 collected tests (170 passed | 4 skipped | 100% green).
+

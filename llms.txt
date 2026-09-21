@@ -54,11 +54,11 @@ Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifest
 
 ## Verification & Test Suite
 
-Tested with Pytest: 160 collected tests (156 passed, 4 skipped in the current local run; optional local Store, WACK, and display checks may skip when their local artifacts or display are unavailable). Execute via `pytest -ra -v`.
+Tested with Pytest: 174 collected tests (170 passed, 4 skipped in the current local run; optional local Store, WACK, and display checks may skip when their local artifacts or display are unavailable). Execute via `pytest -ra -v`.
 
-## Last-checked: 2026-09-13
+## Last-checked: 2026-09-21
 
-Verification: the local Pytest suite collected 160 tests, with 156 passed and 4
+Verification: the local Pytest suite collected 174 tests, with 170 passed and 4
 skipped because optional local Store/MSIX/WACK artifacts are unavailable;
 the codebase is clean, reproducible, and fully passes all contract tests.
 SDK-free Unix preflight found no issues across 12 artifacts;

@@ -17,6 +17,23 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Discoverability, Visual Architecture & Metadata Parity Overhaul (Pfad B, 2026-09-21)
+
+- **GitHub Topics Optimierung (20/20 max):**
+  - Themen-Tags auf das Maximum von 20/20 erweitert mit high-intent Begriffen: `gui`, `microsoft-store`, `msix`, `packaging`, `python`, `tkinter`, `windows`, `app-packaging`, `developer-tools`, `local-first`, `python-packaging`, `windows-sdk`, `appxmanifest`, `microsoft-store-apps`, `msix-packaging`, `appx`, `desktop-packaging`, `store-submission`, `open-bricks`, `zero-egress`.
+- **Reziproke HTML-Anker & Deep-Linking (`README.md`, `README_de.md`):**
+  - Alle 15 Abschnitte in beiden README-Dateien mit doppelten reziproken HTML-Ankern (`<a id="..."></a>`) ausgestattet, sodass Links zwischen den Sprachversionen punktgenau auf die entsprechenden Abschnitte verweisen.
+- **Drittanbieter-Lizenz- & Invarianten-Matrix (`THIRD_PARTY_LICENSES.md`):**
+  - Neue Invariant Cross-Reference Matrix in Abschnitt 6 integriert, die alle 10 Kern-Governance-Invarianten (`INV-LOCAL-01` bis `INV-SLA-10`) direkt den jeweiligen Lizenz- und Architekturgarantien zuordnet.
+  - Audit-Datum auf Stand 2026-09-21 aktualisiert.
+- **Marketing- & Audit-Register (`MARKETING-LOG.txt`):**
+  - Abschnitt 7 für das Pfad-B-Audit 2026-09-21 hinzugefügt (20/20 Topics, reziproke Anker, Invarianten-Matrix, 170 Tests).
+  - Test-Baseline auf 170 passed | 4 skipped (100% grün) synchronisiert.
+- **LLM-Kontext & Test-Synchronisation (`llms.txt`):**
+  - Testbestand auf 174 Tests (170 bestanden, 4 übersprungen) und Zeitstempel auf 2026-09-21 aktualisiert.
+- **Vertragstest-Absicherung (`tests/test_metadata.py`):**
+  - Zusätzliche Vertragstests für reziproke HTML-Anker, Invarianten-Matrix in `THIRD_PARTY_LICENSES.md`, und Marketing-Log Abschnitt 7 ergänzt.
+
 ### Repository-Hygiene, CI-Runaway-Schutz & Multi-Host-Synchronisationshärtung (Pfad A, 2026-09-13)
 
 - **GitHub Actions CI-Workflow-Härtung (`.github/workflows/`):**

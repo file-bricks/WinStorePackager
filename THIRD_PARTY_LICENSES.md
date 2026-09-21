@@ -3,7 +3,7 @@
 **Project:** WinStorePackager  
 **Organization:** file-bricks (Umbrella: open-bricks)  
 **License:** MIT License  
-**Audit Date:** 2026-09-20
+**Audit Date:** 2026-09-21
 **Status:** Audited & Verified (100% Permissive Open-Source & Compliant Build Exceptions)
 
 ---
@@ -74,3 +74,19 @@ WinStorePackager is designed and developed with strict local-first, zero-egress,
 1. **No Copyleft Contagion:** All runtime and transitive libraries are licensed under permissive licenses (HPND-sell-variant, MIT, BSD-3-Clause, Apache-2.0). PyInstaller's build output is covered by the official Bootloader Exception.
 2. **Deterministic Vulnerability Floors:** All dependencies strictly enforce minimum version floors in requirements.txt and pyproject.toml to guard against historical CVEs.
 3. **Fail-Closed Verification:** Automated test suite (tests/test_security_license_contract.py and tests/test_metadata.py) asserts license and dependency constraints on every test run.
+
+### Invariant Cross-Reference Matrix
+
+| Invariant ID | Rule & Domain | License & Architectural Guarantee |
+|---|---|---|
+| **INV-LOCAL-01** | Local-First & Zero-Egress | 100% offline manifest/icon processing, zero telemetry dependencies |
+| **INV-SEC-02** | Cryptographic Keyring & Non-Elevation | `keyring` (MIT) + `pywin32-ctypes` (BSD-3-Clause), unprivileged user-mode (`RunAsInvoker`) |
+| **INV-STORE-03** | Store Schema Compliance | `xml.etree.ElementTree` (PSFL-2.0), strict XML schema conformance |
+| **INV-ASSET-04** | Multi-Scale Asset Integrity | `Pillow` (HPND-sell-variant), Lanczos multi-res scaling without quality loss |
+| **INV-PROFILE-05** | Redacted Profile Portability | `json` / `pathlib` (PSFL-2.0), automatic secret and machine-path redaction |
+| **INV-CROSS-06** | Cross-Platform Preflight Parity | Pure Python stdlib in `unix_preflight.py`, zero Windows SDK requirement on Linux/macOS |
+| **INV-STATE-07** | State Isolation & Atomic Writes | `os.replace` (PSFL-2.0), host-local `%LOCALAPPDATA%` persistence outside git |
+| **INV-WACK-08** | Fail-Closed WACK Evaluation | Deterministic report parsing with fail-closed rejection on errors |
+| **INV-I18N-09** | Universal 6-Language Localization | Pure Python string mapping across DE, EN, ES, ZH, JA, RU with native umlauts |
+| **INV-SLA-10** | Vulnerability Floors & 48h SLA | Enforced dependency floors (`Pillow>=12.3.0`, `keyring>=25.0.0`), 48h response / 5d triage |
+

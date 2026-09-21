@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Bestanden-brightgreen?style=for-the-badge&logo=githubactions" alt="CI Status">
-  <img src="https://img.shields.io/badge/Tests-156%20bestanden%20%7C%204%20%C3%BCbersprungen-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-170%20bestanden%20%7C%204%20%C3%BCbersprungen-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/Lizenz-MIT-green?style=for-the-badge" alt="Lizenz">
   <img src="https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="Plattform">
   <img src="https://img.shields.io/badge/Sicherheits--SLA-48h%20SLA%20%7C%205d%20Triage-blue?style=for-the-badge" alt="Sicherheits-SLA">
@@ -47,6 +47,8 @@
 
 ---
 
+<a id="quick-start"></a>
+<a id="schnellstart"></a>
 ## Schnellstart
 
 | Ziel | Einstieg |
@@ -62,6 +64,8 @@ WinStorePackager richtet sich an kleine Teams und Einzelentwickler, die eine bes
 
 ---
 
+<a id="features"></a>
+<a id="funktionen"></a>
 ## Funktionen
 
 | Funktion | Beschreibung |
@@ -79,6 +83,8 @@ WinStorePackager richtet sich an kleine Teams und Einzelentwickler, die eine bes
 
 ---
 
+<a id="architecture--packaging-pipeline"></a>
+<a id="architektur--paketierungs-pipeline"></a>
 ## Architektur & Paketierungs-Pipeline
 
 ```mermaid
@@ -124,6 +130,8 @@ flowchart TD
 
 ---
 
+<a id="packaging-lifecycle-flow"></a>
+<a id="paketierungs-lebenszyklus"></a>
 ## Paketierungs-Lebenszyklus
 
 ```mermaid
@@ -155,7 +163,9 @@ sequenceDiagram
 
 ---
 
-## Governance- & Laufzeit-Invarianten
+<a id="governance--runtime-invariants"></a>
+<a id="governance--laufzeit-invarianten"></a>
+## Governance & Laufzeit-Invarianten
 
 WinStorePackager folgt 10 verbindlichen Architektur-, Sicherheits- und Governance-Invarianten:
 
@@ -174,6 +184,8 @@ WinStorePackager folgt 10 verbindlichen Architektur-, Sicherheits- und Governanc
 
 ---
 
+<a id="visual-showcase--store-assets"></a>
+<a id="visuelle-showcase--store-assets"></a>
 ## Visuelle Showcase & Store-Assets
 
 | Store-Funktion | Visuelle Übersicht |
@@ -193,6 +205,8 @@ Das Skript erzeugt vier PNGs in 1920x1080 Auflösung unter `releases/windowsstor
 
 ---
 
+<a id="project-profiles"></a>
+<a id="projektprofile"></a>
 ## Projektprofile
 
 WinStorePackager verfügt über ein portables Profilformat: [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md). Die Desktop-App kann `winstorepackager-project-v1.json` importieren und exportieren, sodass Store-Metadaten plattformunabhängig vorbereitet werden können, ohne lokale Publisher-IDs, Zertifikatspfade oder Passwörter preiszugeben.
@@ -205,6 +219,8 @@ python unix_preflight.py --project-root . --profile-path winstorepackager-projec
 
 ---
 
+<a id="prerequisites--installation"></a>
+<a id="voraussetzungen--installation"></a>
 ## Voraussetzungen & Installation
 
 - Python 3.9–3.13+
@@ -219,10 +235,12 @@ pip install -r requirements.txt
 python WindowsStorePublisher_3.py
 ```
 
-Oder unter Windows per Doppelklick auf `START.bat`.
+Or on Windows, double-click `START.bat`.
 
 ---
 
+<a id="sdk-free-unix-preflight"></a>
+<a id="sdk-freier-unix-preflight"></a>
 ## SDK-freier Unix-Preflight
 
 Für Linux/macOS-Entwicklungsrechner oder CI-Pipelines ohne Windows SDK bietet das Repository eine metadatenbasierte Vorprüfung:
@@ -236,7 +254,9 @@ Der Unix-Preflight prüft Projektstruktur, `store_package.json`, README, Datensc
 
 ---
 
-## Lokale Daten & Sicherheit
+<a id="local-data-and-security"></a>
+<a id="lokale-daten-und-sicherheit"></a>
+## Lokale Daten und Sicherheit
 
 WinStorePackager arbeitet ausschließlich auf lokalen Projektdateien:
 
@@ -259,6 +279,8 @@ Vorlage für maschinenspezifische Einstellungen (`settings_store_packager.json`)
 
 ---
 
+<a id="sibling-tools--ecosystem"></a>
+<a id="geschwister-tools--ökosystem"></a>
 ## Geschwister-Tools & Ökosystem
 
 WinStorePackager ist Teil der **file-bricks** und **open-bricks** Open-Source-Softwarefamilie:
@@ -274,6 +296,8 @@ WinStorePackager ist Teil der **file-bricks** und **open-bricks** Open-Source-So
 
 ---
 
+<a id="comparison-with-alternatives"></a>
+<a id="vergleich-mit-alternativen"></a>
 ## Vergleich mit Alternativen
 
 | Funktion | WinStorePackager | MSIX Packaging Tool | Visual Studio | Advanced Installer |
@@ -290,6 +314,8 @@ WinStorePackager ist Teil der **file-bricks** und **open-bricks** Open-Source-So
 
 ---
 
+<a id="third-party-licenses--transparency"></a>
+<a id="drittanbieter-lizenzen--transparenz"></a>
 ## Drittanbieter-Lizenzen & Transparenz
 
 WinStorePackager ist vollständig geprüft hinsichtlich Lizenzkonformität und Zero-Egress:
@@ -302,6 +328,8 @@ WinStorePackager ist vollständig geprüft hinsichtlich Lizenzkonformität und Z
 
 ---
 
+<a id="marketing--target-personas"></a>
+<a id="marketing--zielgruppen"></a>
 ## Marketing & Zielgruppen
 
 WinStorePackager ist für Auffindbarkeit optimiert und richtet sich an vier zentrale Entwickler-Zielgruppen:
@@ -328,6 +356,8 @@ Ausführliche Persona-Schmerzpunktanalysen und Keyword-Rankings sind im [`MARKET
 
 ---
 
+<a id="documentation--license"></a>
+<a id="dokumentation--lizenz"></a>
 ## Dokumentation & Lizenz
 
 - 📄 **Sicherheitsrichtlinie:** [`SECURITY.md`](SECURITY.md) — Zweisprachige Sicherheitsrichtlinie mit Zero-Egress-Garantie

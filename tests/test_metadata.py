@@ -73,7 +73,7 @@ def test_llms_txt_integrity() -> None:
     assert llms_file.is_file(), "llms.txt must exist"
     content = llms_file.read_text(encoding="utf-8")
 
-    assert "Last-checked: 2026-09-13" in content or "Last-checked: 2026-09-11" in content, "llms.txt timestamp not updated"
+    assert any(ts in content for ts in ["Last-checked: 2026-09-21", "Last-checked: 2026-09-13", "Last-checked: 2026-09-11"]), "llms.txt timestamp not updated"
     assert "https://github.com/file-bricks/WinStorePackager" in content, "Canonical repo link missing in llms.txt"
     assert "MSIX" in content and "AppxManifest" in content, "Packaging keywords missing in llms.txt"
     assert "SECURITY.md" in content, "SECURITY.md reference missing in llms.txt"
@@ -269,8 +269,8 @@ def test_changelog_pfad_b_entry() -> None:
     assert changelog_file.is_file()
     content = changelog_file.read_text(encoding="utf-8")
 
-    assert "Discoverability, Visual Architecture & Marketing Overhaul" in content
-    assert "Pfad B, 2026-09-11" in content
+    assert "Discoverability, Visual Architecture & Marketing Overhaul" in content or "Discoverability, Visual Architecture & Metadata Parity Overhaul" in content
+    assert "Pfad B, 2026-09-21" in content or "Pfad B, 2026-09-11" in content
 
 
 def test_ci_timeout_and_concurrency_guardrails() -> None:
@@ -328,6 +328,62 @@ def test_changelog_recent_pfad_a_entry() -> None:
     assert "Pfad A" in content, "Pfad A marker missing in CHANGELOG.md"
     assert "2026-09-13" in content, "2026-09-13 date missing in CHANGELOG.md"
     assert "CI" in content and ("Härtung" in content or "Hardening" in content or "Hygiene" in content)
+
+
+def test_bilingual_readme_reciprocal_dual_anchors() -> None:
+    """Verify that both README.md and README_de.md contain reciprocal HTML anchors for all 15 sections."""
+    readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    pairs = [
+        ("quick-start", "schnellstart"),
+        ("features", "funktionen"),
+        ("architecture--packaging-pipeline", "architektur--paketierungs-pipeline"),
+        ("packaging-lifecycle-flow", "paketierungs-lebenszyklus"),
+        ("governance--runtime-invariants", "governance--laufzeit-invarianten"),
+        ("visual-showcase--store-assets", "visuelle-showcase--store-assets"),
+        ("project-profiles", "projektprofile"),
+        ("prerequisites--installation", "voraussetzungen--installation"),
+        ("sdk-free-unix-preflight", "sdk-freier-unix-preflight"),
+        ("local-data-and-security", "lokale-daten-und-sicherheit"),
+        ("sibling-tools--ecosystem", "geschwister-tools--ökosystem"),
+        ("comparison-with-alternatives", "vergleich-mit-alternativen"),
+        ("third-party-licenses--transparency", "drittanbieter-lizenzen--transparenz"),
+        ("marketing--target-personas", "marketing--zielgruppen"),
+        ("documentation--license", "dokumentation--lizenz"),
+    ]
+
+    for en_id, de_id in pairs:
+        assert f'<a id="{en_id}"></a>' in readme_en, f'Anchor <a id="{en_id}"></a> missing in README.md'
+        assert f'<a id="{de_id}"></a>' in readme_en, f'Reciprocal anchor <a id="{de_id}"></a> missing in README.md'
+        assert f'<a id="{en_id}"></a>' in readme_de, f'Reciprocal anchor <a id="{en_id}"></a> missing in README_de.md'
+        assert f'<a id="{de_id}"></a>' in readme_de, f'Anchor <a id="{de_id}"></a> missing in README_de.md'
+
+
+def test_third_party_licenses_invariant_matrix() -> None:
+    """Verify THIRD_PARTY_LICENSES.md includes the Invariant Cross-Reference Matrix and all 10 invariants."""
+    lic_md = ROOT / "THIRD_PARTY_LICENSES.md"
+    assert lic_md.is_file()
+    content = lic_md.read_text(encoding="utf-8")
+
+    assert "### Invariant Cross-Reference Matrix" in content
+    for inv in [
+        "INV-LOCAL-01", "INV-SEC-02", "INV-STORE-03", "INV-ASSET-04", "INV-PROFILE-05",
+        "INV-CROSS-06", "INV-STATE-07", "INV-WACK-08", "INV-I18N-09", "INV-SLA-10",
+    ]:
+        assert inv in content, f"Invariant {inv} missing in THIRD_PARTY_LICENSES.md matrix"
+
+
+def test_marketing_log_pfad_b_audit_section() -> None:
+    """Verify MARKETING-LOG.txt contains the 2026-09-21 Pfad B audit section and full topic list."""
+    m_log = ROOT / "MARKETING-LOG.txt"
+    assert m_log.is_file()
+    content = m_log.read_text(encoding="utf-8")
+
+    assert "DISCOVERABILITY, MARKETING & GOVERNANCE AUDIT (PFAD B, 2026-09-21)" in content
+    assert "20/20" in content
+    assert "zero-egress" in content
+    assert "open-bricks" in content
 
 
 if __name__ == "__main__":
