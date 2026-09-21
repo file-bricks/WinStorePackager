@@ -194,17 +194,36 @@ def sanitize_application_id(app_name):
     return ".".join(segments)[:64].rstrip(".") or "App"
 
 
+_INVALID_WINDOWS_DIR_CHARS = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
+_WINDOWS_RESERVED_DEVICE_NAMES = {
+    "CON", "PRN", "AUX", "NUL",
+    "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+}
+
+
 def safe_package_dir_name(app_name):
     """Return a single safe output-folder segment derived from the app name."""
     name = (app_name or "").strip() or "MyApp"
     has_separator = any(sep in name for sep in ("/", "\\"))
+    has_invalid_char = bool(_INVALID_WINDOWS_DIR_CHARS.search(name))
+    has_bad_suffix = name.endswith((".", " "))
+    base_stem = name.split(".")[0].upper()
+    is_reserved = base_stem in _WINDOWS_RESERVED_DEVICE_NAMES
+
     if (
         has_separator
+        or has_invalid_char
+        or has_bad_suffix
+        or is_reserved
         or os.path.isabs(name)
         or name in {".", ".."}
         or os.path.splitdrive(name)[0]
     ):
-        return sanitize_application_id(name)
+        sanitized = sanitize_application_id(name)
+        if sanitized.upper() in _WINDOWS_RESERVED_DEVICE_NAMES or sanitized in {".", ".."}:
+            sanitized = f"App_{sanitized}"
+        return sanitized
     return name
 
 
@@ -475,14 +494,23 @@ def validate_signing_credentials(pfx_path, pfx_pw, publisher_cn, timestamp_url):
     Returns (valid: bool, errors: list[str]).
     """
     errors = []
-    if not pfx_path or not os.path.isfile(pfx_path):
+    clean_pfx = str(pfx_path or "").strip().strip('"\'')
+    if not clean_pfx or not os.path.isfile(clean_pfx):
         errors.append("PFX-Zertifikatsdatei fehlt oder ist ungültig.")
+    else:
+        suffix = Path(clean_pfx).suffix.lower()
+        if suffix not in (".pfx", ".p12"):
+            errors.append(f"PFX-Zertifikatsdatei muss auf .pfx oder .p12 enden (angegeben: {suffix or 'keine Endung'}).")
+
+    if pfx_pw is None:
+        errors.append("PFX-Passwort darf nicht None sein.")
 
     val_pub, msg_pub = validate_publisher_cn(publisher_cn or "")
     if not val_pub:
         errors.append(f"Publisher-ID Format ungültig: {msg_pub}")
 
-    if not timestamp_url or not (timestamp_url.startswith("http://") or timestamp_url.startswith("https://")):
+    clean_ts = str(timestamp_url or "").strip()
+    if not clean_ts or not (clean_ts.startswith("http://") or clean_ts.startswith("https://")):
         errors.append("Timestamp URL muss mit http:// oder https:// beginnen.")
 
     return (len(errors) == 0), errors
@@ -2135,14 +2163,24 @@ def patch_widgets(translator):
             messagebox.showerror("Fehler", "AppxManifest.xml nicht gefunden. Bitte Paket erzeugen.")
             return
 
-        makeappx = self.makeappx_path.get().strip()
-        signtool = self.signtool_path.get().strip()
+        makeappx = self.makeappx_path.get().strip().strip('"\'')
+        signtool = self.signtool_path.get().strip().strip('"\'')
 
         if not (makeappx and os.path.isfile(makeappx)):
             messagebox.showerror("Fehler", "MakeAppx.exe nicht gefunden. Bitte Pfad setzen.")
             return
         if not (signtool and os.path.isfile(signtool)):
             messagebox.showerror("Fehler", "SignTool.exe nicht gefunden. Bitte Pfad setzen.")
+            return
+
+        pfx = self.pfx_path.get().strip().strip('"\'')
+        pfx_pw = self.pfx_password.get()
+        ts_url = self.timestamp_url.get().strip()
+
+        valid_cred, cred_errs = validate_signing_credentials(pfx, pfx_pw, self.publisher.get(), ts_url)
+        if not valid_cred:
+            err_msg = "Zertifikats- und Signatur-Prüfung fehlgeschlagen:\n\n" + "\n".join(cred_errs)
+            messagebox.showerror("Fehler", err_msg)
             return
 
         msix_name = self.msix_name.get().strip()
@@ -2168,17 +2206,6 @@ def patch_widgets(translator):
                 # die App friert dauerhaft ein (signtool wartet ggf. auf Timestamp-Server uebers Netz).
                 subprocess.run(cmd_pack, capture_output=True, text=True, check=True, timeout=300)
 
-                pfx = self.pfx_path.get().strip()
-                pfx_pw = self.pfx_password.get()
-                ts_url = self.timestamp_url.get().strip()
-
-                valid_cred, cred_errs = validate_signing_credentials(pfx, pfx_pw, self.publisher.get(), ts_url)
-                if not valid_cred:
-                    progress.close()
-                    err_msg = "Zertifikats- und Signatur-Prüfung fehlgeschlagen:\n\n" + "\n".join(cred_errs)
-                    self.after(0, lambda msg=err_msg: messagebox.showerror("Fehler", msg))
-                    return
-
                 progress.update_status("Signiere MSIX...")
                 cmd_sign = [
                     signtool, "sign",
@@ -2197,13 +2224,23 @@ def patch_widgets(translator):
 
             except subprocess.CalledProcessError as e:
                 progress.close()
+                if os.path.exists(msix_path):
+                    try:
+                        os.remove(msix_path)
+                    except OSError:
+                        pass
                 # Passwort aus Fehlermeldung entfernen
                 safe_cmd = [x if x != pfx_pw else "***" for x in (e.cmd or [])]
                 error_msg = f"Befehl fehlgeschlagen:\n{safe_cmd}\n\nAusgabe:\n{e.stderr if e.stderr else e.stdout}"
                 self.after(0, lambda msg=error_msg: messagebox.showerror("Fehler", msg))
             except Exception as e:
-                err_str = str(e)
                 progress.close()
+                if os.path.exists(msix_path):
+                    try:
+                        os.remove(msix_path)
+                    except OSError:
+                        pass
+                err_str = str(e)
                 self.after(0, lambda err=err_str: messagebox.showerror("Fehler",
                     f"MSIX-Build fehlgeschlagen:\n{err}"))
 
@@ -2494,30 +2531,35 @@ def patch_widgets(translator):
         if not valid:
             issues.append(f"❌ Publisher: {msg}")
 
-        if not self.script_path.get().strip() or not os.path.exists(self.script_path.get()):
+        script = self.script_path.get().strip().strip('"\'')
+        if not script or not os.path.exists(script):
             issues.append("❌ Haupt-Skript fehlt oder existiert nicht")
 
-        if not self.icon_path.get().strip() or not os.path.exists(self.icon_path.get()):
+        icon_path = self.icon_path.get().strip().strip('"\'')
+        if not icon_path or not os.path.exists(icon_path):
             issues.append("❌ Icon fehlt oder existiert nicht")
         else:
             try:
-                img = Image.open(self.icon_path.get())
+                img = Image.open(icon_path)
                 if img.width < 310 or img.height < 310:
                     issues.append(f"⚠️  Icon zu klein ({img.width}x{img.height}), mindestens 310x310 empfohlen")
             except Exception as e:
-                issues.append(f"Warnung: Icon konnte nicht gelesen werden: {e}")
+                issues.append(f"⚠️  Icon konnte nicht gelesen werden: {e}")
 
-        if not self.privacy_url.get().strip():
+        priv_url = self.privacy_url.get().strip()
+        if not priv_url:
             issues.append("❌ Privacy Policy URL fehlt")
-        elif not self.privacy_url.get().startswith(("http://", "https://")):
+        elif not priv_url.startswith(("http://", "https://")):
             issues.append("⚠️  Privacy Policy URL sollte mit http:// oder https:// beginnen")
 
-        if not self.support_url.get().strip():
+        supp_url = self.support_url.get().strip()
+        if not supp_url:
             issues.append("❌ Support URL fehlt")
-        elif not self.support_url.get().startswith(("http://", "https://")):
+        elif not supp_url.startswith(("http://", "https://")):
             issues.append("⚠️  Support URL sollte mit http:// oder https:// beginnen")
 
-        if not self.pfx_path.get().strip() or not os.path.exists(self.pfx_path.get()):
+        pfx_path = self.pfx_path.get().strip().strip('"\'')
+        if not pfx_path or not os.path.isfile(pfx_path):
             issues.append("❌ Zertifikat (.pfx) fehlt oder existiert nicht")
 
         if not self.capabilities.get().strip():
@@ -2529,18 +2571,26 @@ def patch_widgets(translator):
         if not self.readme_box.get("1.0", tk.END).strip():
             issues.append("⚠️  README fehlt")
 
-        if not self.license_box.get("1.0", tk.END).strip() and not self.license_files:
+        if (
+            not self.license_box.get("1.0", tk.END).strip()
+            and not self.license_files
+            and not getattr(self, "license_text_entries", None)
+        ):
             issues.append("⚠️  Lizenz fehlt")
 
-        if not self.makeappx_path.get().strip() or not os.path.exists(self.makeappx_path.get()):
+        makeappx = self.makeappx_path.get().strip().strip('"\'')
+        if not makeappx or not os.path.isfile(makeappx):
             issues.append("❌ MakeAppx.exe nicht gefunden")
 
-        if not self.signtool_path.get().strip() or not os.path.exists(self.signtool_path.get()):
+        signtool = self.signtool_path.get().strip().strip('"\'')
+        if not signtool or not os.path.isfile(signtool):
             issues.append("❌ SignTool.exe nicht gefunden")
 
         version = self.version.get().strip()
-        if not re.match(r'^\d+\.\d+\.\d+\.\d+$', version):
-            issues.append(f"⚠️  Version hat falsches Format: {version} (erwartet: X.X.X.X)")
+        if not version:
+            issues.append("❌ Version fehlt")
+        elif not re.match(r'^\d+\.\d+\.\d+\.\d+$', version):
+            issues.append(f"❌ Version hat falsches Format: {version} (erwartet: X.X.X.X)")
 
         if not self.publisher_display.get().strip():
             issues.append("⚠️  Publisher Display Name fehlt")
@@ -2548,9 +2598,15 @@ def patch_widgets(translator):
         if not self.identity_name.get().strip():
             issues.append("⚠️  Identity Name fehlt")
 
+        ts_url = self.timestamp_url.get().strip()
+        if not ts_url:
+            issues.append("⚠️  Timestamp URL fehlt")
+        elif not ts_url.startswith(("http://", "https://")):
+            issues.append("⚠️  Timestamp URL sollte mit http:// oder https:// beginnen")
+
         if issues:
             critical = [i for i in issues if i.startswith("❌")]
-            warnings = [i for i in issues if i.startswith("⚠️")]
+            warnings = [i for i in issues if not i.startswith("❌")]
 
             msg = ""
             if critical:
@@ -2563,7 +2619,11 @@ def patch_widgets(translator):
                 msg += "WARNUNGEN (sollten behoben werden):\n\n"
                 msg += "\n".join(warnings)
 
+            if not msg:
+                msg = "\n".join(issues)
+
             messagebox.showwarning("Preflight-Check", msg)
+            return {"ok": False, "critical": critical, "warnings": warnings, "issues": issues}
         else:
             messagebox.showinfo("Preflight-Check",
                 "✅ Alle Pflichtfelder sind ausgefüllt!\n\n" +
@@ -2572,6 +2632,7 @@ def patch_widgets(translator):
                 "2. EXE bauen\n" +
                 "3. MSIX bauen & signieren\n" +
                 "4. WACK-Test durchführen")
+            return {"ok": True, "critical": [], "warnings": [], "issues": []}
 
     # ---------- Exit ----------
     def on_quit(self):
