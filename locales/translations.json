@@ -1926,5 +1926,333 @@
     "zh": "创建软件包失败：",
     "ja": "パッケージの作成に失敗しました：",
     "ru": "Не удалось создать пакет:"
+  },
+  "Preflight-Check": {
+    "de": "Preflight-Check",
+    "en": "Preflight Check",
+    "es": "Verificación previa",
+    "zh": "预检",
+    "ja": "事前チェック",
+    "ru": "Предварительная проверка"
+  },
+  "Preflight-Check:": {
+    "de": "Preflight-Check:",
+    "en": "Preflight Check:",
+    "es": "Verificación previa:",
+    "zh": "预检：",
+    "ja": "事前チェック：",
+    "ru": "Предварительная проверка:"
+  },
+  "Preflight-Check: Alle Pflichtfelder ausgefüllt.": {
+    "de": "Preflight-Check: Alle Pflichtfelder ausgefüllt.",
+    "en": "Preflight Check: All mandatory fields filled.",
+    "es": "Verificación previa: Todos los campos obligatorios completados.",
+    "zh": "预检：所有必填字段已填写。",
+    "ja": "事前チェック：すべての必須項目が入力されました。",
+    "ru": "Предварительная проверка: Все обязательные поля заполнены."
+  },
+  "KRITISCHE FEHLER (müssen behoben werden):": {
+    "de": "KRITISCHE FEHLER (müssen behoben werden):",
+    "en": "CRITICAL ERRORS (must be fixed):",
+    "es": "ERRORES CRÍTICOS (deben corregirse):",
+    "zh": "关键错误（必须修复）：",
+    "ja": "致命的なエラー（修正必須）：",
+    "ru": "КРИТИЧЕСКИЕ ОШИБКИ (требуется исправление):"
+  },
+  "WARNUNGEN (sollten behoben werden):": {
+    "de": "WARNUNGEN (sollten behoben werden):",
+    "en": "WARNINGS (should be fixed):",
+    "es": "ADVERTENCIAS (deben revisarse):",
+    "zh": "警告（建议修复）：",
+    "ja": "警告（修正推奨）：",
+    "ru": "ПРЕДУПРЕЖДЕНИЯ (рекомендуется исправить):"
+  },
+  "App-Name fehlt": {
+    "de": "App-Name fehlt",
+    "en": "App name missing",
+    "es": "Falta el nombre de la aplicación",
+    "zh": "缺少应用名称",
+    "ja": "アプリ名がありません",
+    "ru": "Отсутствует имя приложения"
+  },
+  "Publisher:": {
+    "de": "Publisher:",
+    "en": "Publisher:",
+    "es": "Editor:",
+    "zh": "发布者：",
+    "ja": "発行者：",
+    "ru": "Издатель:"
+  },
+  "Haupt-Skript fehlt oder existiert nicht": {
+    "de": "Haupt-Skript fehlt oder existiert nicht",
+    "en": "Main script missing or does not exist",
+    "es": "Falta el script principal o no existe",
+    "zh": "主脚本缺失或不存在",
+    "ja": "メインスクリプトが存在しないか指定されていません",
+    "ru": "Главный скрипт отсутствует или не существует"
+  },
+  "Icon fehlt oder existiert nicht": {
+    "de": "Icon fehlt oder existiert nicht",
+    "en": "Icon missing or does not exist",
+    "es": "Falta el icono o no existe",
+    "zh": "图标缺失或不存在",
+    "ja": "アイコンが存在しないか指定されていません",
+    "ru": "Иконка отсутствует или не существует"
+  },
+  "Icon zu klein ({width}x{height}), mindestens 310x310 empfohlen": {
+    "de": "Icon zu klein ({width}x{height}), mindestens 310x310 empfohlen",
+    "en": "Icon too small ({width}x{height}), minimum 310x310 recommended",
+    "es": "Icono demasiado pequeño ({width}x{height}), mínimo recomendado 310x310",
+    "zh": "图标过小 ({width}x{height})，建议至少 310x310",
+    "ja": "アイコンが小さすぎます（{width}x{height}）、310x310以上を推奨",
+    "ru": "Иконка слишком мала ({width}x{height}), рекомендуется не менее 310x310"
+  },
+  "Icon konnte nicht gelesen werden:": {
+    "de": "Icon konnte nicht gelesen werden:",
+    "en": "Icon could not be read:",
+    "es": "No se pudo leer el icono:",
+    "zh": "无法读取图标：",
+    "ja": "アイコンを読み込めませんでした：",
+    "ru": "Не удалось прочитать иконку:"
+  },
+  "Privacy Policy URL fehlt": {
+    "de": "Privacy Policy URL fehlt",
+    "en": "Privacy Policy URL missing",
+    "es": "Falta la URL de la política de privacidad",
+    "zh": "缺少隐私政策 URL",
+    "ja": "プライバシーポリシーのURLがありません",
+    "ru": "Отсутствует URL политики конфиденциальности"
+  },
+  "Privacy Policy URL sollte mit http:// oder https:// beginnen": {
+    "de": "Privacy Policy URL sollte mit http:// oder https:// beginnen",
+    "en": "Privacy Policy URL should start with http:// or https://",
+    "es": "La URL de privacidad debe comenzar con http:// o https://",
+    "zh": "隐私政策 URL 应以 http:// 或 https:// 开头",
+    "ja": "プライバシーポリシーURLは http:// または https:// で始まる必要があります",
+    "ru": "URL политики конфиденциальности должен начинаться с http:// или https://"
+  },
+  "Support URL fehlt": {
+    "de": "Support URL fehlt",
+    "en": "Support URL missing",
+    "es": "Falta la URL de soporte",
+    "zh": "缺少支持 URL",
+    "ja": "サポートURLがありません",
+    "ru": "Отсутствует URL службы поддержки"
+  },
+  "Support URL sollte mit http:// oder https:// beginnen": {
+    "de": "Support URL sollte mit http:// oder https:// beginnen",
+    "en": "Support URL should start with http:// or https://",
+    "es": "La URL de soporte debe comenzar con http:// o https://",
+    "zh": "支持 URL 应以 http:// 或 https:// 开头",
+    "ja": "サポートURLは http:// または https:// で始まる必要があります",
+    "ru": "URL службы поддержки должен начинаться с http:// или https://"
+  },
+  "Zertifikat (.pfx) fehlt oder existiert nicht": {
+    "de": "Zertifikat (.pfx) fehlt oder existiert nicht",
+    "en": "Certificate (.pfx) missing or does not exist",
+    "es": "Falta el certificado (.pfx) o no existe",
+    "zh": "证书 (.pfx) 缺失或不存在",
+    "ja": "証明書 (.pfx) が存在しないか指定されていません",
+    "ru": "Сертификат (.pfx) отсутствует или не существует"
+  },
+  "Capabilities nicht gesetzt (z.B. internetClient)": {
+    "de": "Capabilities nicht gesetzt (z.B. internetClient)",
+    "en": "Capabilities not set (e.g. internetClient)",
+    "es": "Capacidades no configuradas (p. ej. internetClient)",
+    "zh": "未设置功能（如 internetClient）",
+    "ja": "機能（Capabilities）が設定されていません（例: internetClient）",
+    "ru": "Возможности (capabilities) не заданы (напр. internetClient)"
+  },
+  "Beschreibung fehlt": {
+    "de": "Beschreibung fehlt",
+    "en": "Description missing",
+    "es": "Falta la descripción",
+    "zh": "缺少描述",
+    "ja": "説明がありません",
+    "ru": "Отсутствует описание"
+  },
+  "README fehlt": {
+    "de": "README fehlt",
+    "en": "README missing",
+    "es": "Falta el archivo README",
+    "zh": "缺少 README",
+    "ja": "READMEがありません",
+    "ru": "Отсутствует README"
+  },
+  "Lizenz fehlt": {
+    "de": "Lizenz fehlt",
+    "en": "License missing",
+    "es": "Falta la licencia",
+    "zh": "缺少许可证",
+    "ja": "ライセンスがありません",
+    "ru": "Отсутствует лицензия"
+  },
+  "MakeAppx.exe nicht gefunden": {
+    "de": "MakeAppx.exe nicht gefunden",
+    "en": "MakeAppx.exe not found",
+    "es": "MakeAppx.exe no encontrado",
+    "zh": "未找到 MakeAppx.exe",
+    "ja": "MakeAppx.exe が見つかりません",
+    "ru": "MakeAppx.exe не найден"
+  },
+  "SignTool.exe nicht gefunden": {
+    "de": "SignTool.exe nicht gefunden",
+    "en": "SignTool.exe not found",
+    "es": "SignTool.exe no encontrado",
+    "zh": "未找到 SignTool.exe",
+    "ja": "SignTool.exe が見つかりません",
+    "ru": "SignTool.exe не найден"
+  },
+  "Version fehlt": {
+    "de": "Version fehlt",
+    "en": "Version missing",
+    "es": "Falta la versión",
+    "zh": "缺少版本号",
+    "ja": "バージョンがありません",
+    "ru": "Отсутствует версия"
+  },
+  "Version hat falsches Format: {version} (erwartet: X.X.X.X)": {
+    "de": "Version hat falsches Format: {version} (erwartet: X.X.X.X)",
+    "en": "Version has invalid format: {version} (expected: X.X.X.X)",
+    "es": "Formato de versión no válido: {version} (esperado: X.X.X.X)",
+    "zh": "版本格式错误：{version}（应为：X.X.X.X）",
+    "ja": "バージョンの形式が正しくありません: {version} (期待値: X.X.X.X)",
+    "ru": "Неверный формат версии: {version} (ожидается: X.X.X.X)"
+  },
+  "Publisher Display Name fehlt": {
+    "de": "Publisher Display Name fehlt",
+    "en": "Publisher display name missing",
+    "es": "Falta el nombre para mostrar del editor",
+    "zh": "缺少发布者显示名称",
+    "ja": "発行者表示名がありません",
+    "ru": "Отсутствует отображаемое имя издателя"
+  },
+  "Identity Name fehlt": {
+    "de": "Identity Name fehlt",
+    "en": "Identity name missing",
+    "es": "Falta el nombre de identidad",
+    "zh": "缺少标识名称",
+    "ja": "ID名がありません",
+    "ru": "Отсутствует имя удостоверения"
+  },
+  "Timestamp URL fehlt": {
+    "de": "Timestamp URL fehlt",
+    "en": "Timestamp URL missing",
+    "es": "Falta la URL de marca de tiempo",
+    "zh": "缺少时间戳 URL",
+    "ja": "タイムスタンプURLがありません",
+    "ru": "Отсутствует URL метки времени"
+  },
+  "Timestamp URL sollte mit http:// oder https:// beginnen": {
+    "de": "Timestamp URL sollte mit http:// oder https:// beginnen",
+    "en": "Timestamp URL should start with http:// or https://",
+    "es": "La URL de marca de tiempo debe comenzar con http:// o https://",
+    "zh": "时间戳 URL 应以 http:// 或 https:// 开头",
+    "ja": "タイムスタンプURLは http:// または https:// で始まる必要があります",
+    "ru": "URL метки времени должен начинаться с http:// или https://"
+  },
+  "Alle Pflichtfelder sind ausgefüllt!\n\nBereit für:\n1. Paket erzeugen\n2. EXE bauen\n3. MSIX bauen & signieren\n4. WACK-Test durchführen": {
+    "de": "Alle Pflichtfelder sind ausgefüllt!\n\nBereit für:\n1. Paket erzeugen\n2. EXE bauen\n3. MSIX bauen & signieren\n4. WACK-Test durchführen",
+    "en": "All mandatory fields are filled!\n\nReady for:\n1. Create package\n2. Build EXE\n3. Build & sign MSIX\n4. Run WACK test",
+    "es": "¡Todos los campos obligatorios están completados!\n\nListo para:\n1. Crear paquete\n2. Compilar EXE\n3. Compilar y firmar MSIX\n4. Ejecutar prueba WACK",
+    "zh": "所有必填字段均已填写！\n\n准备就绪：\n1. 创建包\n2. 构建 EXE\n3. 构建并签名 MSIX\n4. 运行 WACK 测试",
+    "ja": "すべての必須項目が入力されています！\n\n次の手順に進めます:\n1. パッケージ作成\n2. EXEビルド\n3. MSIXビルド＆署名\n4. WACKテスト実行",
+    "ru": "Все обязательные поля заполнены!\n\nГотово к:\n1. Созданию пакета\n2. Сборке EXE\n3. Сборке и подписи MSIX\n4. Запуску WACK-теста"
+  },
+  "kritische Fehler": {
+    "de": "kritische Fehler",
+    "en": "critical errors",
+    "es": "errores críticos",
+    "zh": "关键错误",
+    "ja": "致命的なエラー",
+    "ru": "критические ошибки"
+  },
+  "Warnungen": {
+    "de": "Warnungen",
+    "en": "warnings",
+    "es": "advertencias",
+    "zh": "警告",
+    "ja": "警告",
+    "ru": "предупреждений"
+  },
+  "Formatiert": {
+    "de": "Formatiert",
+    "en": "Formatted",
+    "es": "Formateado",
+    "zh": "已格式化",
+    "ja": "整形完了",
+    "ru": "Отформатировано"
+  },
+  "Kopiert": {
+    "de": "Kopiert",
+    "en": "Copied",
+    "es": "Copiado",
+    "zh": "已复制",
+    "ja": "コピー完了",
+    "ru": "Скопировано"
+  },
+  "Changelog wurde für Store-Listing formatiert.": {
+    "de": "Changelog wurde für Store-Listing formatiert.",
+    "en": "Changelog was formatted for Store listing.",
+    "es": "El registro de cambios se formateó para Microsoft Store.",
+    "zh": "更新日志已按应用商店格式排版。",
+    "ja": "更新履歴がストア掲載用に整形されました。",
+    "ru": "Список изменений отформатирован для Магазина."
+  },
+  "Changelog in Zwischenablage kopiert.": {
+    "de": "Changelog in Zwischenablage kopiert.",
+    "en": "Changelog copied to clipboard.",
+    "es": "Registro de cambios copiado al portapapeles.",
+    "zh": "更新日志已复制到剪贴板。",
+    "ja": "更新履歴がクリップボードにコピーされました。",
+    "ru": "Список изменений скопирован в буфер обмена."
+  },
+  "Gespeichert": {
+    "de": "Gespeichert",
+    "en": "Saved",
+    "es": "Guardado",
+    "zh": "已保存",
+    "ja": "保存完了",
+    "ru": "Сохранено"
+  },
+  "Einstellungen wurden gespeichert.": {
+    "de": "Einstellungen wurden gespeichert.",
+    "en": "Settings have been saved.",
+    "es": "Los ajustes se han guardado.",
+    "zh": "设置已保存。",
+    "ja": "設定が保存されました。",
+    "ru": "Настройки сохранены."
+  },
+  "Einstellungen konnten nicht gespeichert werden.": {
+    "de": "Einstellungen konnten nicht gespeichert werden.",
+    "en": "Settings could not be saved.",
+    "es": "No se pudieron guardar los ajustes.",
+    "zh": "无法保存设置。",
+    "ja": "設定を保存できませんでした。",
+    "ru": "Не удалось сохранить настройки."
+  },
+  "Einstellungen konnten nicht gespeichert werden:": {
+    "de": "Einstellungen konnten nicht gespeichert werden:",
+    "en": "Settings could not be saved:",
+    "es": "No se pudieron guardar los ajustes:",
+    "zh": "无法保存设置：",
+    "ja": "設定を保存できませんでした：",
+    "ru": "Не удалось сохранить настройки:"
+  },
+  "Ausgabeordner existiert noch nicht:": {
+    "de": "Ausgabeordner existiert noch nicht:",
+    "en": "Output folder does not exist yet:",
+    "es": "La carpeta de salida aún no existe:",
+    "zh": "输出文件夹尚不存在：",
+    "ja": "出力フォルダーがまだ存在しません：",
+    "ru": "Папка вывода еще не существует:"
+  },
+  "Ausgabeordner geöffnet:": {
+    "de": "Ausgabeordner geöffnet:",
+    "en": "Output folder opened:",
+    "es": "Carpeta de salida abierta:",
+    "zh": "已打开输出文件夹：",
+    "ja": "出力フォルダーを開きました：",
+    "ru": "Папка вывода открыта:"
   }
 }

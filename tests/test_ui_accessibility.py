@@ -45,6 +45,11 @@ def _minimal_app() -> "_wsp.StorePackagerApp":
     app.capabilities = tk.StringVar(value="internetClient")
     app.category = tk.StringVar(value="Productivity")
     app.age_rating = tk.StringVar(value="3+")
+    app.desc_box = tk.Text(app)
+    app.readme_box = tk.Text(app)
+    app.license_box = tk.Text(app)
+    app.license_files = []
+    app.license_text_entries = []
     return app
 
 
@@ -149,6 +154,130 @@ class TestBuildPackageDialogLocalization(unittest.TestCase):
             "Confirmation",
             "Output directory already exists:\nC:/temporary/output\n\nOverwrite?",
         )
+
+
+class TestPreflightCheckLocalizationAndAccessibility(unittest.TestCase):
+    def setUp(self):
+        self.translator = _wsp.get_translator()
+        if self.translator is None:
+            self.skipTest("Translation system is unavailable")
+        self.orig_lang = self.translator.current_lang
+
+    def tearDown(self):
+        if self.translator is not None:
+            self.translator.set_language(self.orig_lang)
+
+    def test_preflight_check_missing_fields_in_english(self):
+        self.translator.set_language("en")
+        app = _minimal_app()
+        try:
+            status_updates = []
+            selected_tabs = []
+            app.set_status = lambda text="": status_updates.append(text)
+            app.select_tab = lambda idx: selected_tabs.append(idx)
+            app.app_name.set("")  # Missing app name -> Critical error on Tab 0
+
+            with patch.object(_wsp.messagebox, "showwarning") as show_warning:
+                res = app.preflight_check()
+
+            self.assertFalse(res["ok"])
+            show_warning.assert_called_once()
+            title, msg = show_warning.call_args[0]
+            self.assertEqual(title, "Preflight Check")
+            self.assertIn("CRITICAL ERRORS (must be fixed):", msg)
+            self.assertIn("App name missing", msg)
+            self.assertTrue(any("critical errors" in s for s in status_updates))
+            self.assertEqual(selected_tabs, [0])
+        finally:
+            app.destroy()
+
+    def test_preflight_check_missing_fields_in_german_with_real_umlauts(self):
+        self.translator.set_language("de")
+        app = _minimal_app()
+        try:
+            status_updates = []
+            selected_tabs = []
+            app.set_status = lambda text="": status_updates.append(text)
+            app.select_tab = lambda idx: selected_tabs.append(idx)
+            app.app_name.set("")
+
+            with patch.object(_wsp.messagebox, "showwarning") as show_warning:
+                res = app.preflight_check()
+
+            self.assertFalse(res["ok"])
+            show_warning.assert_called_once()
+            title, msg = show_warning.call_args[0]
+            self.assertEqual(title, "Preflight-Check")
+            self.assertIn("KRITISCHE FEHLER (müssen behoben werden):", msg)
+            self.assertIn("App-Name fehlt", msg)
+            self.assertTrue(any("kritische Fehler" in s for s in status_updates))
+            self.assertEqual(selected_tabs, [0])
+        finally:
+            app.destroy()
+
+    def test_preflight_check_tab_navigation_to_store_tab_when_first_error_on_store(self):
+        self.translator.set_language("de")
+        app = _minimal_app()
+        try:
+            selected_tabs = []
+            app.select_tab = lambda idx: selected_tabs.append(idx)
+
+            # Valid metadata
+            app.app_name.set("ValidApp")
+            app.publisher.set("CN=ValidPublisher")
+            app.version.set("1.0.0.0")
+            app.publisher_display.set("Valid Studio")
+            app.identity_name.set("Valid.Identity")
+
+            mock_img = SimpleNamespace(width=512, height=512)
+
+            # Mock script & icon & cert & tools
+            with (
+                patch.object(_wsp.os.path, "exists", return_value=True),
+                patch.object(_wsp.os.path, "isfile", return_value=True),
+                patch.object(_wsp, "Image", SimpleNamespace(open=lambda *a, **k: mock_img)),
+                patch.object(_wsp.messagebox, "showwarning"),
+            ):
+                app.script_path.set("C:/dummy/main.py")
+                app.icon_path.set("C:/dummy/icon.png")
+                app.makeappx_path.set("C:/dummy/makeappx.exe")
+                app.signtool_path.set("C:/dummy/signtool.exe")
+                app.pfx_path.set("C:/dummy/cert.pfx")
+                app.timestamp_url.set("https://timestamp.example.com")
+                app.desc_box = Mock(get=lambda *a: "Valid Description")
+                app.readme_box = Mock(get=lambda *a: "Valid Readme")
+                app.license_box = Mock(get=lambda *a: "Valid License")
+                # Missing Store URL
+                app.privacy_url.set("")
+                app.support_url.set("https://support.example.com")
+
+                res = app.preflight_check()
+
+            self.assertFalse(res["ok"])
+            self.assertEqual(selected_tabs, [2])
+        finally:
+            app.destroy()
+
+    def test_changelog_and_settings_actions_update_status_bar(self):
+        self.translator.set_language("de")
+        app = _minimal_app()
+        try:
+            status_updates = []
+            app.set_status = lambda text="": status_updates.append(text)
+            app.changelog_box = tk.Text(app)
+            app.changelog_box.insert("1.0", "- New feature\n- Bug fix")
+
+            with patch.object(_wsp.messagebox, "showinfo") as show_info:
+                app.format_changelog()
+            self.assertTrue(any("Changelog wurde" in s for s in status_updates))
+            show_info.assert_called_with("Formatiert", "Changelog wurde für Store-Listing formatiert.")
+
+            with patch.object(_wsp.messagebox, "showinfo") as show_info:
+                app.copy_changelog()
+            self.assertTrue(any("Zwischenablage" in s for s in status_updates))
+            show_info.assert_called_with("Kopiert", "Changelog in Zwischenablage kopiert.")
+        finally:
+            app.destroy()
 
 
 class TestUiAccessibility(unittest.TestCase):

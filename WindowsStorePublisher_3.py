@@ -58,11 +58,17 @@ def ensure_dependencies():
 # ------------------------------------------------------------
 try:
     from PIL import Image, ImageGrab
-    import pygetwindow as gw
-    import keyring
 except ImportError:
     Image = ImageGrab = None
+
+try:
+    import pygetwindow as gw
+except ImportError:
     gw = None
+
+try:
+    import keyring
+except ImportError:
     keyring = None
 
 # Standard Libs
@@ -686,6 +692,11 @@ class ToolTip:
 
 
 class StorePackagerApp(tk.Tk):
+    def __getattr__(self, attr):
+        if "tk" not in self.__dict__:
+            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{attr}'")
+        return getattr(self.tk, attr)
+
     def __init__(self):
         super().__init__()
         app_icon_path = str(Path(__file__).parent / "WinStorePackager.ico")
@@ -856,10 +867,12 @@ class StorePackagerApp(tk.Tk):
         try:
             write_json_atomic(SETTINGS_FILE, data)
             LOGGER.info("Einstellungen wurden atomar im Runtime-Pfad gespeichert.")
-            messagebox.showinfo("Gespeichert", "Einstellungen wurden gespeichert.")
+            self.set_status(_t("Einstellungen wurden gespeichert."))
+            messagebox.showinfo(_t("Gespeichert"), _t("Einstellungen wurden gespeichert."))
         except Exception as e:
             LOGGER.exception("Einstellungen konnten nicht gespeichert werden.")
-            messagebox.showerror("Fehler", f"Einstellungen konnten nicht gespeichert werden:\n{e}")
+            self.set_status(_t("Einstellungen konnten nicht gespeichert werden."))
+            messagebox.showerror(_t("Fehler"), f"{_t('Einstellungen konnten nicht gespeichert werden:')}\n{e}")
 
     def _get_text_widget_value(self, widget):
         if widget is None:
@@ -1713,12 +1726,14 @@ class StorePackagerApp(tk.Tk):
     def open_output_folder(self):
         outdir = self.package_dir()
         if os.path.exists(outdir):
+            self.set_status(f"{_t('Ausgabeordner geöffnet:')} {outdir}")
             if sys.platform == "win32":
                 os.startfile(outdir)
             else:
                 subprocess.run(["xdg-open", outdir])
         else:
-            messagebox.showwarning("Hinweis", f"Ausgabeordner existiert noch nicht:\n{outdir}")
+            self.set_status(f"{_t('Ausgabeordner existiert noch nicht:')} {outdir}")
+            messagebox.showwarning(_t("Hinweis"), f"{_t('Ausgabeordner existiert noch nicht:')}\n{outdir}")
 
     # ---------- Helpers ----------
     def build_icons(self, icon_src, icon_dir):
@@ -2510,7 +2525,8 @@ def patch_widgets(translator):
         result = '\n'.join(formatted)
         self.changelog_box.delete("1.0", tk.END)
         self.changelog_box.insert(tk.END, result)
-        messagebox.showinfo("Formatiert", "Changelog wurde für Store-Listing formatiert.")
+        self.set_status(_t("Changelog wurde für Store-Listing formatiert."))
+        messagebox.showinfo(_t("Formatiert"), _t("Changelog wurde für Store-Listing formatiert."))
 
     def copy_changelog(self):
         """Copy changelog to clipboard."""
@@ -2518,91 +2534,116 @@ def patch_widgets(translator):
         if text:
             self.clipboard_clear()
             self.clipboard_append(text)
-            messagebox.showinfo("Kopiert", "Changelog in Zwischenablage kopiert.")
+            self.set_status(_t("Changelog in Zwischenablage kopiert."))
+            messagebox.showinfo(_t("Kopiert"), _t("Changelog in Zwischenablage kopiert."))
 
     # ---------- Preflight Check ----------
     def preflight_check(self):
         issues = []
+        first_error_tab = None
 
+        def _record_issue(is_critical, text, tab_idx):
+            nonlocal first_error_tab
+            prefix = "❌ " if is_critical else "⚠️  "
+            issues.append(f"{prefix}{text}")
+            if first_error_tab is None:
+                first_error_tab = tab_idx
+
+        # --- Tab 0: Metadaten ---
         if not self.app_name.get().strip():
-            issues.append("❌ App-Name fehlt")
+            _record_issue(True, _t("App-Name fehlt"), 0)
 
         valid, msg = validate_publisher_cn(self.publisher.get())
         if not valid:
-            issues.append(f"❌ Publisher: {msg}")
+            _record_issue(True, f"{_t('Publisher:')} {msg}", 0)
 
         script = self.script_path.get().strip().strip('"\'')
         if not script or not os.path.exists(script):
-            issues.append("❌ Haupt-Skript fehlt oder existiert nicht")
+            _record_issue(True, _t("Haupt-Skript fehlt oder existiert nicht"), 0)
 
         icon_path = self.icon_path.get().strip().strip('"\'')
         if not icon_path or not os.path.exists(icon_path):
-            issues.append("❌ Icon fehlt oder existiert nicht")
-        else:
+            _record_issue(True, _t("Icon fehlt oder existiert nicht"), 0)
+        elif Image is not None:
             try:
                 img = Image.open(icon_path)
                 if img.width < 310 or img.height < 310:
-                    issues.append(f"⚠️  Icon zu klein ({img.width}x{img.height}), mindestens 310x310 empfohlen")
+                    _record_issue(
+                        False,
+                        _t("Icon zu klein ({width}x{height}), mindestens 310x310 empfohlen").format(
+                            width=img.width, height=img.height
+                        ),
+                        0,
+                    )
             except Exception as e:
-                issues.append(f"⚠️  Icon konnte nicht gelesen werden: {e}")
+                _record_issue(False, f"{_t('Icon konnte nicht gelesen werden:')} {e}", 0)
 
-        priv_url = self.privacy_url.get().strip()
-        if not priv_url:
-            issues.append("❌ Privacy Policy URL fehlt")
-        elif not priv_url.startswith(("http://", "https://")):
-            issues.append("⚠️  Privacy Policy URL sollte mit http:// oder https:// beginnen")
+        desc_content = self.desc_box.get("1.0", tk.END).strip() if getattr(self, "desc_box", None) else ""
+        if not desc_content:
+            _record_issue(False, _t("Beschreibung fehlt"), 0)
 
-        supp_url = self.support_url.get().strip()
-        if not supp_url:
-            issues.append("❌ Support URL fehlt")
-        elif not supp_url.startswith(("http://", "https://")):
-            issues.append("⚠️  Support URL sollte mit http:// oder https:// beginnen")
+        readme_content = self.readme_box.get("1.0", tk.END).strip() if getattr(self, "readme_box", None) else ""
+        if not readme_content:
+            _record_issue(False, _t("README fehlt"), 0)
 
-        pfx_path = self.pfx_path.get().strip().strip('"\'')
-        if not pfx_path or not os.path.isfile(pfx_path):
-            issues.append("❌ Zertifikat (.pfx) fehlt oder existiert nicht")
-
-        if not self.capabilities.get().strip():
-            issues.append("⚠️  Capabilities nicht gesetzt (z.B. internetClient)")
-
-        if not self.desc_box.get("1.0", tk.END).strip():
-            issues.append("⚠️  Beschreibung fehlt")
-
-        if not self.readme_box.get("1.0", tk.END).strip():
-            issues.append("⚠️  README fehlt")
-
+        lic_content = self.license_box.get("1.0", tk.END).strip() if getattr(self, "license_box", None) else ""
         if (
-            not self.license_box.get("1.0", tk.END).strip()
-            and not self.license_files
+            not lic_content
+            and not getattr(self, "license_files", None)
             and not getattr(self, "license_text_entries", None)
         ):
-            issues.append("⚠️  Lizenz fehlt")
-
-        makeappx = self.makeappx_path.get().strip().strip('"\'')
-        if not makeappx or not os.path.isfile(makeappx):
-            issues.append("❌ MakeAppx.exe nicht gefunden")
-
-        signtool = self.signtool_path.get().strip().strip('"\'')
-        if not signtool or not os.path.isfile(signtool):
-            issues.append("❌ SignTool.exe nicht gefunden")
+            _record_issue(False, _t("Lizenz fehlt"), 0)
 
         version = self.version.get().strip()
         if not version:
-            issues.append("❌ Version fehlt")
+            _record_issue(True, _t("Version fehlt"), 0)
         elif not re.match(r'^\d+\.\d+\.\d+\.\d+$', version):
-            issues.append(f"❌ Version hat falsches Format: {version} (erwartet: X.X.X.X)")
+            _record_issue(
+                True,
+                _t("Version hat falsches Format: {version} (erwartet: X.X.X.X)").format(version=version),
+                0,
+            )
 
         if not self.publisher_display.get().strip():
-            issues.append("⚠️  Publisher Display Name fehlt")
+            _record_issue(False, _t("Publisher Display Name fehlt"), 0)
 
         if not self.identity_name.get().strip():
-            issues.append("⚠️  Identity Name fehlt")
+            _record_issue(False, _t("Identity Name fehlt"), 0)
+
+        # --- Tab 1: Build-Einstellungen ---
+        makeappx = self.makeappx_path.get().strip().strip('"\'')
+        if not makeappx or not os.path.isfile(makeappx):
+            _record_issue(True, _t("MakeAppx.exe nicht gefunden"), 1)
+
+        signtool = self.signtool_path.get().strip().strip('"\'')
+        if not signtool or not os.path.isfile(signtool):
+            _record_issue(True, _t("SignTool.exe nicht gefunden"), 1)
+
+        pfx_path = self.pfx_path.get().strip().strip('"\'')
+        if not pfx_path or not os.path.isfile(pfx_path):
+            _record_issue(True, _t("Zertifikat (.pfx) fehlt oder existiert nicht"), 1)
 
         ts_url = self.timestamp_url.get().strip()
         if not ts_url:
-            issues.append("⚠️  Timestamp URL fehlt")
+            _record_issue(False, _t("Timestamp URL fehlt"), 1)
         elif not ts_url.startswith(("http://", "https://")):
-            issues.append("⚠️  Timestamp URL sollte mit http:// oder https:// beginnen")
+            _record_issue(False, _t("Timestamp URL sollte mit http:// oder https:// beginnen"), 1)
+
+        # --- Tab 2: Store-Informationen ---
+        priv_url = self.privacy_url.get().strip()
+        if not priv_url:
+            _record_issue(True, _t("Privacy Policy URL fehlt"), 2)
+        elif not priv_url.startswith(("http://", "https://")):
+            _record_issue(False, _t("Privacy Policy URL sollte mit http:// oder https:// beginnen"), 2)
+
+        supp_url = self.support_url.get().strip()
+        if not supp_url:
+            _record_issue(True, _t("Support URL fehlt"), 2)
+        elif not supp_url.startswith(("http://", "https://")):
+            _record_issue(False, _t("Support URL sollte mit http:// oder https:// beginnen"), 2)
+
+        if not self.capabilities.get().strip():
+            _record_issue(False, _t("Capabilities nicht gesetzt (z.B. internetClient)"), 2)
 
         if issues:
             critical = [i for i in issues if i.startswith("❌")]
@@ -2610,28 +2651,43 @@ def patch_widgets(translator):
 
             msg = ""
             if critical:
-                msg += "KRITISCHE FEHLER (müssen behoben werden):\n\n"
+                msg += f"{_t('KRITISCHE FEHLER (müssen behoben werden):')}\n\n"
                 msg += "\n".join(critical)
 
             if warnings:
                 if msg:
                     msg += "\n\n"
-                msg += "WARNUNGEN (sollten behoben werden):\n\n"
+                msg += f"{_t('WARNUNGEN (sollten behoben werden):')}\n\n"
                 msg += "\n".join(warnings)
 
             if not msg:
                 msg = "\n".join(issues)
 
-            messagebox.showwarning("Preflight-Check", msg)
+            # Accessibility: Update status bar with accessible summary
+            if critical and warnings:
+                self.set_status(f"{_t('Preflight-Check:')} {len(critical)} {_t('kritische Fehler')}, {len(warnings)} {_t('Warnungen')}")
+            elif critical:
+                self.set_status(f"{_t('Preflight-Check:')} {len(critical)} {_t('kritische Fehler')}")
+            else:
+                self.set_status(f"{_t('Preflight-Check:')} {len(warnings)} {_t('Warnungen')}")
+
+            # Smart navigation: switch to the first tab containing an issue
+            if first_error_tab is not None:
+                self.select_tab(first_error_tab)
+
+            messagebox.showwarning(_t("Preflight-Check"), msg)
             return {"ok": False, "critical": critical, "warnings": warnings, "issues": issues}
         else:
-            messagebox.showinfo("Preflight-Check",
-                "✅ Alle Pflichtfelder sind ausgefüllt!\n\n" +
-                "Bereit für:\n" +
-                "1. Paket erzeugen\n" +
-                "2. EXE bauen\n" +
-                "3. MSIX bauen & signieren\n" +
-                "4. WACK-Test durchführen")
+            success_text = _t(
+                "Alle Pflichtfelder sind ausgefüllt!\n\n"
+                "Bereit für:\n"
+                "1. Paket erzeugen\n"
+                "2. EXE bauen\n"
+                "3. MSIX bauen & signieren\n"
+                "4. WACK-Test durchführen"
+            )
+            self.set_status(_t("Preflight-Check: Alle Pflichtfelder ausgefüllt."))
+            messagebox.showinfo(_t("Preflight-Check"), f"✅ {success_text}")
             return {"ok": True, "critical": [], "warnings": [], "issues": []}
 
     # ---------- Exit ----------
