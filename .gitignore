@@ -153,3 +153,6 @@ wheelhouse/
 .tox/
 .coverage*
 htmlcov/
+
+# Agenten-interne Loop-Statusschnappschuesse (GITHUB-POLICY.md SS3, T-20260926-510472849)
+TASKPLAN_STATUS_*.md
