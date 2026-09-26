@@ -8,8 +8,10 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Bestanden-brightgreen?style=for-the-badge&logo=githubactions" alt="CI Status">
-  <img src="https://img.shields.io/badge/Tests-170%20bestanden%20%7C%204%20%C3%BCbersprungen-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-185%20bestanden%20%7C%204%20%C3%BCbersprungen-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/Lizenz-MIT-green?style=for-the-badge" alt="Lizenz">
+  <img src="https://img.shields.io/badge/Attribution-NOTICE-blue?style=for-the-badge" alt="Attribution NOTICE">
+  <img src="https://img.shields.io/badge/Gepr%C3%BCft-2026--09--26-blue?style=for-the-badge" alt="Geprüft Datum">
   <img src="https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="Plattform">
   <img src="https://img.shields.io/badge/Sicherheits--SLA-48h%20SLA%20%7C%205d%20Triage-blue?style=for-the-badge" alt="Sicherheits-SLA">
   <img src="https://img.shields.io/badge/Datenschutz-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="Datenschutz">
@@ -361,6 +363,7 @@ Ausführliche Persona-Schmerzpunktanalysen und Keyword-Rankings sind im [`MARKET
 ## Dokumentation & Lizenz
 
 - 📄 **Sicherheitsrichtlinie:** [`SECURITY.md`](SECURITY.md) — Zweisprachige Sicherheitsrichtlinie mit Zero-Egress-Garantie
+- ⚖️ **Urheberrechts- & Zuordnungshinweis:** [`NOTICE`](NOTICE) — Kanonische Copyright-, open-bricks-Ökosystem-Zuordnung & Abhängigkeitsreferenzen
 - 📝 **Änderungsprotokoll:** [`CHANGELOG.md`](CHANGELOG.md) — Versionshistorie und Release-Notizen
 - 🤖 **LLM-Referenz:** [`llms.txt`](llms.txt) — Maschinenlesbare Architekturübersicht
 - 📦 **Profilformat:** [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) — Portierbare Profilspezifikation

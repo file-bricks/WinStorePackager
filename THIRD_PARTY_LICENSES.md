@@ -3,7 +3,7 @@
 **Project:** WinStorePackager  
 **Organization:** file-bricks (Umbrella: open-bricks)  
 **License:** MIT License  
-**Audit Date:** 2026-09-21
+**Audit Date:** 2026-09-26
 **Status:** Audited & Verified (100% Permissive Open-Source & Compliant Build Exceptions)
 
 ---
@@ -15,6 +15,7 @@ WinStorePackager is designed and developed with strict local-first, zero-egress,
 - **Zero Egress Runtime:** No runtime dependency initiates external telemetry, cloud tracking, or network connections. All packaging, manifest compilation, and icon processing run 100% offline.
 - **Unprivileged Execution:** Runs in standard user space (`RunAsInvoker`) without requiring administrator elevation.
 - **Secure Credential Storage:** Certificate passwords are kept in OS Keyring and never persisted in plain text or configuration files.
+- **Canonical Attribution Notice:** Project copyright and open-source notice are documented in the root [NOTICE](NOTICE) file.
 
 ---
 

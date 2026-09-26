@@ -110,10 +110,16 @@ DONE.md
 *-conflict-*
 *-WORKSTATION*
 *-WORKSTATION-LG*
+*_WORKSTATION*
+*_WORKSTATION-LG*
+*-WORKSTATION.*
+*-WORKSTATION-LG.*
 *-ASUS*
 *-ASUS-GEI*
 *-LAPTOP*
 *-Mac Studio*
+*-MacBook*
+*-IDEAPAD*
 * (kopie)*
 * (Kopie)*
 * (copy)*
@@ -126,7 +132,12 @@ LOCK.*
 *.lock
 !package-lock.json
 LOCK*.txt
+LOCK.user.*
+LOCK.until.*
+LOCK.condition.*
 LOCK.permissions.json
+.automation-lock
+uv.lock
 
 # ---- Packaging, Smoke Tests, Caches & Coverage ----
 wheelhouse/
@@ -134,5 +145,11 @@ wheelhouse/
 *.bak
 *.orig
 *.rej
+.pytest_temp/
+.pytest_tmp*/
+.hypothesis/
+.turbo/
+.nyc_output/
+.tox/
 .coverage*
 htmlcov/

@@ -18,9 +18,12 @@ WinStorePackager is a local-first Windows GUI and CLI utility for preparing Pyth
 - `PRIVACY_POLICY.md`: Local-data and privacy boundary.
 - `STORE_LISTING.md`: Reusable Microsoft Store listing copy.
 - `unix_preflight.py`: Cross-platform preflight validation script (Linux / macOS / CI).
+- `NOTICE`: Canonical copyright, open-bricks ecosystem attribution, and license references.
 - `THIRD_PARTY_LICENSES.md`: Dependency inventory with SPDX licenses, vulnerability floors, and zero-egress invariants.
 - `MARKETING-LOG.txt`: Target personas, high-intent search terms, 4-way competitive matrix, and 10 governance invariants.
 - `.github/workflows/ci.yml`: Multi-OS CI testing matrix (Ubuntu, Windows, macOS across Python 3.9-3.13) with concurrency control, timeout-minutes guardrails, and bytecode gate.
+- `.github/workflows/welcome.yml`: Contributor onboarding workflow with actions/first-interaction@v3, concurrency control, and timeout-minutes guardrails.
+- `.github/workflows/stale.yml`: Automated issue/PR lifecycle hygiene with actions/stale@v9, daily cron schedule, and concurrency control.
 - `tests/test_metadata.py`: Automated contract suite for metadata, badges, and discoverability.
 
 ## Audience
@@ -54,12 +57,13 @@ Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifest
 
 ## Verification & Test Suite
 
-Tested with Pytest: 174 collected tests (170 passed, 4 skipped in the current local run; optional local Store, WACK, and display checks may skip when their local artifacts or display are unavailable). Execute via `pytest -ra -v`.
+Tested with Pytest: 189 collected tests (185 passed, 4 skipped in the current local run; optional local Store, WACK, and display checks may skip when their local artifacts or display are unavailable). Execute via `pytest -ra -v`.
 
-## Last-checked: 2026-09-21
+## Last-checked: 2026-09-26
 
-Verification: the local Pytest suite collected 174 tests, with 170 passed and 4
+Verification: the local Pytest suite collected 189 tests, with 185 passed and 4
 skipped because optional local Store/MSIX/WACK artifacts are unavailable;
 the codebase is clean, reproducible, and fully passes all contract tests.
-SDK-free Unix preflight found no issues across 12 artifacts;
+Pfad A technical hygiene, welcome/stale CI workflows, lock defense, NOTICE attribution,
+and contract test expansion validated;
 `ruff check .` (0 errors) and `python -m compileall -q .` (0 errors) pass 100% cleanly.

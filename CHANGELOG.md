@@ -17,6 +17,33 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Repository-Hygiene, CI Lifecycle Workflows, Lock Defense, NOTICE Attribution & Contract Tests (Pfad A, 2026-09-26)
+
+- **CI/CD Lifecycle Workflow Provisioning & Hardening (`.github/workflows/`):**
+  - `welcome.yml`: Auf `actions/first-interaction@v3` aktualisiert, `timeout-minutes: 5` und Concurrency `cancel-in-progress: true` hinzugefügt; Least-Privilege-Permissions (`issues: write`, `pull-requests: write`) beibehalten.
+  - `stale.yml`: Concurrency `cancel-in-progress: true` mit dedizierter Gruppe `stale-${{ github.ref }}` verankert; `timeout-minutes: 10`, täglicher Cron und Least-Privilege-Rechte beibehalten.
+- **Kanonische NOTICE-Attribution (`NOTICE`):**
+  - Kanonische Open-Source-Datei `NOTICE` im Repo-Root angelegt (Copyright 2024-2026 Lukas Geiger, file-bricks maintainers unter open-bricks Umbrella, MIT Lizenz, Querverweise auf `LICENSE` und `THIRD_PARTY_LICENSES.md`).
+- **Multi-Host Cloud-Sync-, Lock- und Cache-Härtung (`.gitignore`):**
+  - Erweiterte Host-Muster (`*-MacBook*`, `*-IDEAPAD*`, `*_WORKSTATION*`, `*_WORKSTATION-LG*`, `*-WORKSTATION.*`, `*-WORKSTATION-LG.*`) blockiert.
+  - Multi-Agent Lock-Muster (`LOCK.user.*`, `LOCK.until.*`, `LOCK.condition.*`, `.automation-lock`, `uv.lock`) integriert.
+  - Test- und Cache-Artefakte (`.pytest_temp/`, `.pytest_tmp*/`, `.hypothesis/`, `.turbo/`, `.nyc_output/`, `.tox/`) ergänzt.
+- **PEP 621 Standardisierung & Pytest-Härtung (`pyproject.toml`):**
+  - `license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES.txt"]` hinzugefügt.
+  - `Notice` URL in `[project.urls]` registriert.
+  - `[tool.pytest.ini_options]` um `minversion = "7.0"`, `addopts = "-ra -v --basetemp=.pytest_temp"` und `norecursedirs` gehärtet.
+  - Strikte Version-Freeze-Disziplin (T-20260920-167562623): `version = "3.1.0"` unverändert beibehalten.
+- **Level 1 SBOM Drittanbieter-Lizenzaudit (`THIRD_PARTY_LICENSES.md`):**
+  - Re-Audit datiert auf `2026-09-26`, Bestätigung aller 10 Governance-Invarianten (`INV-LOCAL-01` bis `INV-SLA-10`), `RunAsInvoker` Non-Elevation und Querverweis auf `NOTICE`.
+- **Linter- und Code-Hygiene:**
+  - `tests/test_bugsweep_20260921.py`: Ungenutzte lokale Variable `res` in `test_preflight_check_missing_icon_shows_warning` entfernt (Ruff F841 clean).
+- **Dokumentations- & Kontext-Parität (`README.md`, `README_de.md`, `llms.txt`, `MARKETING-LOG.txt`):**
+  - Badges für Tests (185 passed | 4 skipped), `Attribution-NOTICE-blue.svg` und Prüfdatum `2026-09-26` / `Geprüft-2026--09--26` synchronisiert; Verweis auf `NOTICE` in Abschnitt 15 ergänzt.
+  - `llms.txt` Stand 2026-09-26 mit 189 Tests Baseline (185 passed | 4 skipped), `NOTICE` und Lifecycle-Workflows aktualisiert.
+  - `MARKETING-LOG.txt` um Pfad A Revisionsbericht Stand 2026-09-26 erweitert.
+- **Automatisierte Vertragstests (`tests/test_metadata.py`):**
+  - Vertragstests für NOTICE-Attribution, welcome/stale Concurrency & Timeouts, pyproject license-files/Notice URL/norecursedirs, erweiterte .gitignore Multi-Host/Lock-Guards und CHANGELOG [Unreleased] Recency erweitert.
+
 ### Discoverability, Visual Architecture & Metadata Parity Overhaul (Pfad B, 2026-09-21)
 
 - **GitHub Topics Optimierung (20/20 max):**

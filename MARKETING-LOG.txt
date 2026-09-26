@@ -114,3 +114,22 @@ German High-Intent Search Phrases:
 - llms.txt & Agent Guidance: Synchronized test counts, audit dates, and architectural boundaries for external autonomous AI coding agents.
 - Verified Test Baseline: 174 collected tests (170 passed | 4 skipped | 100% green).
 
+================================================================================
+8. REPOSITORY HYGIENE, CI LIFECYCLE WORKFLOWS & SBOM RE-AUDIT (PFAD A, 2026-09-26)
+================================================================================
+
+- CI/CD Lifecycle Workflow Provisioning & Hardening:
+  - welcome.yml upgraded to actions/first-interaction@v3 with timeout-minutes: 5 and concurrency cancel-in-progress: true.
+  - stale.yml hardened with dedicated concurrency group stale-${{ github.ref }} and cancel-in-progress: true.
+- Canonical NOTICE Attribution:
+  - Added root NOTICE attribution file establishing copyright (c) 2024-2026 Lukas Geiger, file-bricks maintainers, open-bricks umbrella, and MIT license cross-references.
+- Multi-Host Cloud-Sync & Lock Defense:
+  - Extended .gitignore with MacBook/IDEAPAD host-tokens, canonical multi-agent locks (LOCK.user.*, LOCK.until.*, LOCK.condition.*, .automation-lock, uv.lock), and test caches (.pytest_temp/, .hypothesis/, .turbo/, .tox/).
+- PEP 621 Standardisierung & Pytest Hardening:
+  - pyproject.toml enriched with license-files whitelist, Notice URL in project.urls, minversion = "7.0", and norecursedirs in pytest.ini_options.
+  - Strict Version-Freeze discipline maintained (version = "3.1.0" untouched per T-20260920-167562623).
+- Level 1 SBOM Third-Party License Re-Audit:
+  - Updated THIRD_PARTY_LICENSES.md re-audit date to 2026-09-26, verifying 100% permissive runtime dependencies, unprivileged RunAsInvoker execution, and all 10 governance invariants (INV-LOCAL-01 to INV-SLA-10).
+- Verified Test Baseline:
+  - 189 collected tests (185 passed | 4 skipped | 100% green via Pytest). Ruff lint clean (0 errors) and compileall bytecode compilation clean.
+

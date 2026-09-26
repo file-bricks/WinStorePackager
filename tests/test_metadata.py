@@ -73,10 +73,14 @@ def test_llms_txt_integrity() -> None:
     assert llms_file.is_file(), "llms.txt must exist"
     content = llms_file.read_text(encoding="utf-8")
 
-    assert any(ts in content for ts in ["Last-checked: 2026-09-21", "Last-checked: 2026-09-13", "Last-checked: 2026-09-11"]), "llms.txt timestamp not updated"
+    assert any(
+        ts in content
+        for ts in ["Last-checked: 2026-09-26", "Last-checked: 2026-09-21", "Last-checked: 2026-09-13", "Last-checked: 2026-09-11"]
+    ), "llms.txt timestamp not updated"
     assert "https://github.com/file-bricks/WinStorePackager" in content, "Canonical repo link missing in llms.txt"
     assert "MSIX" in content and "AppxManifest" in content, "Packaging keywords missing in llms.txt"
     assert "SECURITY.md" in content, "SECURITY.md reference missing in llms.txt"
+    assert "NOTICE" in content, "NOTICE reference missing in llms.txt"
     assert "THIRD_PARTY_LICENSES.md" in content, "THIRD_PARTY_LICENSES.md reference missing in llms.txt"
     assert "MARKETING-LOG.txt" in content, "MARKETING-LOG.txt reference missing in llms.txt"
 
@@ -103,6 +107,7 @@ def test_pyproject_pep621_metadata() -> None:
     assert 'name = "winstorepackager"' in content
     assert 'version = "3.1.0"' in content
     assert "Security =" in content, "Security URL missing in pyproject.toml"
+    assert "Notice =" in content, "Notice URL missing in pyproject.toml"
     assert "Homepage =" in content, "Homepage URL missing in pyproject.toml"
     assert "Repository =" in content, "Repository URL missing in pyproject.toml"
     assert "Documentation =" in content, "Documentation URL missing in pyproject.toml"
@@ -113,7 +118,14 @@ def test_pyproject_pep621_metadata() -> None:
     assert "Operating System :: Microsoft :: Windows" in content
     assert "Operating System :: OS Independent" in content, "OS Independent classifier missing"
     assert "Programming Language :: Python :: 3.13" in content, "Python 3.13 classifier missing"
-    assert 'addopts = "-ra -v"' in content or 'addopts = "-v"' in content, "pytest addopts missing in pyproject.toml"
+    assert "license-files =" in content, "license-files missing in pyproject.toml"
+    assert "minversion =" in content, "minversion missing in pyproject.toml"
+    assert "norecursedirs =" in content, "norecursedirs missing in pyproject.toml"
+    assert (
+        'addopts = "-ra -v --basetemp=.pytest_temp"' in content
+        or 'addopts = "-ra -v"' in content
+        or 'addopts = "-v"' in content
+    ), "pytest addopts missing in pyproject.toml"
 
 
 def test_ci_workflow_integrity() -> None:
@@ -289,9 +301,18 @@ def test_ci_timeout_and_concurrency_guardrails() -> None:
     assert "concurrency:" in smoke_yml, "source-platform-smoke.yml missing concurrency block"
     assert "cancel-in-progress: true" in smoke_yml, "source-platform-smoke.yml missing cancel-in-progress"
 
+    # Welcome Workflow
+    welcome_yml = (workflow_dir / "welcome.yml").read_text(encoding="utf-8")
+    assert "actions/first-interaction@v3" in welcome_yml, "welcome.yml must use first-interaction@v3"
+    assert "timeout-minutes: 5" in welcome_yml, "welcome.yml missing 5 min timeout"
+    assert "concurrency:" in welcome_yml, "welcome.yml missing concurrency block"
+    assert "cancel-in-progress: true" in welcome_yml, "welcome.yml missing cancel-in-progress"
+
     # Stale Workflow
     stale_yml = (workflow_dir / "stale.yml").read_text(encoding="utf-8")
     assert "timeout-minutes: 10" in stale_yml, "stale.yml missing 10 min timeout"
+    assert "concurrency:" in stale_yml, "stale.yml missing concurrency block"
+    assert "cancel-in-progress: true" in stale_yml, "stale.yml missing cancel-in-progress"
 
 
 def test_extended_gitignore_sync_and_lock_defense() -> None:
@@ -303,14 +324,20 @@ def test_extended_gitignore_sync_and_lock_defense() -> None:
     for pat in [
         "*-WORKSTATION*",
         "*-ASUS-GEI*",
+        "*-MacBook*",
+        "*-IDEAPAD*",
         "* (kopie)*",
         "* (copy)*",
         "*conflicted copy*",
         "LOCK",
         "LOCK.*",
+        "LOCK.user.*",
         "*.lock",
         "!package-lock.json",
         "LOCK.permissions.json",
+        ".automation-lock",
+        "uv.lock",
+        ".pytest_temp/",
         "wheelhouse/",
         ".wheel-smoke/",
         ".coverage*",
@@ -384,6 +411,43 @@ def test_marketing_log_pfad_b_audit_section() -> None:
     assert "20/20" in content
     assert "zero-egress" in content
     assert "open-bricks" in content
+
+
+def test_canonical_notice_file_contract() -> None:
+    """Verify root NOTICE file exists, is non-empty, and provides canonical open-source attribution."""
+    notice_file = ROOT / "NOTICE"
+    assert notice_file.is_file(), "NOTICE file must exist in repo root"
+    content = notice_file.read_text(encoding="utf-8")
+
+    assert "WinStorePackager" in content, "WinStorePackager title missing in NOTICE"
+    assert "Lukas Geiger" in content, "Author missing in NOTICE"
+    assert "file-bricks" in content, "file-bricks org missing in NOTICE"
+    assert "open-bricks" in content, "open-bricks umbrella missing in NOTICE"
+    assert "MIT" in content, "MIT license missing in NOTICE"
+    assert "THIRD_PARTY_LICENSES.md" in content, "THIRD_PARTY_LICENSES.md link missing in NOTICE"
+
+
+def test_changelog_recent_pfad_a_hygiene_entry() -> None:
+    """Verify CHANGELOG.md contains the 2026-09-26 Pfad A hygiene release and maintenance notes."""
+    changelog_file = ROOT / "CHANGELOG.md"
+    assert changelog_file.is_file(), "CHANGELOG.md must exist"
+    content = changelog_file.read_text(encoding="utf-8")
+
+    assert "Pfad A, 2026-09-26" in content, "2026-09-26 Pfad A marker missing in CHANGELOG.md"
+    assert "welcome.yml" in content, "welcome.yml missing in CHANGELOG.md"
+    assert "stale.yml" in content, "stale.yml missing in CHANGELOG.md"
+    assert "NOTICE" in content, "NOTICE missing in CHANGELOG.md"
+
+
+def test_marketing_log_pfad_a_audit_section() -> None:
+    """Verify MARKETING-LOG.txt contains Section 8 covering Pfad A 2026-09-26 audit."""
+    m_log = ROOT / "MARKETING-LOG.txt"
+    assert m_log.is_file(), "MARKETING-LOG.txt must exist"
+    content = m_log.read_text(encoding="utf-8")
+
+    assert "8. REPOSITORY HYGIENE, CI LIFECYCLE WORKFLOWS & SBOM RE-AUDIT (PFAD A, 2026-09-26)" in content
+    assert "welcome.yml" in content
+    assert "NOTICE" in content
 
 
 if __name__ == "__main__":

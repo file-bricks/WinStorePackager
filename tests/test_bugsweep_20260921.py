@@ -151,7 +151,7 @@ def test_preflight_check_corrupt_icon_warns_with_non_empty_dialog(tmp_path):
 
     shown_warnings = []
     with patch("tkinter.messagebox.showwarning", side_effect=lambda title, msg: shown_warnings.append((title, msg))):
-        res = app.preflight_check()
+        app.preflight_check()
 
     assert len(shown_warnings) == 1
     title, msg = shown_warnings[0]

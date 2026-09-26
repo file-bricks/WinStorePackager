@@ -9,6 +9,12 @@ description = "Desktop-App & CLI-Tool zur automatisierten Erstellung und Validie
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
+license-files = [
+    "LICENSE",
+    "NOTICE",
+    "THIRD_PARTY_LICENSES.md",
+    "THIRD_PARTY_LICENSES.txt",
+]
 authors = [
     {name = "Lukas Geiger", email = "support@lukasgeiger.com"}
 ]
@@ -63,6 +69,7 @@ Documentation = "https://github.com/file-bricks/WinStorePackager#readme"
 Issues = "https://github.com/file-bricks/WinStorePackager/issues"
 Changelog = "https://github.com/file-bricks/WinStorePackager/blob/master/CHANGELOG.md"
 Security = "https://github.com/file-bricks/WinStorePackager/blob/master/SECURITY.md"
+Notice = "https://github.com/file-bricks/WinStorePackager/blob/master/NOTICE"
 "Third-Party Licenses" = "https://github.com/file-bricks/WinStorePackager/blob/master/THIRD_PARTY_LICENSES.md"
 "Marketing Log" = "https://github.com/file-bricks/WinStorePackager/blob/master/MARKETING-LOG.txt"
 "LLM Ready" = "https://github.com/file-bricks/WinStorePackager/blob/master/llms.txt"
@@ -71,9 +78,23 @@ Umbrella = "https://github.com/open-bricks"
 "Umbrella Ecosystem" = "https://github.com/open-bricks"
 
 [tool.pytest.ini_options]
+minversion = "7.0"
 pythonpath = ["."]
 testpaths = ["tests"]
-addopts = "-ra -v"
+addopts = "-ra -v --basetemp=.pytest_temp"
+norecursedirs = [
+    ".git",
+    ".pytest_cache",
+    ".pytest_temp",
+    ".pytest_tmp*",
+    ".hypothesis",
+    ".turbo",
+    ".tox",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv",
+]
 
 [tool.ruff]
 line-length = 120
