@@ -26,11 +26,24 @@ import tkinter as tk
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 import WindowsStorePublisher_3 as wsp
+
+
+@pytest.fixture(autouse=True)
+def german_translation_contract():
+    translator = wsp.get_translator()
+    previous_language = translator.current_lang
+    translator.set_language("de")
+    try:
+        yield
+    finally:
+        translator.set_language(previous_language)
 
 
 class _Var:
