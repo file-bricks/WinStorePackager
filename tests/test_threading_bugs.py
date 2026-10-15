@@ -11,6 +11,8 @@ Bug #4: except Exception as e in Hintergrundthreads verwendete e direkt
         in Lambdas -- Python 3 loescht e am Ende des except-Blocks
         (NameError wenn Lambda spaeter ausgefuehrt wird).
 """
+from __future__ import annotations
+
 import os
 import sys
 import threading
