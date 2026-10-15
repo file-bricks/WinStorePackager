@@ -44,8 +44,11 @@ def build_store_screenshot_set(
         _workflow_frame(product, ui, icon),
     ]
 
+    if len(SCREENSHOT_FILES) != len(frames):
+        raise ValueError("Screenshot filenames and frames must have equal lengths")
+
     paths: list[Path] = []
-    for name, image in zip(SCREENSHOT_FILES, frames, strict=True):
+    for name, image in zip(SCREENSHOT_FILES, frames):
         path = out / name
         image.save(path, format="PNG", optimize=True)
         paths.append(path)
