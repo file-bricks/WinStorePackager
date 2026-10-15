@@ -46,7 +46,18 @@ jobs:
         run: |
           python -m compileall -q .
 
+      - name: Install Linux virtual display
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y xvfb xauth
+
+      - name: Run Pytest Test Suite (Linux)
+        if: runner.os == 'Linux'
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: xvfb-run -a python -m pytest -ra -v
+
       - name: Run Pytest Test Suite
+        if: runner.os != 'Linux'
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: |
