@@ -17,6 +17,16 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Bugsweep Iteration 1 — Translation Catalog CLI Interface, Parity Gate & Stream Encoding (2026-10-31)
+
+- **CLI-Interface & Argument-Parsing Härtung (`manage_translations.py`):**
+  - Robustes Argument-Parsing mit `argparse` implementiert: Flags `--check` und `--dir` werden nicht mehr irrtümlich als Ordnernamen interpretiert (verhindert das fehlerhafte Erstellen von Verzeichnissen wie `--check/` oder `--dir/`).
+  - Standardisierter `--check`-Modus (CI-Gate): Validiert Vollständigkeit und Wohlgeformtheit aller 282 Übersetzungsschlüssel über alle 6 Sprachen (DE, EN, ES, ZH, JA, RU gem. Policy P-006 Tier-2) und beendet bei fehlenden Schlüsseln mit Exit-Code 1 (bzw. 0 bei voller Parität).
+  - Defensive UTF-8-Stream-Rekonfiguration (`_ensure_utf8_streams`): Schützt `sys.stdout` und `sys.stderr` unter Windows vor `UnicodeEncodeError`/`UnicodeDecodeError` und verhindert Zeichenverfälschungen bei Umlauten.
+  - Atomares Speichern: Aktualisierungen von `locales/translations.json` erfolgen crash- und unterbrechungsresistent über temporäre Dateien (`.tmp.<pid>`) und `os.replace`.
+- **Automatisierte Vertragstests (`tests/test_manage_translations_cli.py`):**
+  - 4 neue hermetische Vertragstests decken CLI-Argument-Parsing, Verzeichnis-Nicht-Erstellung, Exit-Code-Gating bei Lücken und Unit-Prüfung `check_translations()` ab.
+
 ### Repository-Hygiene, CI Lifecycle Workflows, Lock Defense, NOTICE Attribution & Contract Tests (Pfad A, 2026-09-26)
 
 - **CI/CD Lifecycle Workflow Provisioning & Hardening (`.github/workflows/`):**
