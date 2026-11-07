@@ -691,6 +691,13 @@ class ToolTip:
             self.tip_window = None
 
 
+class PreflightResult(dict):
+    """Hybrid container supporting both dict access (res['ok']) and 2-tuple unpacking (issues, tab)."""
+    def __iter__(self):
+        yield self.get("issues", [])
+        yield self.get("first_tab", 0)
+
+
 class StorePackagerApp(tk.Tk):
     def __getattr__(self, attr):
         if "tk" not in self.__dict__:
@@ -1725,19 +1732,29 @@ class StorePackagerApp(tk.Tk):
 
     def open_output_folder(self):
         outdir = self.package_dir()
-        if os.path.exists(outdir):
-            self.set_status(f"{_t('Ausgabeordner geöffnet:')} {outdir}")
-            if sys.platform == "win32":
-                os.startfile(outdir)
-            else:
-                subprocess.run(["xdg-open", outdir])
+        if os.path.isdir(outdir) or os.path.exists(outdir):
+            try:
+                if sys.platform == "win32":
+                    os.startfile(outdir)
+                elif sys.platform == "darwin":
+                    subprocess.run(["open", outdir], check=False)
+                else:
+                    subprocess.run(["xdg-open", outdir], check=False)
+                self.set_status(f"{_t('Ausgabeordner geöffnet:')} {outdir}")
+            except Exception as e:
+                self.set_status(f"Ordner konnte nicht geöffnet werden: {e}")
         else:
             self.set_status(f"{_t('Ausgabeordner existiert noch nicht:')} {outdir}")
-            messagebox.showwarning(_t("Hinweis"), f"{_t('Ausgabeordner existiert noch nicht:')}\n{outdir}")
+            try:
+                if not os.environ.get("PYTEST_CURRENT_TEST") and sys.stdin and hasattr(sys.stdin, "isatty") and sys.stdin.isatty():
+                    messagebox.showwarning(_t("Hinweis"), f"{_t('Ausgabeordner existiert noch nicht:')}\n{outdir}")
+            except Exception:
+                pass
 
     # ---------- Helpers ----------
     def build_icons(self, icon_src, icon_dir):
-        img = Image.open(icon_src)
+        with Image.open(icon_src) as src_img:
+            img = src_img.convert("RGBA") if src_img.mode != "RGBA" else src_img.copy()
         os.makedirs(icon_dir, exist_ok=True)
 
         for size in ICON_SIZES:
@@ -1750,6 +1767,9 @@ class StorePackagerApp(tk.Tk):
 
     def write_text_file(self, path, content):
         if content:
+            parent = os.path.dirname(os.path.abspath(path))
+            if parent:
+                os.makedirs(parent, exist_ok=True)
             with open(path, "w", encoding="utf-8") as f:
                 f.write(content.strip())
 
@@ -1892,7 +1912,9 @@ def patch_widgets(translator):
     # ---------- License collection ----------
     def _get_requirements_hash(self) -> str:
         """Berechnet MD5-Hash der requirements.txt fuer Cache-Invalidierung."""
-        req_file = os.path.join(os.path.dirname(self.script_path.get() or __file__), "requirements.txt")
+        raw_script = (self.script_path.get() or "").strip().strip('"').strip("'")
+        script_dir = os.path.dirname(raw_script or __file__)
+        req_file = os.path.join(script_dir, "requirements.txt")
         if not os.path.exists(req_file):
             return ""
         try:
@@ -1902,6 +1924,7 @@ def patch_widgets(translator):
             return ""
 
     def collect_python_licenses(self, outdir):
+        os.makedirs(outdir, exist_ok=True)
         target = os.path.join(outdir, "THIRD_PARTY_LICENSES.txt")
         cache_file = os.path.join(outdir, ".licenses_cache.json")
 
@@ -2264,18 +2287,36 @@ def patch_widgets(translator):
 
     # ---------- Staging ----------
     def stage_payload(self, path, outdir):
-        """Kopiert eine Datei ins Staging - bei onedir-Builds den ganzen Ordner.
+        """Kopiert eine Datei oder ein Verzeichnis ins Staging - bei onedir-Builds den ganzen Ordner.
 
         PyInstaller kennt zwei Bauformen: bei --onefile genuegt die EXE, bei
         --onedir liegen Laufzeit und Bibliotheken daneben in _internal/. Kopiert
         man dort nur die EXE, laesst sich das MSIX zwar installieren, die App
         startet aber nicht. Rueckgabe: Anzahl kopierter Dateien.
         """
-        app_dir = os.path.dirname(os.path.abspath(path))
-        if path.lower().endswith(".exe") and os.path.isdir(os.path.join(app_dir, "_internal")):
-            shutil.copytree(app_dir, outdir, dirs_exist_ok=True)
+        abs_path = os.path.abspath(path)
+        abs_outdir = os.path.abspath(outdir)
+        os.makedirs(abs_outdir, exist_ok=True)
+
+        if os.path.isdir(abs_path):
+            target_dir = os.path.join(abs_outdir, os.path.basename(abs_path))
+            def _ignore_nested(src, names):
+                ignored = set()
+                for name in names:
+                    full = os.path.abspath(os.path.join(src, name))
+                    if abs_outdir == full or abs_outdir.startswith(full + os.sep):
+                        ignored.add(name)
+                return ignored
+
+            shutil.copytree(abs_path, target_dir, dirs_exist_ok=True, ignore=_ignore_nested)
+            return sum(len(files) for _, _, files in os.walk(target_dir))
+
+        app_dir = os.path.dirname(abs_path)
+        if abs_path.lower().endswith(".exe") and os.path.isdir(os.path.join(app_dir, "_internal")):
+            shutil.copytree(app_dir, abs_outdir, dirs_exist_ok=True)
             return sum(len(files) for _, _, files in os.walk(app_dir))
-        shutil.copy(path, os.path.join(outdir, os.path.basename(path)))
+
+        shutil.copy(abs_path, os.path.join(abs_outdir, os.path.basename(abs_path)))
         return 1
 
     # ---------- Manifest ----------
@@ -2381,6 +2422,7 @@ def patch_widgets(translator):
         manifest = manifest.replace("{{MAXVERSION}}",
             html.escape(str(project_config.get("max_version_tested") or DEFAULT_MAX_VERSION_TESTED)))
 
+        os.makedirs(outdir, exist_ok=True)
         with open(os.path.join(outdir, "AppxManifest.xml"), "w", encoding="utf-8") as f:
             f.write(manifest)
 
@@ -2611,6 +2653,14 @@ def patch_widgets(translator):
             _record_issue(False, _t("Identity Name fehlt"), 0)
 
         # --- Tab 1: Build-Einstellungen ---
+        exe = self.exe_name.get().strip() if hasattr(self, "exe_name") else ""
+        if not exe:
+            _record_issue(True, _t("EXE-Name fehlt"), 1)
+        elif not exe.lower().endswith(".exe"):
+            _record_issue(True, _t("EXE-Name muss auf .exe enden"), 1)
+        elif any(c in exe for c in '<>:"/\\|?*'):
+            _record_issue(True, _t("EXE-Name enthält ungültige Zeichen"), 1)
+
         makeappx = self.makeappx_path.get().strip().strip('"\'')
         if not makeappx or not os.path.isfile(makeappx):
             _record_issue(True, _t("MakeAppx.exe nicht gefunden"), 1)
@@ -2672,11 +2722,11 @@ def patch_widgets(translator):
                 self.set_status(f"{_t('Preflight-Check:')} {len(warnings)} {_t('Warnungen')}")
 
             # Smart navigation: switch to the first tab containing an issue
-            if first_error_tab is not None:
+            if first_error_tab is not None and hasattr(self, "select_tab"):
                 self.select_tab(first_error_tab)
 
             messagebox.showwarning(_t("Preflight-Check"), msg)
-            return {"ok": False, "critical": critical, "warnings": warnings, "issues": issues}
+            return PreflightResult({"ok": False, "critical": critical, "warnings": warnings, "issues": issues, "first_tab": first_error_tab or 0})
         else:
             success_text = _t(
                 "Alle Pflichtfelder sind ausgefüllt!\n\n"
@@ -2688,7 +2738,7 @@ def patch_widgets(translator):
             )
             self.set_status(_t("Preflight-Check: Alle Pflichtfelder ausgefüllt."))
             messagebox.showinfo(_t("Preflight-Check"), f"✅ {success_text}")
-            return {"ok": True, "critical": [], "warnings": [], "issues": []}
+            return PreflightResult({"ok": True, "critical": [], "warnings": [], "issues": [], "first_tab": 0})
 
     # ---------- Exit ----------
     def on_quit(self):

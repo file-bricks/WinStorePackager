@@ -4,7 +4,7 @@
   "publisher_display": "Lukas Geiger",
   "identity_name": "Geiger.WinStorePackager",
   "version": "3.1.0.0",
-  "description": "Python-Apps für den Microsoft Store packen (MSIX). Manifest-Generierung, Icon-Builder, PyInstaller-Integration, Code-Signing, WACK-Tests.",
+  "description": "MSIX packaging tool for Python apps — create manifest, icons and Store package with one click.",
   "executable": "WinStorePackager.exe",
   "capabilities": "internetClient,runFullTrust",
   "category": "Developer Tools",
@@ -14,7 +14,71 @@
   "support_url": "https://github.com/file-bricks/WinStorePackager/issues",
   "languages": [
     "de-DE",
-    "en-US"
+    "en-US",
+    "es-ES",
+    "zh-CN",
+    "ja-JP",
+    "ru-RU"
   ],
-  "store_id": "9NT273Z50BJR"
+  "store_id": "9NT273Z50BJR",
+  "description_de": "MSIX-Packaging-Tool für Python-Apps: Manifest, Icons und Store-Pakete per Klick erstellen.",
+  "description_en": "MSIX packaging tool for Python apps: create manifest, icons and Store packages with one click.",
+  "description_es": "Empaquetador MSIX para apps Python: crea manifiesto, iconos y paquetes Store con un clic.",
+  "description_zh": "Python 应用的 MSIX 打包工具：一键生成清单、图标和应用商店发布包。",
+  "description_ja": "Pythonアプリ用MSIXパッケージャー：ワンクリックでマニフェスト、アイコン、Storeパッケージを作成。",
+  "description_ru": "MSIX-упаковщик для Python-приложений: манифест, иконки и пакет Store в один клик.",
+  "keywords_de": [
+    "MSIX",
+    "Desktop App",
+    "Manifest",
+    "Icon Generator",
+    "Entwicklertools",
+    "Paketierung",
+    "Windows App"
+  ],
+  "keywords_en": [
+    "MSIX",
+    "Desktop App",
+    "Manifest",
+    "Icon Generator",
+    "Developer Tools",
+    "Packaging",
+    "Windows App"
+  ],
+  "keywords_es": [
+    "MSIX",
+    "App Escritorio",
+    "Manifiesto",
+    "Generador Iconos",
+    "Herramientas Desarrollador",
+    "Empaquetado",
+    "App Windows"
+  ],
+  "keywords_zh": [
+    "MSIX",
+    "桌面应用",
+    "应用清单",
+    "图标生成器",
+    "开发者工具",
+    "应用打包",
+    "Windows 应用"
+  ],
+  "keywords_ja": [
+    "MSIX",
+    "デスクトップアプリ",
+    "マニフェスト",
+    "アイコン生成",
+    "開発ツール",
+    "パッケージング",
+    "Windowsアプリ"
+  ],
+  "keywords_ru": [
+    "MSIX",
+    "Десктоп приложение",
+    "Манифест",
+    "Генератор иконок",
+    "Инструменты разработчика",
+    "Упаковка",
+    "Windows приложение"
+  ]
 }

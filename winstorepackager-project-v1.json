@@ -4,8 +4,8 @@
   "project_root": ".",
   "metadata": {
     "app_name": "WinStorePackager",
-    "publisher_display": "Your Publisher Name",
-    "identity_name": "YourPublisher.WinStorePackager",
+    "publisher_display": "Lukas Geiger",
+    "identity_name": "Geiger.WinStorePackager",
     "version": "3.1.0.0"
   },
   "paths": {

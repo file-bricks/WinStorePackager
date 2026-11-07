@@ -49,6 +49,9 @@ releases/*
 releases/windowsstore/*
 !releases/windowsstore/screenshots/
 !releases/windowsstore/screenshots/*.png
+!releases/windowsstore/*.md
+!releases/windowsstore/*.json
+!releases/windowsstore/*.png
 _WARTUNG/
 *.exe
 *.msi

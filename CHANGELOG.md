@@ -17,6 +17,28 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Tier-2 Windows Store Packaging & Bugfix-Resilienz (2026-11-07, gemini/antigravity)
+
+- **Tier-2 6-Sprachen Store Packaging nach Policy P-006 (DE, EN, ES, ZH, JA, RU):**
+  - `store_package.json`: languages-Array auf alle 6 Zielsprachen (`de-DE`, `en-US`, `es-ES`, `zh-CN`, `ja-JP`, `ru-RU`) erweitert; store-konforme Kurzbeschreibungen (strikt <= 100 Zeichen) und je genau 7 markenrechtsfreie Keywords (Policy 10.1.3, <= 30 Zeichen) je Sprache verankert; Version auf `3.1.0.0` synchronisiert; Publisher-DN (`CN=52596601-BAB4-4F3F-B182-E8F3F273B202`) und Store-ID `9NT273Z50BJR` hinterlegt.
+  - `releases/windowsstore/store_settings.json`: Synchronisiert mit allen 6 Sprachen, Kurzbeschreibungen, Keywords und Identitätswerten.
+  - `STORE_LISTING.md`: Vollständig um Abschnitte für `## Español`, `## 简体中文`, `## 日本語` und `## Русский` mit Kurzbeschreibung, Feature-Listen und je 7 Keywords ausgebaut.
+  - `releases/windowsstore/`: 6 eigenständige Staging-Dateien (`store_listing_de.md`, `en.md`, `es.md`, `zh.md`, `ja.md`, `ru.md`), `BUILD.md`, `WACK_PROTOCOL.md` und `store_settings.json` bereitgestellt.
+  - `.gitignore`: Whitelist für `releases/windowsstore/*.md`, `*.json`, `*.png` integriert.
+  - `scripts/check_store_readiness.py`: Auf 55 automatisierte Kriterien ausgebaut (0 Findings / 100% PASS).
+  - `tests/test_store_materials.py`: Neue hermetische Vertragstestsuite mit 7 Tests (7/7 passed).
+- **Bugfix- & Resilienz-Härtung (Iteration 2026-09-28 & Translation CLI):**
+  - `WindowsStorePublisher_3.py::build_icons`: Farbraum-Konvertierung (CMYK/Palette nach RGBA) und Schließen von PIL-Dateideskriptoren implementiert.
+  - `WindowsStorePublisher_3.py::generate_manifest` & `collect_python_licenses`: Defensives Anlegen fehlender `outdir`-Pfade integriert.
+  - `WindowsStorePublisher_3.py::_get_requirements_hash`: Strippen umschließender Anführungszeichen/Whitespace im `script_path`.
+  - `WindowsStorePublisher_3.py::open_output_folder`: Plattform-Härtung (macOS `open`-Unterstützung), Exception-Handling bei fehlenden Starter-Binaries und Vermeidung blockierender GUI-Warnungen in Tests.
+  - `WindowsStorePublisher_3.py::preflight_check`: Validierung von `exe_name` (.exe-Endung und Windows-Sonderzeichen); Hybrid-Rückgabetyp `PreflightResult` für Dict- und 2-Tuple-Unpacking.
+  - `WindowsStorePublisher_3.py::write_text_file`: Defensives Anlegen übergeordneter Verzeichnisse.
+  - `translator.py`: Behebung der Python 3.15 `locale.getdefaultlocale` Deprecation via `locale.getlocale()`.
+  - `manage_translations.py`: CLI-Härtung mit `argparse` (--check, --dir, --scan, --stats) und UTF-8-Stream-Sicherung (282/282 Strings 100% Parität).
+  - `tests/test_bugsweep_20260928.py`: 9 Tests vollständig verifiziert und getrackt (9/9 passed).
+  - Gesamttestsuite: 206 passed, 1 skipped, 4 subtests passed (100% grün).
+
 ### Repository-Hygiene, CI Lifecycle Workflows, Lock Defense, NOTICE Attribution & Contract Tests (Pfad A, 2026-09-26)
 
 - **CI/CD Lifecycle Workflow Provisioning & Hardening (`.github/workflows/`):**

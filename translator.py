@@ -59,7 +59,15 @@ def detect_system_language() -> str:
         pass
     try:
         import locale
-        loc = (locale.getdefaultlocale()[0] or "").lower()
+        try:
+            loc = (locale.getlocale()[0] or "").lower()
+        except Exception:
+            loc = ""
+        if not loc:
+            try:
+                loc = (locale.getdefaultlocale()[0] or "").lower()
+            except Exception:
+                loc = ""
         if loc.startswith("de"):
             return "de"
         if loc.startswith("es"):
