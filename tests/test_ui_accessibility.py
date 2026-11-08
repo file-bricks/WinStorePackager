@@ -454,5 +454,135 @@ class TestUiAccessibility(unittest.TestCase):
         self.assertNotIn('"Version 2.3 (Auto-Setup & Safe Mode)\\n\\n"', source)
         self.assertIn("Windows Store Packager — Version 3.1.0", source)
 
+    @patch("WindowsStorePublisher_3.messagebox.showinfo")
+    def test_shortcuts_help_content_localization_and_parity(self, mock_showinfo):
+        tr = _wsp.get_translator()
+        try:
+            if tr is not None:
+                tr.set_language("de")
+            self.app.language.set("de")
+            self.app.show_shortcuts_help()
+            mock_showinfo.assert_called_once()
+            title, text = mock_showinfo.call_args[0]
+            self.assertEqual(title, "Tastaturkürzel & Barrierefreiheit")
+            self.assertIn("Globale Tastaturkürzel:", text)
+            self.assertIn("F1", text)
+            self.assertIn("Shift + F1", text)
+            self.assertIn("Strg + BildAb / BildAuf", text)
+            self.assertIn("Tastaturnavigation & Screenreader:", text)
+            self.assertIn("Escape", text)
+
+            mock_showinfo.reset_mock()
+            if tr is not None:
+                tr.set_language("en")
+            self.app.language.set("en")
+            self.app.show_shortcuts_help()
+            mock_showinfo.assert_called_once()
+            title_en, text_en = mock_showinfo.call_args[0]
+            self.assertEqual(title_en, "Keyboard Shortcuts & Accessibility")
+            self.assertIn("Global Keyboard Shortcuts:", text_en)
+            self.assertIn("Cycle forward and backward between tabs", text_en)
+            self.assertIn("Show About WinStorePackager", text_en)
+            self.assertIn("Keyboard Navigation & Screen Reader:", text_en)
+        finally:
+            if tr is not None:
+                tr.set_language("de")
+            self.app.language.set("de")
+
+    @patch("WindowsStorePublisher_3.messagebox.showinfo")
+    def test_about_dialog_content_localization_and_parity(self, mock_showinfo):
+        tr = _wsp.get_translator()
+        try:
+            if tr is not None:
+                tr.set_language("de")
+            self.app.language.set("de")
+            self.app.show_about_dialog()
+            mock_showinfo.assert_called_once()
+            title, text = mock_showinfo.call_args[0]
+            self.assertEqual(title, "Über WinStorePackager")
+            self.assertIn("Version 3.1.0", text)
+            self.assertIn("Vollständiges GUI-Tool für Microsoft Store Packaging & MSIX-Erstellung.", text)
+
+            mock_showinfo.reset_mock()
+            if tr is not None:
+                tr.set_language("en")
+            self.app.language.set("en")
+            self.app.show_about_dialog()
+            mock_showinfo.assert_called_once()
+            title_en, text_en = mock_showinfo.call_args[0]
+            self.assertEqual(title_en, "About WinStorePackager")
+            self.assertIn("Version 3.1.0", text_en)
+            self.assertIn("Complete GUI tool for Microsoft Store Packaging & MSIX creation.", text_en)
+        finally:
+            if tr is not None:
+                tr.set_language("de")
+            self.app.language.set("de")
+
+    def test_keyboard_tab_cycling_next_and_prev(self):
+        nb = ttk.Notebook(self.app)
+        f1 = ttk.Frame(nb)
+        f2 = ttk.Frame(nb)
+        f3 = ttk.Frame(nb)
+        f4 = ttk.Frame(nb)
+        nb.add(f1, text="Tab 1")
+        nb.add(f2, text="Tab 2")
+        nb.add(f3, text="Tab 3")
+        nb.add(f4, text="Tab 4")
+        old_nb = getattr(self.app, "notebook", None)
+        self.app.notebook = nb
+        try:
+            self.assertTrue(hasattr(self.app, "next_tab"))
+            self.assertTrue(hasattr(self.app, "prev_tab"))
+
+            # Start at tab 0
+            self.app.select_tab(0)
+            self.assertEqual(self.app.notebook.index(self.app.notebook.select()), 0)
+
+            # Cycle forward
+            self.app.next_tab()
+            self.assertEqual(self.app.notebook.index(self.app.notebook.select()), 1)
+            self.app.next_tab()
+            self.assertEqual(self.app.notebook.index(self.app.notebook.select()), 2)
+            self.app.next_tab()
+            self.assertEqual(self.app.notebook.index(self.app.notebook.select()), 3)
+            # Wrap around
+            self.app.next_tab()
+            self.assertEqual(self.app.notebook.index(self.app.notebook.select()), 0)
+
+            # Cycle backward
+            self.app.prev_tab()
+            self.assertEqual(self.app.notebook.index(self.app.notebook.select()), 3)
+            self.app.prev_tab()
+            self.assertEqual(self.app.notebook.index(self.app.notebook.select()), 2)
+        finally:
+            self.app.notebook = old_nb
+            nb.destroy()
+
+    @patch("WindowsStorePublisher_3.messagebox.showwarning")
+    @patch("WindowsStorePublisher_3.messagebox.showinfo")
+    def test_license_and_error_messagebox_localization(self, mock_showinfo, mock_showwarning):
+        tr = _wsp.get_translator()
+        try:
+            if tr is not None:
+                tr.set_language("de")
+            self.app.language.set("de")
+            self.app.license_box.delete("1.0", tk.END)
+            self.app.license_text_entries = []
+            self.app.add_license_text_entry()
+            mock_showwarning.assert_called_once_with("Hinweis", "Bitte Lizenztext eingeben und erneut klicken.")
+
+            # With text in box
+            self.app.license_box.insert("1.0", "Custom License Text")
+            self.app.add_license_text_entry()
+            mock_showinfo.assert_called_once()
+            title, msg = mock_showinfo.call_args[0]
+            self.assertEqual(title, "Lizenz hinzugefügt")
+            self.assertIn("Text als zusätzliche Lizenz gespeichert.", msg)
+            self.assertIn("Gesamt: 1 Texteinträge", msg)
+        finally:
+            if tr is not None:
+                tr.set_language("de")
+            self.app.language.set("de")
+
 if __name__ == "__main__":
     unittest.main()

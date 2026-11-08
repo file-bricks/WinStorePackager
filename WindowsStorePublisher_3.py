@@ -839,7 +839,7 @@ class StorePackagerApp(tk.Tk):
             try:
                 keyring.set_password(KEYRING_SERVICE, "pfx_password", self.pfx_password.get())
             except Exception as e:
-                messagebox.showwarning("Warnung", f"Passwort konnte nicht im Keyring gespeichert werden:\n{e}")
+                messagebox.showwarning(_t("Warnung"), f"{_t('Passwort konnte nicht im Keyring gespeichert werden:')}\n{e}")
 
         data = {
             "app_name": self.app_name.get(),
@@ -1049,27 +1049,52 @@ class StorePackagerApp(tk.Tk):
             except Exception:
                 pass
 
+    def next_tab(self):
+        """Wechselt zum nächsten Reiter (barrierefreie Tastaturnavigation)."""
+        if hasattr(self, "notebook") and self.notebook:
+            try:
+                current = self.notebook.index(self.notebook.select())
+                total = self.notebook.index("end")
+                if total > 0:
+                    self.select_tab((current + 1) % total)
+            except Exception:
+                pass
+
+    def prev_tab(self):
+        """Wechselt zum vorherigen Reiter (barrierefreie Tastaturnavigation)."""
+        if hasattr(self, "notebook") and self.notebook:
+            try:
+                current = self.notebook.index(self.notebook.select())
+                total = self.notebook.index("end")
+                if total > 0:
+                    self.select_tab((current - 1 + total) % total)
+            except Exception:
+                pass
+
     def show_shortcuts_help(self):
         """Zeigt ein modales Dialogfenster mit allen Tastaturkürzeln und Barrierefreiheitsfunktionen."""
         help_text = (
-            "WinStorePackager — Tastaturkürzel & Barrierefreiheit\n\n"
-            "Globale Tastaturkürzel:\n"
-            "• Strg + S : Einstellungen dauerhaft speichern\n"
-            "• Strg + O : Projektprofil importieren\n"
-            "• Strg + E : Projektprofil exportieren\n"
-            "• F5       : 1. Preflight-Check starten\n"
-            "• Strg + 1 : Reiter 'Metadaten' aufrufen\n"
-            "• Strg + 2 : Reiter 'Build-Einstellungen' aufrufen\n"
-            "• Strg + 3 : Reiter 'Store-Informationen' aufrufen\n"
-            "• Strg + 4 : Reiter 'Aktionen' aufrufen\n"
-            "• F1       : Diese Hilfe anzeigen\n"
-            "• Strg + Q : Anwendung beenden\n\n"
-            "Tastaturnavigation & Screenreader:\n"
-            "• Tab / Umschalt+Tab : Vorwärts / Rückwärts durch alle Steuerelemente springen\n"
-            "• Leertaste / Eingabetaste : Fokussierte Schaltfläche aktivieren\n"
-            "• Pfeiltasten : Auswahl in Menüs und Kombinationsfeldern ändern\n"
-            "• Statusleiste : Zeigt beim Fokussieren kontextuelle Hilfetexte an\n"
-            "• Tooltips : Erscheinen sowohl beim Maus-Hover als auch bei Tastatur-Fokus"
+            f"{_t('WinStorePackager — Tastaturkürzel & Barrierefreiheit')}\n\n"
+            f"{_t('Globale Tastaturkürzel:')}\n"
+            f"• Strg + S : {_t('Speichert alle Einstellungen und Pfade dauerhaft (Strg+S)')}\n"
+            f"• Strg + O : {_t('Lädt ein gespeichertes JSON-Projektprofil (Strg+O)')}\n"
+            f"• Strg + E : {_t('Speichert die Konfiguration ohne Geheimnisse als JSON (Strg+E)')}\n"
+            f"• F5       : {_t('Prüft alle Pflichtfelder und Pfade vor dem Paketbau (F5)')}\n"
+            f"• Strg + 1 : {_t('Reiter »Metadaten« aufrufen')}\n"
+            f"• Strg + 2 : {_t('Reiter »Build-Einstellungen« aufrufen')}\n"
+            f"• Strg + 3 : {_t('Reiter »Store-Informationen« aufrufen')}\n"
+            f"• Strg + 4 : {_t('Reiter »Aktionen« aufrufen')}\n"
+            f"• Strg + BildAb / BildAuf : {_t('Zwischen Reitern vor- und zurückblättern')}\n"
+            f"• F1       : {_t('Diese Hilfe anzeigen')}\n"
+            f"• Shift + F1 : {_t('Über WinStorePackager anzeigen')}\n"
+            f"• Strg + Q : {_t('Beendet das Programm nach Sicherheitsabfrage (Strg+Q)')}\n\n"
+            f"{_t('Tastaturnavigation & Screenreader:')}\n"
+            f"• Tab / Umschalt+Tab : {_t('Vorwärts / Rückwärts durch alle Steuerelemente springen')}\n"
+            f"• Leertaste / Eingabetaste : {_t('Fokussierte Schaltfläche aktivieren')}\n"
+            f"• Pfeiltasten : {_t('Auswahl in Menüs und Kombinationsfeldern ändern')}\n"
+            f"• Statusleiste : {_t('Zeigt beim Fokussieren kontextuelle Hilfetexte an')}\n"
+            f"• Tooltips : {_t('Erscheinen sowohl beim Maus-Hover als auch bei Tastatur-Fokus')}\n"
+            f"• Escape : {_t('Schließt aktive Tooltips und Dialoge')}"
         )
         messagebox.showinfo(_t("Tastaturkürzel & Barrierefreiheit"), help_text)
 
@@ -1078,11 +1103,11 @@ class StorePackagerApp(tk.Tk):
         about_text = (
             "Windows Store Packager — MSIX Creator\n"
             "Version 3.1.0 (Auto-Setup & Safe Mode)\n\n"
-            "Vollständiges GUI-Tool für Microsoft Store Packaging & MSIX-Erstellung.\n"
-            "Unterstützt Python-Desktop-Apps, i18n-Mehrsprachigkeit (6 Sprachen),\n"
-            "WACK-Validierung und barrierefreie Tastaturbedienung.\n\n"
-            "Lizenz: MIT\n"
-            "Entwickelt für barrierefreie, sichere Softwarepakete."
+            f"{_t('Vollständiges GUI-Tool für Microsoft Store Packaging & MSIX-Erstellung.')}\n"
+            f"{_t('Unterstützt Python-Desktop-Apps, i18n-Mehrsprachigkeit (6 Sprachen),')}\n"
+            f"{_t('WACK-Validierung und barrierefreie Tastaturbedienung.')}\n\n"
+            f"{_t('Lizenz: MIT')}\n"
+            f"{_t('Entwickelt für barrierefreie, sichere Softwarepakete.')}"
         )
         messagebox.showinfo(_t("Über WinStorePackager"), about_text)
 
@@ -1157,6 +1182,9 @@ class StorePackagerApp(tk.Tk):
         view_menu.add_command(label=f"{_t('Build-Einstellungen')}  (Ctrl+2)", command=lambda: self.select_tab(1))
         view_menu.add_command(label=f"{_t('Store-Informationen')}  (Ctrl+3)", command=lambda: self.select_tab(2))
         view_menu.add_command(label=f"{_t('Aktionen')}  (Ctrl+4)", command=lambda: self.select_tab(3))
+        view_menu.add_separator()
+        view_menu.add_command(label=f"{_t('Nächster Reiter')}  (Ctrl+PageDown)", command=self.next_tab)
+        view_menu.add_command(label=f"{_t('Vorheriger Reiter')}  (Ctrl+PageUp)", command=self.prev_tab)
         menubar.add_cascade(label=_t("Ansicht"), menu=view_menu)
 
         # 4. Menü: Sprache (Language)
@@ -1179,7 +1207,7 @@ class StorePackagerApp(tk.Tk):
         # 5. Menü: Hilfe (Help)
         help_menu = tk.Menu(menubar, tearoff=0)
         help_menu.add_command(label=f"{_t('Tastaturkürzel & Barrierefreiheit')}  (F1)", command=self.show_shortcuts_help)
-        help_menu.add_command(label=_t("Über WinStorePackager"), command=self.show_about_dialog)
+        help_menu.add_command(label=f"{_t('Über WinStorePackager')}  (Shift+F1)", command=self.show_about_dialog)
         menubar.add_cascade(label=_t("Hilfe"), menu=help_menu)
 
         self.config(menu=menubar)
@@ -1198,10 +1226,14 @@ class StorePackagerApp(tk.Tk):
         self.bind_all("<Control-Q>", lambda e: self.on_quit())
         self.bind_all("<F5>", lambda e: self.preflight_check())
         self.bind_all("<F1>", lambda e: self.show_shortcuts_help())
+        self.bind_all("<Shift-F1>", lambda e: self.show_about_dialog())
+        self.bind_all("<Shift-KeyPress-F1>", lambda e: self.show_about_dialog())
         self.bind_all("<Control-Key-1>", lambda e: self.select_tab(0))
         self.bind_all("<Control-Key-2>", lambda e: self.select_tab(1))
         self.bind_all("<Control-Key-3>", lambda e: self.select_tab(2))
         self.bind_all("<Control-Key-4>", lambda e: self.select_tab(3))
+        self.bind_all("<Control-Next>", lambda e: self.next_tab())
+        self.bind_all("<Control-Prior>", lambda e: self.prev_tab())
 
         # Safe window closing handler (save-on-exit prompt)
         self.protocol("WM_DELETE_WINDOW", self.on_quit)
@@ -1683,7 +1715,7 @@ class StorePackagerApp(tk.Tk):
                     self.readme_box.delete("1.0", tk.END)
                     self.readme_box.insert(tk.END, f.read())
             except Exception as e:
-                messagebox.showerror("Fehler", f"Datei konnte nicht geladen werden:\n{e}")
+                messagebox.showerror(_t("Fehler"), f"{_t('Datei konnte nicht geladen werden:')}\n{e}")
 
     def load_desc_file(self):
         path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt;*.md"), ("All Files", "*.*")])
@@ -1693,7 +1725,7 @@ class StorePackagerApp(tk.Tk):
                     self.desc_box.delete("1.0", tk.END)
                     self.desc_box.insert(tk.END, f.read())
             except Exception as e:
-                messagebox.showerror("Fehler", f"Datei konnte nicht geladen werden:\n{e}")
+                messagebox.showerror(_t("Fehler"), f"{_t('Datei konnte nicht geladen werden:')}\n{e}")
 
     def choose_makeappx(self):
         path = filedialog.askopenfilename(filetypes=[("Executable", "*.exe"), ("All Files", "*.*")])
@@ -1719,16 +1751,22 @@ class StorePackagerApp(tk.Tk):
         path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt;*.md"), ("All Files", "*.*")])
         if path:
             self.license_files.append(path)
-            messagebox.showinfo("Lizenz hinzugefügt", f"Datei hinzugefügt:\n{path}\n\nGesamt: {len(self.license_files)} Dateien")
+            messagebox.showinfo(
+                _t("Lizenz hinzugefügt"),
+                f"{_t('Datei hinzugefügt:')}\n{path}\n\n{_t('Gesamt:')} {len(self.license_files)} {_t('Dateien')}",
+            )
 
     def add_license_text_entry(self):
         txt = self.license_box.get("1.0", tk.END).strip()
         if txt:
             self.license_text_entries.append(txt)
             self.license_box.delete("1.0", tk.END)
-            messagebox.showinfo("Lizenz hinzugefügt", f"Text als zusätzliche Lizenz gespeichert.\n\nGesamt: {len(self.license_text_entries)} Texteinträge")
+            messagebox.showinfo(
+                _t("Lizenz hinzugefügt"),
+                f"{_t('Text als zusätzliche Lizenz gespeichert.')}\n\n{_t('Gesamt:')} {len(self.license_text_entries)} {_t('Texteinträge')}",
+            )
         else:
-            messagebox.showwarning("Hinweis", "Bitte Lizenztext eingeben und erneut klicken.")
+            messagebox.showwarning(_t("Hinweis"), _t("Bitte Lizenztext eingeben und erneut klicken."))
 
     def open_output_folder(self):
         outdir = self.package_dir()

@@ -2254,5 +2254,261 @@
     "zh": "已打开输出文件夹：",
     "ja": "出力フォルダーを開きました：",
     "ru": "Папка вывода открыта:"
+  },
+  "WinStorePackager — Tastaturkürzel & Barrierefreiheit": {
+    "de": "WinStorePackager — Tastaturkürzel & Barrierefreiheit",
+    "en": "WinStorePackager — Keyboard Shortcuts & Accessibility",
+    "es": "WinStorePackager — Atajos de teclado y accesibilidad",
+    "zh": "WinStorePackager — 键盘快捷键与无障碍",
+    "ja": "WinStorePackager — キーボード ショートカットとアクセシビリティ",
+    "ru": "WinStorePackager — Сочетания клавиш и специальные возможности"
+  },
+  "Globale Tastaturkürzel:": {
+    "de": "Globale Tastaturkürzel:",
+    "en": "Global Keyboard Shortcuts:",
+    "es": "Atajos de teclado globales:",
+    "zh": "全局键盘快捷键：",
+    "ja": "グローバル キーボード ショートカット:",
+    "ru": "Глобальные сочетания клавиш:"
+  },
+  "Reiter »Metadaten« aufrufen": {
+    "de": "Reiter »Metadaten« aufrufen",
+    "en": "Open 'Metadata' tab",
+    "es": "Abrir pestaña 'Metadatos'",
+    "zh": "打开“元数据”标签页",
+    "ja": "「メタデータ」タブを開く",
+    "ru": "Открыть вкладку «Метаданные»"
+  },
+  "Reiter »Build-Einstellungen« aufrufen": {
+    "de": "Reiter »Build-Einstellungen« aufrufen",
+    "en": "Open 'Build Settings' tab",
+    "es": "Abrir pestaña 'Ajustes de compilación'",
+    "zh": "打开“构建设置”标签页",
+    "ja": "「ビルド設定」タブを開く",
+    "ru": "Открыть вкладку «Параметры сборки»"
+  },
+  "Reiter »Store-Informationen« aufrufen": {
+    "de": "Reiter »Store-Informationen« aufrufen",
+    "en": "Open 'Store Information' tab",
+    "es": "Abrir pestaña 'Información de Store'",
+    "zh": "打开“应用商店信息”标签页",
+    "ja": "「ストア情報」タブを開く",
+    "ru": "Открыть вкладку «Сведения для Магазина»"
+  },
+  "Reiter »Aktionen« aufrufen": {
+    "de": "Reiter »Aktionen« aufrufen",
+    "en": "Open 'Actions' tab",
+    "es": "Abrir pestaña 'Acciones'",
+    "zh": "打开“操作”标签页",
+    "ja": "「アクション」タブを開く",
+    "ru": "Открыть вкладку «Действия»"
+  },
+  "Zwischen Reitern vor- und zurückblättern": {
+    "de": "Zwischen Reitern vor- und zurückblättern",
+    "en": "Cycle forward and backward between tabs",
+    "es": "Avanzar y retroceder entre pestañas",
+    "zh": "在各标签页之间前后切换",
+    "ja": "タブ間を前後に切り替える",
+    "ru": "Переключение между вкладками вперед и назад"
+  },
+  "Diese Hilfe anzeigen": {
+    "de": "Diese Hilfe anzeigen",
+    "en": "Show this help",
+    "es": "Mostrar esta ayuda",
+    "zh": "显示此帮助",
+    "ja": "このヘルプを表示",
+    "ru": "Показать эту справку"
+  },
+  "Über WinStorePackager anzeigen": {
+    "de": "Über WinStorePackager anzeigen",
+    "en": "Show About WinStorePackager",
+    "es": "Mostrar acerca de WinStorePackager",
+    "zh": "显示关于 WinStorePackager",
+    "ja": "WinStorePackager についてを表示",
+    "ru": "Показать информацию о WinStorePackager"
+  },
+  "Tastaturnavigation & Screenreader:": {
+    "de": "Tastaturnavigation & Screenreader:",
+    "en": "Keyboard Navigation & Screen Reader:",
+    "es": "Navegación por teclado y lector de pantalla:",
+    "zh": "键盘导航与屏幕阅读器：",
+    "ja": "キーボード ナビゲーションとスクリーン リーダー:",
+    "ru": "Навигация с клавиатуры и средства чтения с экрана:"
+  },
+  "Vorwärts / Rückwärts durch alle Steuerelemente springen": {
+    "de": "Vorwärts / Rückwärts durch alle Steuerelemente springen",
+    "en": "Jump forward / backward through all controls",
+    "es": "Saltar adelante / atrás por todos los controles",
+    "zh": "在所有控件之间向前/向后切换",
+    "ja": "すべてのコントロールを前後に移動",
+    "ru": "Переход вперед / назад по всем элементам управления"
+  },
+  "Fokussierte Schaltfläche aktivieren": {
+    "de": "Fokussierte Schaltfläche aktivieren",
+    "en": "Activate focused button",
+    "es": "Activar botón enfocado",
+    "zh": "激活当前聚焦的按钮",
+    "ja": "フォーカスされているボタンをアクティブ化",
+    "ru": "Активировать элемент в фокусе"
+  },
+  "Auswahl in Menüs und Kombinationsfeldern ändern": {
+    "de": "Auswahl in Menüs und Kombinationsfeldern ändern",
+    "en": "Change selection in menus and combo boxes",
+    "es": "Cambiar selección en menús y cuadros combinados",
+    "zh": "更改菜单和下拉组合框中的选择",
+    "ja": "メニューやコンボ ボックスの選択肢を変更",
+    "ru": "Изменить выбор в меню и раскрывающихся списках"
+  },
+  "Zeigt beim Fokussieren kontextuelle Hilfetexte an": {
+    "de": "Zeigt beim Fokussieren kontextuelle Hilfetexte an",
+    "en": "Displays contextual help text when focused",
+    "es": "Muestra texto de ayuda contextual al enfocar",
+    "zh": "聚焦时显示上下文帮助文本",
+    "ja": "フォーカス時にコンテキスト ヘルプ テキストを表示",
+    "ru": "Отображает контекстную справку при установке фокуса"
+  },
+  "Erscheinen sowohl beim Maus-Hover als auch bei Tastatur-Fokus": {
+    "de": "Erscheinen sowohl beim Maus-Hover als auch bei Tastatur-Fokus",
+    "en": "Appear on both mouse hover and keyboard focus",
+    "es": "Aparecen tanto al pasar el ratón como con el foco del teclado",
+    "zh": "鼠标悬停和键盘聚焦时均会显示",
+    "ja": "マウス ホバーとキーボード フォーカスの両方で表示",
+    "ru": "Появляются как при наведении мыши, так и при фокусе с клавиатуры"
+  },
+  "Schließt aktive Tooltips und Dialoge": {
+    "de": "Schließt aktive Tooltips und Dialoge",
+    "en": "Closes active tooltips and dialogs",
+    "es": "Cierra cuadros de diálogo e información sobre herramientas activos",
+    "zh": "关闭活动的提示框和对话框",
+    "ja": "アクティブなツールチップとダイアログを閉じる",
+    "ru": "Закрывает активные подсказки и диалоговые окна"
+  },
+  "Nächster Reiter": {
+    "de": "Nächster Reiter",
+    "en": "Next Tab",
+    "es": "Siguiente pestaña",
+    "zh": "下一个标签页",
+    "ja": "次のタブ",
+    "ru": "Следующая вкладка"
+  },
+  "Vorheriger Reiter": {
+    "de": "Vorheriger Reiter",
+    "en": "Previous Tab",
+    "es": "Pestaña anterior",
+    "zh": "上一个标签页",
+    "ja": "前のタブ",
+    "ru": "Предыдущая вкладка"
+  },
+  "Vollständiges GUI-Tool für Microsoft Store Packaging & MSIX-Erstellung.": {
+    "de": "Vollständiges GUI-Tool für Microsoft Store Packaging & MSIX-Erstellung.",
+    "en": "Complete GUI tool for Microsoft Store Packaging & MSIX creation.",
+    "es": "Herramienta GUI completa para empaquetado de Microsoft Store y creación de MSIX.",
+    "zh": "用于 Microsoft Store 打包和 MSIX 创建的完整 GUI 工具。",
+    "ja": "Microsoft Store パッケージ化および MSIX 作成のための完全な GUI ツール。",
+    "ru": "Полнофункциональный графический инструмент для упаковки приложений Microsoft Store и создания MSIX."
+  },
+  "Unterstützt Python-Desktop-Apps, i18n-Mehrsprachigkeit (6 Sprachen),": {
+    "de": "Unterstützt Python-Desktop-Apps, i18n-Mehrsprachigkeit (6 Sprachen),",
+    "en": "Supports Python desktop apps, i18n multilingualism (6 languages),",
+    "es": "Compatible con aplicaciones de escritorio de Python, i18n multilingüe (6 idiomas),",
+    "zh": "支持 Python 桌面应用、i18n 多语言支持（6 种语言）、",
+    "ja": "Python デスクトップ アプリ、i18n 多言語対応 (6 言語) をサポート、",
+    "ru": "Поддерживает классические приложения Python, многоязычность i18n (6 языков),"
+  },
+  "WACK-Validierung und barrierefreie Tastaturbedienung.": {
+    "de": "WACK-Validierung und barrierefreie Tastaturbedienung.",
+    "en": "WACK validation and accessible keyboard navigation.",
+    "es": "Validación WACK y navegación accesible por teclado.",
+    "zh": "WACK 验证与无障碍键盘操作。",
+    "ja": "WACK 検証、アクセシブルなキーボード操作に対応。",
+    "ru": "проверку WACK и доступное управление с клавиатуры."
+  },
+  "Lizenz: MIT": {
+    "de": "Lizenz: MIT",
+    "en": "License: MIT",
+    "es": "Licencia: MIT",
+    "zh": "许可证：MIT",
+    "ja": "ライセンス: MIT",
+    "ru": "Лицензия: MIT"
+  },
+  "Entwickelt für barrierefreie, sichere Softwarepakete.": {
+    "de": "Entwickelt für barrierefreie, sichere Softwarepakete.",
+    "en": "Designed for accessible, secure software packages.",
+    "es": "Diseñado para paquetes de software seguros y accesibles.",
+    "zh": "专为构建无障碍、安全的软件包而设计。",
+    "ja": "アクセシブルで安全なソフトウェア パッケージのために設計されました。",
+    "ru": "Создано для доступных и безопасных пакетов программного обеспечения."
+  },
+  "Lizenz hinzugefügt": {
+    "de": "Lizenz hinzugefügt",
+    "en": "License Added",
+    "es": "Licencia agregada",
+    "zh": "许可证已添加",
+    "ja": "ライセンスが追加されました",
+    "ru": "Лицензия добавлена"
+  },
+  "Datei hinzugefügt:": {
+    "de": "Datei hinzugefügt:",
+    "en": "File added:",
+    "es": "Archivo agregado:",
+    "zh": "已添加文件：",
+    "ja": "追加されたファイル:",
+    "ru": "Файл добавлен:"
+  },
+  "Text als zusätzliche Lizenz gespeichert.": {
+    "de": "Text als zusätzliche Lizenz gespeichert.",
+    "en": "Text saved as additional license.",
+    "es": "Texto guardado como licencia adicional.",
+    "zh": "文本已另存为附加许可证。",
+    "ja": "テキストが追加ライセンスとして保存されました。",
+    "ru": "Текст сохранен в качестве дополнительной лицензии."
+  },
+  "Bitte Lizenztext eingeben und erneut klicken.": {
+    "de": "Bitte Lizenztext eingeben und erneut klicken.",
+    "en": "Please enter license text and click again.",
+    "es": "Por favor, introduzca el texto de la licencia y vuelva a hacer clic.",
+    "zh": "请输入许可证文本并重试。",
+    "ja": "ライセンス テキストを入力して再度クリックしてください。",
+    "ru": "Пожалуйста, введите текст лицензии и нажмите еще раз."
+  },
+  "Datei konnte nicht geladen werden:": {
+    "de": "Datei konnte nicht geladen werden:",
+    "en": "File could not be loaded:",
+    "es": "No se pudo cargar el archivo:",
+    "zh": "无法加载文件：",
+    "ja": "ファイルを読み込めませんでした:",
+    "ru": "Не удалось загрузить файл:"
+  },
+  "Passwort konnte nicht im Keyring gespeichert werden:": {
+    "de": "Passwort konnte nicht im Keyring gespeichert werden:",
+    "en": "Password could not be saved to keyring:",
+    "es": "No se pudo guardar la contraseña en el llavero:",
+    "zh": "无法将密码保存到密钥环：",
+    "ja": "パスワードをキーリングに保存できませんでした:",
+    "ru": "Не удалось сохранить пароль в связку ключей:"
+  },
+  "Gesamt:": {
+    "de": "Gesamt:",
+    "en": "Total:",
+    "es": "Total:",
+    "zh": "总计：",
+    "ja": "合計:",
+    "ru": "Всего:"
+  },
+  "Dateien": {
+    "de": "Dateien",
+    "en": "files",
+    "es": "archivos",
+    "zh": "个文件",
+    "ja": "個のファイル",
+    "ru": "файлов"
+  },
+  "Texteinträge": {
+    "de": "Texteinträge",
+    "en": "text entries",
+    "es": "entradas de texto",
+    "zh": "个文本条目",
+    "ja": "個のテキスト エントリ",
+    "ru": "текстовых записей"
   }
 }

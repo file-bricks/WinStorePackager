@@ -17,6 +17,20 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### WCAG 2.1 AA Keyboard Ergonomics, Accessible Dialogs & Tier-2 Multi-Language Parity (2026-11-08, gemini/antigravity)
+
+- **WCAG 2.1 AA / BITV 2.0 Tastatur-Ergonomie & barrierefreie Reiter-Navigation:**
+  - `WindowsStorePublisher_3.py`: `next_tab()` und `prev_tab()` implementiert; Tastaturnavigation via `Ctrl+PageDown` (`<Control-Next>`) und `Ctrl+PageUp` (`<Control-Prior>`) für zyklisches Wechseln zwischen allen 4 Reitern (Metadaten, Build-Einstellungen, Store-Informationen, Aktionen) hinzugefügt.
+  - Ansicht-Menü um `Nächster Reiter (Ctrl+PageDown)` und `Vorheriger Reiter (Ctrl+PageUp)` erweitert.
+  - Tastenkürzel `Shift+F1` (`<Shift-F1>` und `<Shift-KeyPress-F1>`) für direkten Aufruf des Info-Dialogs (`Über WinStorePackager`) verankert und im Hilfe-Menü ausgezeichnet.
+- **Barrierefreie Dialoge & 100% 6-Sprachen-Parität (DE, EN, ES, ZH, JA, RU):**
+  - `show_shortcuts_help`: Vollständige Lokalisierung aller Dialogtexte und Überschriften über das Übersetzungssystem `_t(...)`; alle globalen Shortcuts (`F1`, `Shift+F1`, `Ctrl+PageDown/Up`, `Strg+1..4`, `Escape`), Screenreader-Hinweise und Tastaturbedienung in 6 Sprachen synchronisiert.
+  - `show_about_dialog`: Vollständige Lokalisierung aller Produkt- und Lizenztexte über `_t(...)` unter strikter Beibehaltung der Versionsverträge (`Version 3.1.0`).
+  - Fehlermeldungen und Lizenzdialoge (`add_license_file`, `add_license_text_entry`, `load_readme_file`, `load_desc_file`, Keyring-Warnung) auf barrierefreie, lokalisierte Dialoge mit echten deutschen Umlauten umgestellt.
+  - `locales/translations.json`: Um 32 neue Schlüssel mit 100% Parität über DE, EN, ES, ZH, JA, RU erweitert (Gesamtbestand: 314 Schlüssel, `manage_translations.py --check` 100% grün).
+- **Vertragstests & Qualitätssicherung:**
+  - `tests/test_ui_accessibility.py`: 4 neue Vertragstests hinzugefügt (`test_shortcuts_help_content_localization_and_parity`, `test_about_dialog_content_localization_and_parity`, `test_keyboard_tab_cycling_next_and_prev`, `test_license_and_error_messagebox_localization`); Gesamttestsuite auf 210 passed, 1 skipped (100% grün in ~10s).
+
 ### Tier-2 Windows Store Packaging & Bugfix-Resilienz (2026-11-07, gemini/antigravity)
 
 - **Tier-2 6-Sprachen Store Packaging nach Policy P-006 (DE, EN, ES, ZH, JA, RU):**
