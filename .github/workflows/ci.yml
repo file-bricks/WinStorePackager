@@ -23,6 +23,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        # ubuntu-latest (26.04) no longer ships Python 3.9 via setup-python.
+        # Keep the declared 3.9 floor covered on Linux by pinning that one
+        # combination to ubuntu-24.04.
+        exclude:
+          - os: ubuntu-latest
+            python-version: "3.9"
+        include:
+          - os: ubuntu-24.04
+            python-version: "3.9"
 
     steps:
       - uses: actions/checkout@v4
