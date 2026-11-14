@@ -17,6 +17,10 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### CI: Python 3.9 auf Linux wieder lauffähig (2026-11-11)
+
+- `.github/workflows/ci.yml`: Die Kombination Python 3.9 + Linux läuft jetzt auf `ubuntu-24.04`. `ubuntu-latest` (26.04) stellt 3.9 über `actions/setup-python` nicht mehr bereit; der Job scheiterte deshalb seit 2026-11-08 schon beim Einrichten. Alle anderen Kombinationen bleiben unverändert.
+
 ### WCAG 2.1 AA Keyboard Ergonomics, Accessible Dialogs & Tier-2 Multi-Language Parity (2026-11-08, gemini/antigravity)
 
 - **WCAG 2.1 AA / BITV 2.0 Tastatur-Ergonomie & barrierefreie Reiter-Navigation:**
