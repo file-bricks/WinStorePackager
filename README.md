@@ -1,6 +1,6 @@
 <img src="assets/banner.svg" width="100%" alt="WinStorePackager Banner">
 
-> **English** | [Deutsch](README_de.md)
+> **English** · [Deutsch](README_de.md) · [Español](README_es.md) · [Français](README_fr.md) · [Português](README_pt.md) · [Русский](README_ru.md) · [简体中文](README_zh.md) · [日本語](README_ja.md) · [العربية](README_ar.md) · [हिन्दी](README_hi.md) · [বাংলা](README_bn.md)
 
 <p align="center">
   <img src="https://img.shields.io/badge/Ecosystem-file--bricks-blue?style=for-the-badge" alt="Ecosystem">
