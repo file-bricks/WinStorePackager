@@ -12,8 +12,17 @@ WinStorePackager is a local-first Windows GUI and CLI utility for preparing Pyth
 
 - `README.md`: English main landing page, visual showcase, quickstart, lifecycle diagram, local-data boundaries.
 - `README_de.md`: German companion README for Microsoft Store packaging users and ecosystem links.
+- `README_es.md`: Spanish full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
+- `README_fr.md`: French full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
+- `README_pt.md`: Portuguese full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
+- `README_ru.md`: Russian full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
+- `README_zh.md`: Simplified Chinese full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
+- `README_ja.md`: Japanese full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
+- `README_ar.md`: Modern Standard Arabic full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
+- `README_hi.md`: Hindi full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
+- `README_bn.md`: Bengali full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
 - `SECURITY.md`: Bilingual security policy with Local-First, Zero-Egress, and OS Keyring guarantees.
-- `WindowsStorePublisher_3.py`: Desktop GUI entry point with 6-language i18n support.
+- `WindowsStorePublisher_3.py`: Desktop GUI entry point with 6-language runtime i18n support (DE, EN, ES, ZH, JA, RU; documentation covers the 11-language World-Set).
 - `PROJECT_PROFILE_FORMAT.md`: `winstorepackager-project-v1` exchange format.
 - `PRIVACY_POLICY.md`: Local-data and privacy boundary.
 - `STORE_LISTING.md`: Reusable Microsoft Store listing copy.

@@ -17,6 +17,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### 11-Sprachen-World-Set Dokumentation (2026-11-16, gemini/antigravity)
+
+- **Vollständiges 11-Sprachen-World-Set der Dokumentation:**
+  - `README_es.md` (Spanisch), `README_fr.md` (Französisch), `README_pt.md` (Portugiesisch), `README_ru.md` (Russisch), `README_zh.md` (Vereinfachtes Chinesisch), `README_ja.md` (Japanisch), `README_ar.md` (Modernes Hocharabisch), `README_hi.md` (Hindi) und `README_bn.md` (Bengali) mit vollständiger Parität (15 Abschnitte, 30 reziproke HTML-Anker, 10 Governance-Invarianten, Mermaid-Architektur- und Sequenzdiagramme) erstellt.
+  - Reziproker 11×11-Sprachumschalter in allen 11 `README*.md`-Dateien synchronisiert.
+  - Dokumentations- und Kontextdateien (`llms.txt`, `CHANGELOG.md`) auf das 11-Sprachen-World-Set aktualisiert bei unverändertem Bestand der 6 Laufzeit-UI-Sprachen (DE, EN, ES, ZH, JA, RU).
+
 ### CI: Python 3.9 auf Linux wieder lauffähig (2026-11-11)
 
 - `.github/workflows/ci.yml`: Die Kombination Python 3.9 + Linux läuft jetzt auf `ubuntu-24.04`. `ubuntu-latest` (26.04) stellt 3.9 über `actions/setup-python` nicht mehr bereit; der Job scheiterte deshalb seit 2026-11-08 schon beim Einrichten. Alle anderen Kombinationen bleiben unverändert.
