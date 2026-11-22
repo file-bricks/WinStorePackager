@@ -83,8 +83,12 @@ def manage_translations(source_dir=".", check_only: bool = False, scan: bool = T
         try:
             with open(trans_file, "r", encoding="utf-8") as f:
                 translations = json.load(f)
-        except (json.JSONDecodeError, OSError):
-            translations = {}
+        except (json.JSONDecodeError, UnicodeDecodeError, OSError) as exc:
+            print(f"[FAIL] {trans_file} ist nicht lesbar oder enthaelt ungueltiges JSON ({exc}) -- Datei bleibt unveraendert.")
+            return False
+        if not isinstance(translations, dict):
+            print(f"[FAIL] {trans_file} hat keine JSON-Objekt-Wurzel ({type(translations).__name__}) -- Datei bleibt unveraendert.")
+            return False
     else:
         translations = {}
 
@@ -98,8 +102,10 @@ def manage_translations(source_dir=".", check_only: bool = False, scan: bool = T
 
         if added:
             os.makedirs(os.path.dirname(trans_file), exist_ok=True)
-            with open(trans_file, "w", encoding="utf-8") as f:
+            tmp_file = f"{trans_file}.tmp"
+            with open(tmp_file, "w", encoding="utf-8") as f:
                 json.dump(translations, f, indent=2, ensure_ascii=False)
+            os.replace(tmp_file, trans_file)
             print(f"[+] {len(added)} neue Einträge hinzugefügt:")
             for s in added[:20]:
                 print(f"    - {s}")
@@ -134,7 +140,7 @@ def main() -> None:
         target_dir = unknown[0]
 
     ok = manage_translations(target_dir, check_only=args.check, scan=not args.check)
-    if args.check and not ok:
+    if not ok:
         sys.exit(1)
 
 
