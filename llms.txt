@@ -10,6 +10,8 @@ WinStorePackager is a local-first Windows GUI and CLI utility for preparing Pyth
 
 ## Key Files
 
+- `SKILL.md`: Standalone product usage skill for AI agents and automated assistants (Policy P-022).
+- `llm.txt`: Compatibility pointer referencing `llms.txt` and `SKILL.md`.
 - `README.md`: English main landing page, visual showcase, quickstart, lifecycle diagram, local-data boundaries.
 - `README_de.md`: German companion README for Microsoft Store packaging users and ecosystem links.
 - `README_es.md`: Spanish full World-Set documentation guide (15-section parity, lifecycle diagrams, Store workflows).
@@ -27,13 +29,14 @@ WinStorePackager is a local-first Windows GUI and CLI utility for preparing Pyth
 - `PRIVACY_POLICY.md`: Local-data and privacy boundary.
 - `STORE_LISTING.md`: Reusable Microsoft Store listing copy.
 - `unix_preflight.py`: Cross-platform preflight validation script (Linux / macOS / CI).
+- `manage_translations.py`: 6-language catalog scanner and `--check` CI parity gate.
+- `scripts/check_store_readiness.py`: Automated Windows Store readiness and listing preflight checker.
 - `NOTICE`: Canonical copyright, open-bricks ecosystem attribution, and license references.
 - `THIRD_PARTY_LICENSES.md`: Dependency inventory with SPDX licenses, vulnerability floors, and zero-egress invariants.
-- `MARKETING-LOG.txt`: Target personas, high-intent search terms, 4-way competitive matrix, and 10 governance invariants.
 - `.github/workflows/ci.yml`: Multi-OS CI testing matrix (Ubuntu, Windows, macOS across Python 3.9-3.13) with concurrency control, timeout-minutes guardrails, and bytecode gate.
 - `.github/workflows/welcome.yml`: Contributor onboarding workflow with actions/first-interaction@v3, concurrency control, and timeout-minutes guardrails.
 - `.github/workflows/stale.yml`: Automated issue/PR lifecycle hygiene with actions/stale@v9, daily cron schedule, and concurrency control.
-- `tests/test_metadata.py`: Automated contract suite for metadata, badges, and discoverability.
+- `tests/test_metadata.py`: Automated contract suite for metadata, badges, P-022 entrypoints, and discoverability.
 
 ## Audience
 
@@ -62,17 +65,14 @@ WinStorePackager is not the official Microsoft MSIX Packaging Tool and does not 
 
 ## Privacy Boundary
 
-Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifests, MSIX/AppX packages, WACK logs, and release bundles should stay outside Git. Runtime settings and rotating logs live outside the checkout in host-local directories; certificate passwords remain in the operating-system Keyring. Project profile exports intentionally omit sensitive Windows-specific values.
+Local Publisher IDs, certificate paths, passwords, SDK paths, generated manifests, MSIX/AppX packages, WACK logs, and release bundles stay outside Git. Runtime settings and rotating logs live outside the checkout in host-local directories; certificate passwords remain in the operating-system Keyring. Project profile exports intentionally omit sensitive Windows-specific values.
 
 ## Verification & Test Suite
 
-Tested with Pytest: 189 collected tests (185 passed, 4 skipped in the current local run; optional local Store, WACK, and display checks may skip when their local artifacts or display are unavailable). Execute via `pytest -ra -v`.
+Tested with Pytest: 215 collected tests (214 passed, 1 skipped in the local run when optional local MSIX artifacts are absent). Execute via `python -m pytest -ra -v`.
 
-## Last-checked: 2026-09-26
+## Last-checked: 2026-11-24
 
-Verification: the local Pytest suite collected 189 tests, with 185 passed and 4
-skipped because optional local Store/MSIX/WACK artifacts are unavailable;
-the codebase is clean, reproducible, and fully passes all contract tests.
-Pfad A technical hygiene, welcome/stale CI workflows, lock defense, NOTICE attribution,
-and contract test expansion validated;
-`ruff check .` (0 errors) and `python -m compileall -q .` (0 errors) pass 100% cleanly.
+Verification: `python -m pytest -ra -v` (214 passed, 1 skipped), `ruff check .` (0 errors),
+`python -m compileall -q .` (0 errors), `pip install --no-build-isolation --dry-run .` (PEP 639 OK),
+and `repo_privacy_gate.py` (PASS).

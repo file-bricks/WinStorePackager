@@ -8,18 +8,17 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="CI Status">
-  <img src="https://img.shields.io/badge/Tests-185%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-214%20passed%20%7C%201%20skipped-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Attribution-NOTICE-blue?style=for-the-badge" alt="Attribution NOTICE">
-  <img src="https://img.shields.io/badge/Verified-2026--09--26-blue?style=for-the-badge" alt="Verified Date">
+  <img src="https://img.shields.io/badge/Verified-2026--11--24-blue?style=for-the-badge" alt="Verified Date">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="Platform">
   <img src="https://img.shields.io/badge/Security%20SLA-48h%20SLA%20%7C%205d%20triage-blue?style=for-the-badge" alt="Security SLA">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="Local First">
   <img src="https://img.shields.io/badge/Security-Local--First%20%7C%20Non--Elevation-success?style=for-the-badge" alt="Security">
   <img src="https://img.shields.io/badge/Third--Party%20Audited-100%25%20Permissive-blue?style=for-the-badge" alt="Third-Party Audited">
-  <img src="https://img.shields.io/badge/Marketing%20Log-Active-teal?style=for-the-badge" alt="Marketing Log">
   <img src="https://img.shields.io/badge/Code%20Style-Ruff-000000?style=for-the-badge" alt="Code Style">
-  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt-blueviolet?style=for-the-badge" alt="LLM Ready">
+  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt%20%7C%20SKILL.md-blueviolet?style=for-the-badge" alt="LLM Ready">
 </p>
 
 <h1 align="center">WinStorePackager</h1>
@@ -45,7 +44,7 @@
 </p>
 
 > [!NOTE]
-> **AI Agent & LLM Integration Notice**: High-level repository structure and context boundaries are documented in [`llms.txt`](llms.txt). LLM agents and automated tools can inspect package schemas via [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) and [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json).
+> **AI Agent & LLM Integration Notice**: High-level repository structure, capabilities, and context boundaries are documented in [`llms.txt`](llms.txt) ([`llm.txt`](llm.txt)) and the standalone product skill [`SKILL.md`](SKILL.md). LLM agents and automated tools can inspect package schemas via [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) and [`winstorepackager-project-v1.json`](winstorepackager-project-v1.json).
 
 ---
 
@@ -240,6 +239,14 @@ python WindowsStorePublisher_3.py
 
 Or on Windows, double-click `START.bat`.
 
+### Install with your LLM
+
+Copy this prompt into your AI coding assistant:
+
+```text
+Clone https://github.com/file-bricks/WinStorePackager.git, read SKILL.md and llms.txt, install requirements.txt, and run `python unix_preflight.py --project-root . --json` and `python -m pytest -ra -v` to verify the setup.
+```
+
 ---
 
 <a id="sdk-free-unix-preflight"></a>
@@ -355,8 +362,6 @@ WinStorePackager is optimized for discoverability and targeted towards four core
 - `Python desktop app Windows Store submission helper`
 - `AppxManifest XML generator Python`
 
-See [`MARKETING-LOG.txt`](MARKETING-LOG.txt) for full keyword rankings, persona pain-point analyses, and competitive positioning data.
-
 ---
 
 <a id="documentation--license"></a>
@@ -366,10 +371,9 @@ See [`MARKETING-LOG.txt`](MARKETING-LOG.txt) for full keyword rankings, persona 
 - 📄 **Security Policy:** [`SECURITY.md`](SECURITY.md) — Bilingual vulnerability disclosure & local-first guarantees
 - ⚖️ **Attribution Notice:** [`NOTICE`](NOTICE) — Canonical copyright, open-bricks ecosystem attribution & dependency references
 - 📝 **Changelog:** [`CHANGELOG.md`](CHANGELOG.md) — Version history and release notes
-- 🤖 **LLM Reference:** [`llms.txt`](llms.txt) — Machine-readable architectural guide
+- 🤖 **LLM & Agent Reference:** [`SKILL.md`](SKILL.md), [`llms.txt`](llms.txt) & [`llm.txt`](llm.txt) — Product usage skill and machine-readable architectural guide
 - 📦 **Profile Format:** [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) — Portable project profile specification
 - 📜 **Third-Party Licenses:** [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) & [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt)
-- 📊 **Marketing Log:** [`MARKETING-LOG.txt`](MARKETING-LOG.txt) — Persona and discoverability registry
 
 ### License & Liability
 

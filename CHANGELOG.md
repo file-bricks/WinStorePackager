@@ -17,6 +17,18 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ## [Unreleased]
 
+### Repository-Hygiene, Privacy Gate, PEP 639 Packaging & Policy P-022 Sync (2026-11-24)
+
+- **Privacy-Gate & Git-Tracking-Hygiene (`repo_privacy_gate.py` PASS):**
+  - `MARKETING-LOG.txt` per `git rm --cached` aus dem Git-Tracking entfernt (bleibt lokal erhalten) und über `.gitignore` (`MARKETING-LOG.txt`, `*MARKETING-LOG.txt`, interne Steuerungsmuster, `.codex/`, `.gemini/`, `.agent/`) dauerhaft ausgeschlossen.
+  - Verbleibende Hostnamen-, Nutzerpfad- und Token-Muster in `CHANGELOG.md`, `PLAN_D_POINTER.md`, `releases/windowsstore/WACK_PROTOCOL.md`, `tests/test_dogfood_real_apps.py`, `tests/test_metadata.py`, `tests/test_project_profile.py`, `tests/test_security_license_contract.py` und `tests/test_store_dogfood_readiness.py` portabel bereinigt.
+- **PEP 639 Packaging & CWD-sicheres Pytest (`pyproject.toml`, `conftest.py`, `MANIFEST.in`):**
+  - `pyproject.toml`: `license = "MIT"` (PEP 639 String-Lizenz ohne doppelten OSI-Classifier), explizite `[tool.setuptools] py-modules`, `asyncio_default_fixture_loop_scope = "function"`, Entfernung von `"Marketing Log"` aus `[project.urls]` und Verlagerung von `--basetemp=.pytest_temp` in `conftest.py` (`config.rootpath / ".pytest_temp"`).
+  - `MANIFEST.in` für vollständige Quelldistributionen inkl. `SKILL.md`, `llm.txt`, `llms.txt`, `README*.md` und Store-/Lokalisierungs-Assets ergänzt.
+  - `manage_translations.py`: `.pytest_cache` und `.pytest_temp` in `skip_dirs` ergänzt.
+- **Policy P-022 & Dokumentationsparität (`SKILL.md`, `llm.txt`, `llms.txt`, `README*.md`):**
+  - Eigenständigen Produkt-Skill `SKILL.md` und Kompatibilitätsverweis `llm.txt` ergänzt; `llms.txt` (`Last-checked: 2026-11-24`) und alle 11 `README*.md`-Fassungen (Badges `214 passed | 1 skipped`, `2026-11-24`, `SKILL.md`/`llm.txt`-Verlinkung, Entfernung toter `MARKETING-LOG.txt`-Links, LLM-Installationshinweis in `README.md`/`README_de.md`) synchronisiert.
+
 ### 11-Sprachen-World-Set Dokumentation (2026-11-16, gemini/antigravity)
 
 - **Vollständiges 11-Sprachen-World-Set der Dokumentation:**
@@ -72,7 +84,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - **Kanonische NOTICE-Attribution (`NOTICE`):**
   - Kanonische Open-Source-Datei `NOTICE` im Repo-Root angelegt (Copyright 2024-2026 Lukas Geiger, file-bricks maintainers unter open-bricks Umbrella, MIT Lizenz, Querverweise auf `LICENSE` und `THIRD_PARTY_LICENSES.md`).
 - **Multi-Host Cloud-Sync-, Lock- und Cache-Härtung (`.gitignore`):**
-  - Erweiterte Host-Muster (`*-MacBook*`, `*-IDEAPAD*`, `*_WORKSTATION*`, `*_WORKSTATION-LG*`, `*-WORKSTATION.*`, `*-WORKSTATION-LG.*`) blockiert.
+  - Erweiterte Host-Konfliktmuster (`*-<HOST>*`) blockiert.
   - Multi-Agent Lock-Muster (`LOCK.user.*`, `LOCK.until.*`, `LOCK.condition.*`, `.automation-lock`, `uv.lock`) integriert.
   - Test- und Cache-Artefakte (`.pytest_temp/`, `.pytest_tmp*/`, `.hypothesis/`, `.turbo/`, `.nyc_output/`, `.tox/`) ergänzt.
 - **PEP 621 Standardisierung & Pytest-Härtung (`pyproject.toml`):**
@@ -153,9 +165,9 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - **Drittanbieter-Lizenzkatalog (`THIRD_PARTY_LICENSES.txt`):**
   - Vollständiges Lizenzinventar mit SPDX-Identifikatoren und Upstream-URLs für direkte und transitive Laufzeitpakete (`Pillow`, `PyGetWindow`, `PyRect`, `keyring`, `jaraco.*`, `pywin32-ctypes`), Build-/Packaging-Tools (`PyInstaller` inkl. Bootloader Exception, `pyinstaller-hooks-contrib`, `altgraph`, `packaging`) und Dev/Test-Tools (`pytest`, `pluggy`, `iniconfig`, `ruff`) aufgebaut.
 - **Sync- & Gitignore-Härtung (`.gitignore`):**
-  - Multi-Host-Synchronisationsmuster `*-WORKSTATION-LG*` und `*-ASUS-GEI*` gegen versehentliches Committen von OneDrive-Konfliktkopien integriert.
+  - Multi-Host-Synchronisationsmuster (`*-<HOST>*`) gegen versehentliches Committen von OneDrive-Konfliktkopien integriert.
 - **Privacy & Pfadbereinigung (`tests/test_dogfood_real_apps.py`):**
-  - Hardcodierte Entwicklerpfade (`C:\Users\lukas`) durch dynamische `Path.home()`-Auflösung ersetzt.
+  - Hardcodierte Entwicklerpfade (`<USER_HOME>`) durch dynamische `Path.home()`-Auflösung ersetzt.
 - **Automatisierte Sicherheits-Vertragstests (`tests/test_security_license_contract.py`):**
   - 6 neue Pytest-Vertragstests für Vulnerability-Floors, Lizenzbestand, Gitignore-Schutz, pfadunabhängige Quellcodedateien, gefahrlose Subprocess-Aufrufe (`shell=False`) und 48h-Sicherheits-SLA implementiert (144/144 Tests erfolgreich).
 

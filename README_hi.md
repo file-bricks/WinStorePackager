@@ -8,18 +8,17 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="संस्करण">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="CI स्थिति">
-  <img src="https://img.shields.io/badge/Tests-185%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="परीक्षण">
+  <img src="https://img.shields.io/badge/Tests-214%20passed%20%7C%201%20skipped-brightgreen?style=for-the-badge" alt="परीक्षण">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="लाइसेंस">
   <img src="https://img.shields.io/badge/Attribution-NOTICE-blue?style=for-the-badge" alt="एट्रिब्यूशन नोटिस">
-  <img src="https://img.shields.io/badge/Verified-2026--09--26-blue?style=for-the-badge" alt="सत्यापन तिथि">
+  <img src="https://img.shields.io/badge/Verified-2026--11--24-blue?style=for-the-badge" alt="सत्यापन तिथि">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="प्लेटफ़ॉर्म">
   <img src="https://img.shields.io/badge/Security%20SLA-48h%20SLA%20%7C%205d%20triage-blue?style=for-the-badge" alt="सुरक्षा SLA">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="गोपनीयता">
   <img src="https://img.shields.io/badge/Security-Local--First%20%7C%20Non--Elevation-success?style=for-the-badge" alt="सुरक्षा">
   <img src="https://img.shields.io/badge/Third--Party%20Audited-100%25%20Permissive-blue?style=for-the-badge" alt="थर्ड-पार्टी ऑडिट">
-  <img src="https://img.shields.io/badge/Marketing%20Log-Active-teal?style=for-the-badge" alt="मार्केटिंग लॉग">
   <img src="https://img.shields.io/badge/Code%20Style-Ruff-000000?style=for-the-badge" alt="कोड शैली">
-  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt-blueviolet?style=for-the-badge" alt="LLM रेडी">
+  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt%20%7C%20SKILL.md-blueviolet?style=for-the-badge" alt="LLM रेडी">
 </p>
 
 <h1 align="center">WinStorePackager</h1>
@@ -355,8 +354,6 @@ WinStorePackager खोज योग्यता के लिए अनुक�
 - `Python desktop app Windows Store submission helper`
 - `AppxManifest XML generator Python`
 
-पूर्ण कीवर्ड रैंकिंग, व्यक्तित्व विश्लेषण और प्रतिस्पर्धी स्थिति डेटा के लिए [`MARKETING-LOG.txt`](MARKETING-LOG.txt) देखें।
-
 ---
 
 <a id="documentation--license"></a>
@@ -366,10 +363,9 @@ WinStorePackager खोज योग्यता के लिए अनुक�
 - 📄 **सुरक्षा नीति:** [`SECURITY.md`](SECURITY.md) — द्विभाषी भेद्यता प्रकटीकरण और स्थानीय-प्रथम गारंटी
 - ⚖️ **एट्रिब्यूशन नोटिस:** [`NOTICE`](NOTICE) — विहित कॉपीराइट, open-bricks इकोसिस्टम एट्रिब्यूशन और निर्भरता संदर्भ
 - 📝 **परिवर्तन लॉग:** [`CHANGELOG.md`](CHANGELOG.md) — संस्करण इतिहास और रिलीज़ नोट्स
-- 🤖 **LLM संदर्भ:** [`llms.txt`](llms.txt) — मशीन-पठनीय वास्तुशिल्प गाइड
+- 🤖 **LLM संदर्भ:** [`SKILL.md`](SKILL.md), [`llms.txt`](llms.txt) & [`llm.txt`](llm.txt) — मशीन-पठनीय वास्तुशिल्प गाइड
 - 📦 **प्रोफ़ाइल प्रारूप:** [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) — पोर्टेबल प्रोजेक्ट प्रोफ़ाइल विनिर्देश
 - 📜 **थर्ड-पार्टी लाइसेंस:** [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) और [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt)
-- 📊 **मार्केटिंग लॉग:** [`MARKETING-LOG.txt`](MARKETING-LOG.txt) — लक्षित उपयोगकर्ता और खोज योग्यता रजिस्ट्री
 
 ### License & Liability
 

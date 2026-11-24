@@ -8,18 +8,17 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Версия">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="Статус CI">
-  <img src="https://img.shields.io/badge/Tests-185%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="Тесты">
+  <img src="https://img.shields.io/badge/Tests-214%20passed%20%7C%201%20skipped-brightgreen?style=for-the-badge" alt="Тесты">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="Лицензия">
   <img src="https://img.shields.io/badge/Attribution-NOTICE-blue?style=for-the-badge" alt="Уведомление об авторстве">
-  <img src="https://img.shields.io/badge/Verified-2026--09--26-blue?style=for-the-badge" alt="Дата проверки">
+  <img src="https://img.shields.io/badge/Verified-2026--11--24-blue?style=for-the-badge" alt="Дата проверки">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="Платформы">
   <img src="https://img.shields.io/badge/Security%20SLA-48h%20SLA%20%7C%205d%20triage-blue?style=for-the-badge" alt="SLA безопасности">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="Конфиденциальность">
   <img src="https://img.shields.io/badge/Security-Local--First%20%7C%20Non--Elevation-success?style=for-the-badge" alt="Безопасность">
   <img src="https://img.shields.io/badge/Third--Party%20Audited-100%25%20Permissive-blue?style=for-the-badge" alt="Аудит сторонних библиотек">
-  <img src="https://img.shields.io/badge/Marketing%20Log-Active-teal?style=for-the-badge" alt="Журнал маркетинга">
   <img src="https://img.shields.io/badge/Code%20Style-Ruff-000000?style=for-the-badge" alt="Стиль кода">
-  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt-blueviolet?style=for-the-badge" alt="Готов к LLM">
+  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt%20%7C%20SKILL.md-blueviolet?style=for-the-badge" alt="Готов к LLM">
 </p>
 
 <h1 align="center">WinStorePackager</h1>
@@ -355,8 +354,6 @@ WinStorePackager оптимизирован для быстрого поиска
 - `Python desktop app Windows Store submission helper`
 - `AppxManifest XML generator Python`
 
-Ознакомьтесь с [`MARKETING-LOG.txt`](MARKETING-LOG.txt) для получения полной информации о рейтингах ключевых слов, анализе потребностей аудитории и конкурентном позиционировании.
-
 ---
 
 <a id="documentation--license"></a>
@@ -366,10 +363,9 @@ WinStorePackager оптимизирован для быстрого поиска
 - 📄 **Политика безопасности:** [`SECURITY.md`](SECURITY.md) — Двуязычное раскрытие уязвимостей и гарантии local-first
 - ⚖️ **Уведомление об авторстве:** [`NOTICE`](NOTICE) — Канонический копирайт, указание экосистемы open-bricks и ссылки на зависимости
 - 📝 **История изменений:** [`CHANGELOG.md`](CHANGELOG.md) — История версий и примечания к выпускам
-- 🤖 **Справочник для LLM:** [`llms.txt`](llms.txt) — Машиночитаемое руководство по архитектуре
+- 🤖 **Справочник для LLM:** [`SKILL.md`](SKILL.md), [`llms.txt`](llms.txt) & [`llm.txt`](llm.txt) — Машиночитаемое руководство по архитектуре
 - 📦 **Формат профиля:** [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) — Спецификация переносимого профиля проекта
 - 📜 **Сторонние лицензии:** [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) и [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt)
-- 📊 **Журнал маркетинга:** [`MARKETING-LOG.txt`](MARKETING-LOG.txt) — Реестр целевой аудитории и видимости
 
 ### License & Liability
 

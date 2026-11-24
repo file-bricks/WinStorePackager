@@ -26,7 +26,16 @@ TEST.txt
 TESTS.txt
 TESTERGEBNISSE.txt
 BUGREPORT.md
+BEFUNDE.md
 DIAGNOSE_REPORT.md
+*MARKETING-LOG.txt
+MARKETING-LOG.txt
+*STATUS-LOG.txt
+STORE_READINESS.md
+STORE_CONTRACT.md
+TASKPLAN_STATUS_*.md
+*_DAILY_CARE.md
+_STAGING/
 tmpclaude-*
 
 # ---- Persoenliche / Sensible Daten ----
@@ -65,6 +74,9 @@ _WARTUNG/
 
 # ---- IDE & Editoren ----
 .claude/
+.codex/
+.gemini/
+.agent/
 .vscode/
 .idea/
 *.swp

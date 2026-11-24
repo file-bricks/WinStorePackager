@@ -1,0 +1,4 @@
+# WinStorePackager (v3.1.0)
+Canonical entry point for LLMs and agents: `llms.txt`
+Product usage skill for agents: `SKILL.md`
+Repository: https://github.com/file-bricks/WinStorePackager

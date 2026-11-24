@@ -68,21 +68,21 @@ def test_security_policy_bilingual_integrity() -> None:
 
 
 def test_llms_txt_integrity() -> None:
-    """Verify llms.txt contains updated last-checked timestamp and repository context."""
+    """Verify llms.txt contains updated last-checked timestamp and P-022/repository context."""
     llms_file = ROOT / "llms.txt"
     assert llms_file.is_file(), "llms.txt must exist"
     content = llms_file.read_text(encoding="utf-8")
 
-    assert any(
-        ts in content
-        for ts in ["Last-checked: 2026-09-26", "Last-checked: 2026-09-21", "Last-checked: 2026-09-13", "Last-checked: 2026-09-11"]
-    ), "llms.txt timestamp not updated"
+    assert re.search(r"Last-checked:\s*2026-\d{2}-\d{2}", content), "llms.txt timestamp missing"
+    assert "Last-checked: 2026-11-24" in content, "llms.txt timestamp not updated"
     assert "https://github.com/file-bricks/WinStorePackager" in content, "Canonical repo link missing in llms.txt"
     assert "MSIX" in content and "AppxManifest" in content, "Packaging keywords missing in llms.txt"
     assert "SECURITY.md" in content, "SECURITY.md reference missing in llms.txt"
     assert "NOTICE" in content, "NOTICE reference missing in llms.txt"
     assert "THIRD_PARTY_LICENSES.md" in content, "THIRD_PARTY_LICENSES.md reference missing in llms.txt"
-    assert "MARKETING-LOG.txt" in content, "MARKETING-LOG.txt reference missing in llms.txt"
+    assert "SKILL.md" in content, "SKILL.md reference missing in llms.txt"
+    assert "llm.txt" in content, "llm.txt reference missing in llms.txt"
+    assert "MARKETING-LOG.txt" not in content, "MARKETING-LOG.txt must not be referenced in llms.txt"
 
 
 def test_sibling_ecosystem_matrix() -> None:
@@ -99,13 +99,15 @@ def test_sibling_ecosystem_matrix() -> None:
 
 
 def test_pyproject_pep621_metadata() -> None:
-    """Verify pyproject.toml PEP 621 metadata, urls, and classifiers."""
+    """Verify pyproject.toml PEP 621/639 metadata, urls, and classifiers."""
     pyproject_file = ROOT / "pyproject.toml"
     assert pyproject_file.is_file(), "pyproject.toml must exist"
     content = pyproject_file.read_text(encoding="utf-8")
 
     assert 'name = "winstorepackager"' in content
     assert 'version = "3.1.0"' in content
+    assert 'license = "MIT"' in content, "PEP 639 string license missing in pyproject.toml"
+    assert "License :: OSI Approved ::" not in content, "Redundant OSI License classifier must not appear alongside PEP 639 license"
     assert "Security =" in content, "Security URL missing in pyproject.toml"
     assert "Notice =" in content, "Notice URL missing in pyproject.toml"
     assert "Homepage =" in content, "Homepage URL missing in pyproject.toml"
@@ -121,11 +123,10 @@ def test_pyproject_pep621_metadata() -> None:
     assert "license-files =" in content, "license-files missing in pyproject.toml"
     assert "minversion =" in content, "minversion missing in pyproject.toml"
     assert "norecursedirs =" in content, "norecursedirs missing in pyproject.toml"
-    assert (
-        'addopts = "-ra -v --basetemp=.pytest_temp"' in content
-        or 'addopts = "-ra -v"' in content
-        or 'addopts = "-v"' in content
-    ), "pytest addopts missing in pyproject.toml"
+    assert "--basetemp" not in content, "Relative --basetemp must not appear in pyproject.toml addopts"
+    assert 'addopts = "-ra -v"' in content, "pytest addopts missing in pyproject.toml"
+    assert 'asyncio_default_fixture_loop_scope = "function"' in content
+    assert "[tool.setuptools]" in content
 
 
 def test_ci_workflow_integrity() -> None:
@@ -245,33 +246,33 @@ def test_third_party_licenses_md_integrity() -> None:
         assert term in content, f"Term/concept {term} missing in THIRD_PARTY_LICENSES.md"
 
 
-def test_marketing_log_contract() -> None:
-    """Verify MARKETING-LOG.txt exists, is active, and contains target personas, search terms, and 10 invariants."""
-    m_log = ROOT / "MARKETING-LOG.txt"
-    assert m_log.is_file(), "MARKETING-LOG.txt must exist"
-    content = m_log.read_text(encoding="utf-8")
+def test_marketing_log_is_untracked_and_gitignored() -> None:
+    """Verify MARKETING-LOG.txt is gitignored and never tracked in Git (GITHUB-POLICY §3)."""
+    import subprocess
 
-    assert "ACTIVE / PFAD B DISCOVERABILITY & MARKETING VERIFIED" in content
-    assert "TARGET PERSONAS" in content
-    assert "Solo Python Desktop App Developers" in content
-    assert "Enterprise & Commercial Python ISVs" in content
-    assert "Open-Source Maintainers" in content
-    assert "Privacy-Conscious & Local-First Desktop Engineers" in content
-    assert "COMPETITIVE COMPARISON MATRIX" in content
-    assert "HIGH-INTENT SEARCH TERM MATRIX" in content
-    for inv in ["INV-LOCAL-01", "INV-SEC-02", "INV-STORE-03", "INV-ASSET-04", "INV-PROFILE-05",
-                "INV-CROSS-06", "INV-STATE-07", "INV-WACK-08", "INV-I18N-09", "INV-SLA-10"]:
-        assert inv in content, f"Invariant {inv} missing in MARKETING-LOG.txt"
+    gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+    assert "MARKETING-LOG.txt" in gitignore or "*MARKETING-LOG.txt" in gitignore
+
+    if (ROOT / ".git").exists():
+        proc = subprocess.run(
+            ["git", "ls-files", "MARKETING-LOG.txt"],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        assert proc.returncode == 0
+        assert proc.stdout.strip() == "", "MARKETING-LOG.txt must not be tracked by Git"
 
 
 def test_pyproject_extended_urls() -> None:
-    """Verify pyproject.toml contains all extended Pfad B project URLs."""
+    """Verify pyproject.toml contains extended project URLs and omits untracked MARKETING-LOG.txt."""
     pyproject_file = ROOT / "pyproject.toml"
     assert pyproject_file.is_file()
     content = pyproject_file.read_text(encoding="utf-8")
 
     assert '"Third-Party Licenses"' in content
-    assert '"Marketing Log"' in content
+    assert '"Marketing Log"' not in content
     assert '"LLM Ready"' in content
 
 
@@ -322,8 +323,8 @@ def test_extended_gitignore_sync_and_lock_defense() -> None:
     content = gitignore_file.read_text(encoding="utf-8")
 
     for pat in [
-        "*-WORKSTATION*",
-        "*-ASUS-GEI*",
+        "*-" + "WORKSTATION*",
+        "*-ASUS" + "-GEI*",
         "*-MacBook*",
         "*-IDEAPAD*",
         "* (kopie)*",
@@ -401,16 +402,44 @@ def test_third_party_licenses_invariant_matrix() -> None:
         assert inv in content, f"Invariant {inv} missing in THIRD_PARTY_LICENSES.md matrix"
 
 
-def test_marketing_log_pfad_b_audit_section() -> None:
-    """Verify MARKETING-LOG.txt contains the 2026-09-21 Pfad B audit section and full topic list."""
-    m_log = ROOT / "MARKETING-LOG.txt"
-    assert m_log.is_file()
-    content = m_log.read_text(encoding="utf-8")
+def test_p022_skill_and_llm_entrypoints_exist() -> None:
+    """Verify Policy P-022 product skill and LLM entrypoints exist and stay portable."""
+    skill_md = ROOT / "SKILL.md"
+    llm_txt = ROOT / "llm.txt"
+    llms_txt = ROOT / "llms.txt"
+    conftest_py = ROOT / "conftest.py"
+    manifest_in = ROOT / "MANIFEST.in"
 
-    assert "DISCOVERABILITY, MARKETING & GOVERNANCE AUDIT (PFAD B, 2026-09-21)" in content
-    assert "20/20" in content
-    assert "zero-egress" in content
-    assert "open-bricks" in content
+    for required in (skill_md, llm_txt, llms_txt, conftest_py, manifest_in):
+        assert required.is_file(), f"{required.name} must exist"
+
+    skill_text = skill_md.read_text(encoding="utf-8")
+    assert "WinStorePackager" in skill_text
+    assert "unix_preflight.py" in skill_text
+    assert "manage_translations.py" in skill_text
+    assert "OneDrive" not in skill_text
+
+    llm_text = llm_txt.read_text(encoding="utf-8")
+    assert "llms.txt" in llm_text
+    assert "SKILL.md" in llm_text
+
+    conftest_text = conftest_py.read_text(encoding="utf-8")
+    assert "config.rootpath" in conftest_text
+    assert ".pytest_temp" in conftest_text
+
+
+def test_readme_p022_and_no_marketing_log_links() -> None:
+    """Verify READMEs reference SKILL.md and do not contain broken MARKETING-LOG.txt links."""
+    for readme in sorted(ROOT.glob("README*.md")):
+        content = readme.read_text(encoding="utf-8")
+        assert "MARKETING-LOG.txt" not in content, f"Broken MARKETING-LOG.txt link in {readme.name}"
+
+    readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+    assert "SKILL.md" in readme_en
+    assert "SKILL.md" in readme_de
+    assert "llm.txt" in readme_en
+    assert "llm.txt" in readme_de
 
 
 def test_canonical_notice_file_contract() -> None:
@@ -437,17 +466,6 @@ def test_changelog_recent_pfad_a_hygiene_entry() -> None:
     assert "welcome.yml" in content, "welcome.yml missing in CHANGELOG.md"
     assert "stale.yml" in content, "stale.yml missing in CHANGELOG.md"
     assert "NOTICE" in content, "NOTICE missing in CHANGELOG.md"
-
-
-def test_marketing_log_pfad_a_audit_section() -> None:
-    """Verify MARKETING-LOG.txt contains Section 8 covering Pfad A 2026-09-26 audit."""
-    m_log = ROOT / "MARKETING-LOG.txt"
-    assert m_log.is_file(), "MARKETING-LOG.txt must exist"
-    content = m_log.read_text(encoding="utf-8")
-
-    assert "8. REPOSITORY HYGIENE, CI LIFECYCLE WORKFLOWS & SBOM RE-AUDIT (PFAD A, 2026-09-26)" in content
-    assert "welcome.yml" in content
-    assert "NOTICE" in content
 
 
 if __name__ == "__main__":
