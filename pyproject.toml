@@ -8,7 +8,7 @@ version = "3.1.0"
 description = "Desktop-App & CLI-Tool zur automatisierten Erstellung und Validierung von Windows Store MSIX-Paketen mit WACK-Integration"
 readme = "README.md"
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = "MIT"
 license-files = [
     "LICENSE",
     "NOTICE",
@@ -32,7 +32,6 @@ keywords = [
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
@@ -71,7 +70,6 @@ Changelog = "https://github.com/file-bricks/WinStorePackager/blob/master/CHANGEL
 Security = "https://github.com/file-bricks/WinStorePackager/blob/master/SECURITY.md"
 Notice = "https://github.com/file-bricks/WinStorePackager/blob/master/NOTICE"
 "Third-Party Licenses" = "https://github.com/file-bricks/WinStorePackager/blob/master/THIRD_PARTY_LICENSES.md"
-"Marketing Log" = "https://github.com/file-bricks/WinStorePackager/blob/master/MARKETING-LOG.txt"
 "LLM Ready" = "https://github.com/file-bricks/WinStorePackager/blob/master/llms.txt"
 "Parent Organization" = "https://github.com/file-bricks"
 Umbrella = "https://github.com/open-bricks"
@@ -81,7 +79,8 @@ Umbrella = "https://github.com/open-bricks"
 minversion = "7.0"
 pythonpath = ["."]
 testpaths = ["tests"]
-addopts = "-ra -v --basetemp=.pytest_temp"
+addopts = "-ra -v"
+asyncio_default_fixture_loop_scope = "function"
 norecursedirs = [
     ".git",
     ".pytest_cache",
@@ -103,5 +102,18 @@ target-version = "py310"
 [tool.ruff.lint]
 select = ["E", "F", "W"]
 ignore = ["E402", "E501"]
+
+[tool.setuptools]
+py-modules = [
+    "WindowsStorePublisher_3",
+    "generate_store_screenshots",
+    "linux_preflight",
+    "manage_translations",
+    "project_profile",
+    "release_contract",
+    "runtime_paths",
+    "translator",
+    "unix_preflight",
+]
 
 

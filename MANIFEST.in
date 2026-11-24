@@ -1,0 +1,27 @@
+include LICENSE
+include NOTICE
+include README*.md
+include CHANGELOG.md
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include SECURITY.md
+include SUPPORT.md
+include PRIVACY_POLICY.md
+include PROJECT_PROFILE_FORMAT.md
+include STORE_LISTING.md
+include WINDOWS_STORE_PREP.md
+include THIRD_PARTY_LICENSES.md
+include THIRD_PARTY_LICENSES.txt
+include SKILL.md
+include llms.txt
+include llm.txt
+include requirements.txt
+include store_package.json
+include winstorepackager-project-v1.json
+include conftest.py
+recursive-include locales *.json
+recursive-include assets *
+recursive-include store_assets *.png
+recursive-include scripts *.py
+recursive-include tests *.py
+global-exclude __pycache__ *.py[cod] *.tmp

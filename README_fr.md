@@ -8,18 +8,17 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="Statut CI">
-  <img src="https://img.shields.io/badge/Tests-185%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-214%20passed%20%7C%201%20skipped-brightgreen?style=for-the-badge" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="Licence">
   <img src="https://img.shields.io/badge/Attribution-NOTICE-blue?style=for-the-badge" alt="Avis d'attribution">
-  <img src="https://img.shields.io/badge/Verified-2026--09--26-blue?style=for-the-badge" alt="Date de vérification">
+  <img src="https://img.shields.io/badge/Verified-2026--11--24-blue?style=for-the-badge" alt="Date de vérification">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="Plateformes">
   <img src="https://img.shields.io/badge/Security%20SLA-48h%20SLA%20%7C%205d%20triage-blue?style=for-the-badge" alt="SLA de sécurité">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="Confidentialité">
   <img src="https://img.shields.io/badge/Security-Local--First%20%7C%20Non--Elevation-success?style=for-the-badge" alt="Sécurité">
   <img src="https://img.shields.io/badge/Third--Party%20Audited-100%25%20Permissive-blue?style=for-the-badge" alt="Audité par des tiers">
-  <img src="https://img.shields.io/badge/Marketing%20Log-Active-teal?style=for-the-badge" alt="Journal marketing">
   <img src="https://img.shields.io/badge/Code%20Style-Ruff-000000?style=for-the-badge" alt="Style de code">
-  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt-blueviolet?style=for-the-badge" alt="Prêt pour les LLM">
+  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt%20%7C%20SKILL.md-blueviolet?style=for-the-badge" alt="Prêt pour les LLM">
 </p>
 
 <h1 align="center">WinStorePackager</h1>
@@ -355,8 +354,6 @@ WinStorePackager est optimisé pour la découvrabilité et s'adresse à quatre s
 - `Python desktop app Windows Store submission helper`
 - `AppxManifest XML generator Python`
 
-Consultez [`MARKETING-LOG.txt`](MARKETING-LOG.txt) pour le classement complet des mots-clés, l'analyse des besoins des utilisateurs cibles et le positionnement concurrentiel.
-
 ---
 
 <a id="documentation--license"></a>
@@ -366,10 +363,9 @@ Consultez [`MARKETING-LOG.txt`](MARKETING-LOG.txt) pour le classement complet de
 - 📄 **Politique de sécurité :** [`SECURITY.md`](SECURITY.md) — Déclaration bilingue des vulnérabilités et garanties local-first
 - ⚖️ **Avis d'attribution :** [`NOTICE`](NOTICE) — Droit d'auteur canonique, attribution à l'écosystème open-bricks et références des dépendances
 - 📝 **Journal des modifications :** [`CHANGELOG.md`](CHANGELOG.md) — Historique des versions et notes de publication
-- 🤖 **Référence LLM :** [`llms.txt`](llms.txt) — Guide d'architecture compréhensible par les machines
+- 🤖 **Référence LLM :** [`SKILL.md`](SKILL.md), [`llms.txt`](llms.txt) & [`llm.txt`](llm.txt) — Guide d'architecture compréhensible par les machines
 - 📦 **Format de profil :** [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) — Spécification de profil de projet portable
 - 📜 **Licences tierces :** [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) & [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt)
-- 📊 **Journal marketing :** [`MARKETING-LOG.txt`](MARKETING-LOG.txt) — Registre des cibles et de la découvrabilité
 
 ### License & Liability
 

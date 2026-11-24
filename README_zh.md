@@ -8,18 +8,17 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="版本">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="CI 状态">
-  <img src="https://img.shields.io/badge/Tests-185%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="测试">
+  <img src="https://img.shields.io/badge/Tests-214%20passed%20%7C%201%20skipped-brightgreen?style=for-the-badge" alt="测试">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="许可证">
   <img src="https://img.shields.io/badge/Attribution-NOTICE-blue?style=for-the-badge" alt="归属通知">
-  <img src="https://img.shields.io/badge/Verified-2026--09--26-blue?style=for-the-badge" alt="验证日期">
+  <img src="https://img.shields.io/badge/Verified-2026--11--24-blue?style=for-the-badge" alt="验证日期">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="平台">
   <img src="https://img.shields.io/badge/Security%20SLA-48h%20SLA%20%7C%205d%20triage-blue?style=for-the-badge" alt="安全 SLA">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="隐私">
   <img src="https://img.shields.io/badge/Security-Local--First%20%7C%20Non--Elevation-success?style=for-the-badge" alt="安全性">
   <img src="https://img.shields.io/badge/Third--Party%20Audited-100%25%20Permissive-blue?style=for-the-badge" alt="第三方审计">
-  <img src="https://img.shields.io/badge/Marketing%20Log-Active-teal?style=for-the-badge" alt="营销日志">
   <img src="https://img.shields.io/badge/Code%20Style-Ruff-000000?style=for-the-badge" alt="代码规范">
-  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt-blueviolet?style=for-the-badge" alt="LLM 就绪">
+  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt%20%7C%20SKILL.md-blueviolet?style=for-the-badge" alt="LLM 就绪">
 </p>
 
 <h1 align="center">WinStorePackager</h1>
@@ -355,8 +354,6 @@ WinStorePackager 经过深度搜索引擎发现优化，核心聚焦服务以下
 - `Python desktop app Windows Store submission helper`
 - `AppxManifest XML generator Python`
 
-欲了解完整的关键词排名记录、用户需求痛点分析及竞品市场定位数据，请参阅 [`MARKETING-LOG.txt`](MARKETING-LOG.txt)。
-
 ---
 
 <a id="documentation--license"></a>
@@ -366,10 +363,9 @@ WinStorePackager 经过深度搜索引擎发现优化，核心聚焦服务以下
 - 📄 **安全政策**：[`SECURITY.md`](SECURITY.md) — 双语漏洞披露指南与本地优先安全准则
 - ⚖️ **归属与版权通知**：[`NOTICE`](NOTICE) — 规范版权信息、open-bricks 架构归属与依赖来源
 - 📝 **变更日志**：[`CHANGELOG.md`](CHANGELOG.md) — 版本迭代历史与发布说明
-- 🤖 **大模型技术索引**：[`llms.txt`](llms.txt) — 专供 AI 读取的系统架构概览
+- 🤖 **大模型技术索引**：[`SKILL.md`](SKILL.md), [`llms.txt`](llms.txt) & [`llm.txt`](llm.txt) — 专供 AI 读取的系统架构概览
 - 📦 **项目配置规范**：[`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) — 便携式项目配置标准文档
 - 📜 **第三方许可证**：[`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) 与 [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt)
-- 📊 **市场分析日志**：[`MARKETING-LOG.txt`](MARKETING-LOG.txt) — 目标群体画像与搜索收录登记册
 
 ### License & Liability
 

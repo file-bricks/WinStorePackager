@@ -42,4 +42,4 @@ Start-Process powershell -Verb RunAs -ArgumentList '-ExecutionPolicy Bypass -Fil
 
 ## Lokaler Worker- und Ergebnisvertrag
 
-Der ausführbare WACK-Worker liegt im Plan-D-Clone `C:\_Local_DEV\repos\WinStorePackager`. Er führt `appcert reset` und danach `appcert test` im Hintergrund aus, wartet auf beide Prozesse und unterscheidet `passed`, `failed`, `timed_out`, `cancelled`, `tool_missing` und `start_failed`.
+Der ausführbare WACK-Worker liegt im Plan-D-Clone `<LOCAL_DEV_REPOS>\WinStorePackager`. Er führt `appcert reset` und danach `appcert test` im Hintergrund aus, wartet auf beide Prozesse und unterscheidet `passed`, `failed`, `timed_out`, `cancelled`, `tool_missing` und `start_failed`.

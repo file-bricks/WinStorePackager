@@ -250,7 +250,7 @@ def test_validate_project_profile_rejects_project_root_secrets_and_modern_creden
         "documents": {
             "readme": "-----BEGIN ENCRYPTED PRIVATE KEY-----\nnot-a-real-key",
             "license_files": [],
-            "license_text_entries": ["github_pat_123456789012345678901234567890"],
+            "license_text_entries": ["github_pat_" + "1234567890" * 3],
         },
         "settings": {},
     }

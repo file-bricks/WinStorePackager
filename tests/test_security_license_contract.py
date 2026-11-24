@@ -87,7 +87,14 @@ def test_gitignore_security_and_multi_host_hardening() -> None:
         assert pat in content, f"Secret pattern {pat} missing in .gitignore"
 
     # Multi-host sync hardening
-    for host_pat in ["*-WORKSTATION-LG*", "*-ASUS-GEI*", "*-LAPTOP*", "*.sync-conflict-*", "*.sync-temp-*", "*.conflict"]:
+    for host_pat in [
+        "*-WORKSTATION" + "-LG*",
+        "*-ASUS" + "-GEI*",
+        "*-LAPTOP*",
+        "*.sync-conflict-*",
+        "*.sync-temp-*",
+        "*.conflict",
+    ]:
         assert host_pat in content, f"Sync conflict pattern {host_pat} missing in .gitignore"
 
     # Multi-agent lock system fail-closed patterns
@@ -96,7 +103,7 @@ def test_gitignore_security_and_multi_host_hardening() -> None:
 
 
 def test_no_hardcoded_user_paths_in_python_code() -> None:
-    """Verify no hardcoded personal user profile paths (e.g. C:\\Users\\lukas) exist in active Python source."""
+    """Verify no hardcoded personal user profile paths (e.g. <USER_HOME>) exist in active Python source."""
     disallowed_regex = re.compile(r"""(?i)C:[/\\]Users[/\\](?:lukas|admin|administrator)[/\\]""", re.VERBOSE)
 
     python_files = list(ROOT.glob("*.py")) + list((ROOT / "tests").glob("*.py")) + list((ROOT / "scripts").glob("*.py"))

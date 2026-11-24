@@ -39,6 +39,17 @@ NS = {
 
 # Local repository and OneDrive mirror bases
 ONEDRIVE_SOFTWARE = Path.home() / "OneDrive" / ".TOPICS" / ".SOFTWARE"
+_ENV_LOCAL_DEV_REPOS = os.environ.get("LOCAL_DEV_REPOS", "").strip()
+LOCAL_DEV_REPOS = Path(_ENV_LOCAL_DEV_REPOS) if _ENV_LOCAL_DEV_REPOS else None
+
+
+def _candidate_paths(repo_name: str, od_rel: tuple[str, ...]) -> list[Path]:
+    paths: list[Path] = []
+    if LOCAL_DEV_REPOS is not None:
+        paths.append(LOCAL_DEV_REPOS / repo_name)
+    paths.append(ONEDRIVE_SOFTWARE.joinpath(*od_rel))
+    return paths
+
 
 # Authoritative reference metadata for live submitted apps
 LIVE_APPS_SPEC = {
@@ -54,10 +65,7 @@ LIVE_APPS_SPEC = {
         "capabilities": "internetClient,runFullTrust",
         "category": "Developer Tools",
         "age_rating": "3+",
-        "local_paths": [
-            Path(r"C:\_Local_DEV\repos\MethodenAnalyser"),
-            ONEDRIVE_SOFTWARE / "CODING" / "REL-PUB_MethodenAnalyser",
-        ],
+        "local_paths": _candidate_paths("MethodenAnalyser", ("CODING", "REL-PUB_MethodenAnalyser")),
     },
     "SQLiteViewer": {
         "store_id": "9P6H501XB8JT",
@@ -71,10 +79,7 @@ LIVE_APPS_SPEC = {
         "capabilities": "internetClient,runFullTrust",
         "category": "Developer Tools",
         "age_rating": "3+",
-        "local_paths": [
-            Path(r"C:\_Local_DEV\repos\SQLiteViewer"),
-            ONEDRIVE_SOFTWARE / "DATA" / "REL-PUB_SQLiteViewer",
-        ],
+        "local_paths": _candidate_paths("SQLiteViewer", ("DATA", "REL-PUB_SQLiteViewer")),
     },
     "CleanMarkdown": {
         "store_id": "9MW9QN49WQG2",
@@ -88,10 +93,7 @@ LIVE_APPS_SPEC = {
         "capabilities": "runFullTrust",
         "category": "Productivity",
         "age_rating": "3+",
-        "local_paths": [
-            Path(r"C:\_Local_DEV\repos\CleanMarkdown"),
-            ONEDRIVE_SOFTWARE / "DOCS" / "DEV_CleanMarkdown",
-        ],
+        "local_paths": _candidate_paths("CleanMarkdown", ("DOCS", "DEV_CleanMarkdown")),
     },
     "PromptBoard": {
         "store_id": "9N1FNJL2FHLC",
@@ -105,10 +107,7 @@ LIVE_APPS_SPEC = {
         "capabilities": "runFullTrust",
         "category": "Productivity",
         "age_rating": "3+",
-        "local_paths": [
-            Path(r"C:\_Local_DEV\repos\PromptBoard"),
-            ONEDRIVE_SOFTWARE / "DATA" / "REL-PUB_PromptBoard",
-        ],
+        "local_paths": _candidate_paths("PromptBoard", ("DATA", "REL-PUB_PromptBoard")),
     },
 }
 

@@ -48,7 +48,7 @@ def test_dogfood_release_msix_hash_is_documented_in_wack_protocol():
 
 def test_store_dogfood_docs_use_portable_paths():
     stale_fragments = [
-        r"C:\Users\User",
+        "C:\\Users\\" + "User",
         r"OneDrive\Software Entwicklung",
     ]
     checked_docs = [

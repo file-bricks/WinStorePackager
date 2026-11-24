@@ -8,18 +8,17 @@
   <img src="https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge" alt="バージョン">
   <img src="https://img.shields.io/badge/Python-3.9--3.13-yellow?style=for-the-badge" alt="Python">
   <img src="https://img.shields.io/badge/CI-Multi--OS%20Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="CI ステータス">
-  <img src="https://img.shields.io/badge/Tests-185%20passed%20%7C%204%20skipped-brightgreen?style=for-the-badge" alt="テスト">
+  <img src="https://img.shields.io/badge/Tests-214%20passed%20%7C%201%20skipped-brightgreen?style=for-the-badge" alt="テスト">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="ライセンス">
   <img src="https://img.shields.io/badge/Attribution-NOTICE-blue?style=for-the-badge" alt="帰属通知">
-  <img src="https://img.shields.io/badge/Verified-2026--09--26-blue?style=for-the-badge" alt="検証日">
+  <img src="https://img.shields.io/badge/Verified-2026--11--24-blue?style=for-the-badge" alt="検証日">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6?style=for-the-badge" alt="プラットフォーム">
   <img src="https://img.shields.io/badge/Security%20SLA-48h%20SLA%20%7C%205d%20triage-blue?style=for-the-badge" alt="セキュリティ SLA">
   <img src="https://img.shields.io/badge/Privacy-100%25%20Local--First%20%7C%20Zero--Egress-purple?style=for-the-badge" alt="プライバシー">
   <img src="https://img.shields.io/badge/Security-Local--First%20%7C%20Non--Elevation-success?style=for-the-badge" alt="セキュリティ">
   <img src="https://img.shields.io/badge/Third--Party%20Audited-100%25%20Permissive-blue?style=for-the-badge" alt="サードパーティ監査">
-  <img src="https://img.shields.io/badge/Marketing%20Log-Active-teal?style=for-the-badge" alt="マーケティングログ">
   <img src="https://img.shields.io/badge/Code%20Style-Ruff-000000?style=for-the-badge" alt="コードスタイル">
-  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt-blueviolet?style=for-the-badge" alt="LLM レディ">
+  <img src="https://img.shields.io/badge/LLM--Ready-llms.txt%20%7C%20SKILL.md-blueviolet?style=for-the-badge" alt="LLM レディ">
 </p>
 
 <h1 align="center">WinStorePackager</h1>
@@ -355,8 +354,6 @@ WinStorePackager は発見性が最適化されており、主に 4 つの開発
 - `Python desktop app Windows Store submission helper`
 - `AppxManifest XML generator Python`
 
-詳細なキーワードランキング、ペルソナ課題分析、競合ポジショニングについては、[`MARKETING-LOG.txt`](MARKETING-LOG.txt) をご参照ください。
-
 ---
 
 <a id="documentation--license"></a>
@@ -366,10 +363,9 @@ WinStorePackager は発見性が最適化されており、主に 4 つの開発
 - 📄 **セキュリティポリシー**: [`SECURITY.md`](SECURITY.md) — 2 言語による脆弱性開示とローカルファースト保証
 - ⚖️ **帰属通知**: [`NOTICE`](NOTICE) — 正式な著作権表示、open-bricks エコシステムへの帰属、依存関係の参照
 - 📝 **変更履歴**: [`CHANGELOG.md`](CHANGELOG.md) — バージョン履歴とリリースノート
-- 🤖 **LLM リファレンス**: [`llms.txt`](llms.txt) — 機械可読なアーキテクチャガイド
+- 🤖 **LLM リファレンス**: [`SKILL.md`](SKILL.md), [`llms.txt`](llms.txt) & [`llm.txt`](llm.txt) — 機械可読なアーキテクチャガイド
 - 📦 **プロファイル仕様**: [`PROJECT_PROFILE_FORMAT.md`](PROJECT_PROFILE_FORMAT.md) — ポータブルプロジェクトプロファイル仕様
 - 📜 **サードパーティライセンス**: [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) & [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt)
-- 📊 **マーケティングログ**: [`MARKETING-LOG.txt`](MARKETING-LOG.txt) — ターゲットユーザーと発見性の台帳
 
 ### License & Liability
 
