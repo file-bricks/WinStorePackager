@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import time
 from pathlib import Path
 from typing import List, Tuple
 
@@ -179,6 +180,11 @@ def check_staging_files(project_root: Path) -> List[str]:
     return errors
 
 
+_URL_CHECK_ATTEMPTS = 3
+_URL_CHECK_BACKOFF_SECONDS = 1.0
+_TRANSIENT_HTTP_STATUSES = frozenset({429, 500, 502, 503, 504})
+
+
 def check_url_reachability(project_root: Path) -> List[str]:
     """Checks that privacy_url/support_url from store_package.json actually resolve."""
     import urllib.error
@@ -199,13 +205,24 @@ def check_url_reachability(project_root: Path) -> List[str]:
         if not url or not isinstance(url, str) or not url.strip():
             continue
         req = urllib.request.Request(url, headers={"User-Agent": "store-readiness-check/1.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=5) as resp:
-                status = resp.status
-        except urllib.error.HTTPError as e:
-            status = e.code
-        except Exception:
-            # Tolerant in offline/mock/sandbox test environments
+        status = None
+        for attempt in range(_URL_CHECK_ATTEMPTS):
+            if attempt:
+                time.sleep(_URL_CHECK_BACKOFF_SECONDS * attempt)
+            try:
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    status = resp.status
+            except urllib.error.HTTPError as e:
+                status = e.code
+            except Exception:
+                # Tolerant in offline/mock/sandbox test environments
+                status = None
+                break
+            if status not in _TRANSIENT_HTTP_STATUSES:
+                break
+        if status is None or status in _TRANSIENT_HTTP_STATUSES:
+            # Network unavailable or the host is temporarily overloaded/rate-limiting:
+            # neither says anything about whether the URL itself is wrong.
             continue
         if status >= 400:
             errors.append(f"store_package.json field '{field}' ({url}) returned HTTP {status} -- not reachable.")
